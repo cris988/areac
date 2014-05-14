@@ -3,16 +3,21 @@ local scene = storyboard.newScene()
 
 local widget = require('widget')
 local myApp = require('myapp')
-local navBar = require('classBar')
 
 widget.setTheme(myApp.theme)
 
+_W = display.contentWidth
+_H = display.contentHeight
 local titleText
 local locationtxt
 local views = {}
 local goBack = {}
+local accediProfilo = {}
 
 local titleBarHeight = 50
+local indietro
+local titleBar
+local titleText
 
 local function ignoreTouch( event )
 	return true
@@ -26,28 +31,54 @@ end
 function scene:createScene(event)
 	local group = self.view
 
-	--navBar:disegna()
-	navBar.titleText.text = 'Profilo'
+	titleBar = display.newImageRect(myApp.topBarBg, display.contentWidth, 50)
+    titleBar.x = display.contentCenterX
+    titleBar.y = 25 + display.topStatusBarContentHeight
 
-	local background = display.newRect(0,0,display.contentWidth, display.contentHeight)
-	background:setFillColor(0.9, 0.9, 0.9)
-    background.x = display.contentCenterX
-    background.y = display.contentCenterY
-	group:insert(background)
-	--background:addEventListener("touch", ignoreTouch)
+    titleText = display.newText( 'Profilo', 0, 0, myApp.fontBold, 20 )
+    titleText:setFillColor(0,0,0)
+    titleText.x = display.contentCenterX
+    titleText.y = titleBarHeight * 0.5 + display.topStatusBarContentHeight
 
-    local statusBarBackground = display.newImageRect(myApp.topBarBg, display.contentWidth, display.topStatusBarContentHeight)
-    statusBarBackground.x = display.contentCenterX
-    statusBarBackground.y = display.topStatusBarContentHeight * 0.5
-    group:insert(statusBarBackground)
+	indietro = widget.newButton({
+	    id  = 'BtIndietro',
+	    label = 'Indietro',
+	    x = display.contentCenterX*0.3,
+	    y = titleBarHeight * 0.5 + display.topStatusBarContentHeight,
+	    color = { 0.062745,0.50980,0.99607 },
+	    fontSize = 18,
+	    onRelease = goBack
+	})
+	group:insert(titleBar)
+    group:insert(titleText)
+    group:insert(indietro)
+
+	-- local background = display.newRect(0,0,display.contentWidth, display.contentHeight)
+	-- background:setFillColor(0.9, 0.9, 0.9)
+ --    background.x = display.contentCenterX
+ --    background.y = display.contentCenterY
+	-- group:insert(background)
+
+ --    local statusBarBackground = display.newImageRect(myApp.topBarBg, display.contentWidth, display.topStatusBarContentHeight)
+ --    statusBarBackground.x = display.contentCenterX
+ --    statusBarBackground.y = display.topStatusBarContentHeight * 0.5
+ --    group:insert(statusBarBackground)
+
+ 	myApp.index = event.params.var
+ 	print ('index accedi ' .. myApp.index)
+ 	local myText = display.newText( 'Profilo', _W*0.5, _H*0.5, myApp.font, 20 )
+    myText:setFillColor(1) 
+    group:insert(myText)
 
     
 end
 
-function goBack ()
-    scene:destroyScene(event)
-    myApp.tabBar.isVisible = true
-    storyboard.gotoScene(storyboard.getPrevious())
+
+function goBack()
+    storyboard.removeAll()
+    -- local sceneName = storyboard.getCurrentSceneName()
+    -- storyboard.removeScene( name )
+    storyboard.gotoScene(storyboard.getPrevious(), { params = { myApp.index } })
 end
 
 

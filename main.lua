@@ -7,7 +7,6 @@ display.setStatusBar( display.TranslucentStatusBar )
 local storyboard = require ( "storyboard" )
 local widget = require( "widget" )
 local myApp = require( "myapp" ) 
-local navBar = require('classBar')
 
 
 
@@ -76,7 +75,7 @@ myApp.fontBoldItalic = "Helvetica-BoldItalic"
 
 widget.setTheme(myApp.theme)
 
-
+local titleBarHeight = 50
 
 
 
@@ -148,69 +147,70 @@ widget.setTheme(myApp.theme)
 
 
 
+-- myApp.titleBar = display.newImageRect(myApp.topBarBg, display.contentWidth, 50)
+-- myApp.titleBar.x = display.contentCenterX
+-- myApp.titleBar.y = 25 + display.topStatusBarContentHeight
 
+-- myApp.titleText = display.newText( '', 0, 0, myApp.fontBold, 20 )
+-- myApp.titleText:setFillColor(0,0,0)
+-- myApp.titleText.x = display.contentCenterX
+-- myApp.titleText.y = titleBarHeight * 0.5 + display.topStatusBarContentHeight
 
---navBar:disegna()
--- function navigationBar()
---     local titleBar = display.newImageRect(myApp.topBarBg, display.contentWidth, 50)
---     titleBar.x = display.contentCenterX
---     titleBar.y = 25 + display.topStatusBarContentHeight
+-- myApp.accedi = widget.newButton({
+--     id  = 'BtAccedi',
+--     label = 'Accedi',
+--     x = display.contentCenterX*1.75,
+--     y = titleBarHeight * 0.5 + display.topStatusBarContentHeight,
+--     color = { 0.062745,0.50980,0.99607 },
+--     fontSize = 18,
+--     onRelease = myApp.AccediProfilo
+-- })
+-- myApp.accedi.isVisible = false
 
+-- myApp.profilo = widget.newButton({
+--     id  = 'BtProfilo',
+--     label = 'Profilo',
+--     x = display.contentCenterX*1.75,
+--     y = titleBarHeight * 0.5 + display.topStatusBarContentHeight,
+--     color = { 0.062745,0.50980,0.99607 },
+--     fontSize = 18,
+--     onRelease = myApp.showScreen4
+-- })
+-- myApp.profilo.isVisible = false
 
---     local titleText = display.newText( "", 0, 0, myApp.fontBold, 20 )
---     titleText:setFillColor(0,0,0)
---     titleText.x = display.contentCenterX
---     titleText.y = titleBar.height * 0.5 + display.topStatusBarContentHeight
+-- myApp.indietro = widget.newButton({
+--     id  = 'BtIndietro',
+--     label = 'Indietro',
+--     x = display.contentCenterX*0.3,
+--     y = titleBarHeight * 0.5 + display.topStatusBarContentHeight,
+--     color = { 0.062745,0.50980,0.99607 },
+--     fontSize = 18,
+--     onRelease = myApp.goBack
+-- })
+-- myApp.indietro.isVisible = false
 
-
---     myApp.accedi = widget.newButton({
---         id  = 'BtAccedi',
---         label = 'Accedi',
---         x = display.contentCenterX*1.75,
---         y = titleBar.height * 0.5 + display.topStatusBarContentHeight,
---         color = { 0.062745,0.50980,0.99607 },
---         fontSize = 18,
---         onPress = myApp.AccediProfilo
---     })
-
-
---     myApp.profilo = widget.newButton({
---         id  = 'BtProfilo',
---         label = 'Profilo',
---         x = display.contentCenterX*1.75,
---         y = titleBar.height * 0.5 + display.topStatusBarContentHeight,
---         color = { 0.062745,0.50980,0.99607 },
---         fontSize = 18,
---         onRelease = myApp.showScreen4
---     })
---     myApp.profilo.isVisible = false
-
-
---     myApp.indietro = widget.newButton({
---         id  = 'BtIndietro',
---         label = 'Indietro',
---         x = display.contentCenterX*0.3,
---         y = titleBar.height * 0.5 + display.topStatusBarContentHeight,
---         color = { 0.062745,0.50980,0.99607 },
---         fontSize = 18,
---         onRelease = myApp.goBack
---     })
+-- function myApp.goBack()
+--     storyboard.removeAll()
+--     -- local sceneName = storyboard.getCurrentSceneName()
+--     -- storyboard.removeScene( name )
+--     myApp.tabBar.isVisible = true
 --     myApp.indietro.isVisible = false
-
-
---     function myApp.goBack ()
---         scene:destroyScene(event)
---         myApp.tabBar.isVisible = true
---         storyboard.gotoScene(storyboard.getPrevious())
---     end
-
---     function myApp.AccediProfilo()
---         titleText.text ='Profilo'
---         storyboard.removeAll()
---         myApp.tabBar.isVisible = false
---         storyboard.gotoScene("accedi")
---     end
+--     storyboard.gotoScene(storyboard.getPrevious())
 -- end
+
+-- function myApp.AccediProfilo()
+--     storyboard.removeAll()
+--     myApp.tabBar.isVisible = false
+--     myApp.accedi.isVisible = false
+--     myApp.indietro.isVisible = true
+--     storyboard.gotoScene("accedi")
+-- end
+
+
+
+
+
+
 
 
 
@@ -251,7 +251,7 @@ function myApp.showScreen3()
     return true
 end
 
-function myApp.showScreen4()
+function myApp.showScreen4() 
     myApp.tabBar:setSelected(4)
     storyboard.removeAll()
     -- storyboard.gotoScene("informazioni", {time=250, effect="crossFade"})
