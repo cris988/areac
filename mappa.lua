@@ -3,16 +3,18 @@ local scene = storyboard.newScene()
 
 local widget = require('widget')
 local myApp = require('myapp')
+local navBar = require('classBar')
 
 widget.setTheme(myApp.theme)
 
 local titleText
 local locationtxt
 local views = {}
-local goToAccedi = {}
+--local goToAccedi = {}
 
 local _H = display.contentHeight
 local _W = display.contentWidth
+local titleBarHeight = 50
 
 
 local function ignoreTouch( event )
@@ -26,6 +28,9 @@ end
 
 function scene:createScene(event)
 	local group = self.view
+
+    navBar:disegna()
+    navBar.titleText.text = 'Mappa'
 
     -- if ( system.getInfo( "environment" ) == "simulator" ) then
     --     local simulatorMessage = "Maps not supported in Corona Simulator.\nYou must build for iOS or Android to test native.newMapView() support."
@@ -49,35 +54,6 @@ function scene:createScene(event)
     statusBarBackground.x = display.contentCenterX
     statusBarBackground.y = display.topStatusBarContentHeight * 0.5
     group:insert(statusBarBackground)
-
-	--
-    -- Create the other UI elements
-    -- create toolbar to go at the top of the screen
-    local titleBar = display.newImageRect(myApp.topBarBg, display.contentWidth, 50)
-    titleBar.x = display.contentCenterX
-    titleBar.y = 25 + display.topStatusBarContentHeight
-    group:insert(titleBar)
-    --
-    -- set up the text for the title bar, will be changed based on what page
-    -- the viewer is on
-
-    -- create embossed text to go above toolbar
-    titleText = display.newText( "Mappa", 0, 0, myApp.fontBold, 20 )
-    titleText:setFillColor(0,0,0)
-    titleText.x = display.contentCenterX
-    titleText.y = titleBar.height * 0.5 + display.topStatusBarContentHeight
-    group:insert(titleText)
-
-    local profilo = widget.newButton({
-    id  = 'BtProfilo',
-    label = 'Accedi',
-    x = display.contentCenterX*1.75,
-    y = display.contentCenterY*0.163,
-    color = { 0.062745,0.50980,0.99607 },
-    fontSize = 18,
-    onRelease = goToAccedi
-    })
-    group:insert(profilo)
 
 
     local contornoMappa = display.newRect( display.contentCenterX, display.contentCenterY+8, _W, _H*0.7 )
@@ -116,15 +92,6 @@ function scene:createScene(event)
     myMap.isLocationVisible = true
     myMap.isZoomEnabled = true
     group:insert(myMap)
-end
-
-
-function goToAccedi(event)
-        --scene:exitScene(event)
-        --myApp.tabBar:removeSelf()
-        myMap:removeSelf()
-        myApp.tabBar.isVisible = false
-        storyboard.gotoScene("accedi")
 end
 
 
