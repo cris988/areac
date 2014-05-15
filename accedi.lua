@@ -1,23 +1,23 @@
 local storyboard = require ('storyboard')
 local scene = storyboard.newScene()
-
 local widget = require('widget')
 local myApp = require('myapp')
 
 widget.setTheme(myApp.theme)
 
-_W = display.contentWidth
-_H = display.contentHeight
-local titleText
-local locationtxt
+
+-- funzioni
 local views = {}
 local goBack = {}
 local accediProfilo = {}
 
-local titleBarHeight = 50
+
+-- variabili
 local indietro
 local titleBar
 local titleText
+local titleText
+local locationtxt
 
 local function ignoreTouch( event )
 	return true
@@ -31,6 +31,7 @@ end
 function scene:createScene(event)
 	local group = self.view
 
+	------ instanzio nav bar e bottoni
 	titleBar = display.newImageRect(myApp.topBarBg, display.contentWidth, 50)
     titleBar.x = display.contentCenterX
     titleBar.y = 25 + display.topStatusBarContentHeight
@@ -64,8 +65,7 @@ function scene:createScene(event)
  --    statusBarBackground.y = display.topStatusBarContentHeight * 0.5
  --    group:insert(statusBarBackground)
 
- 	myApp.index = event.params.var
- 	print ('index accedi ' .. myApp.index)
+ 
  	local myText = display.newText( 'Profilo', _W*0.5, _H*0.5, myApp.font, 20 )
     myText:setFillColor(1) 
     group:insert(myText)
@@ -74,12 +74,28 @@ function scene:createScene(event)
 end
 
 
+
+
+
+
+
+
 function goBack()
     storyboard.removeAll()
-    -- local sceneName = storyboard.getCurrentSceneName()
-    -- storyboard.removeScene( name )
-    storyboard.gotoScene(storyboard.getPrevious(), { params = { myApp.index } })
+    storyboard.gotoScene(storyboard.getPrevious(), { params = { var = myApp.index } })
 end
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -101,9 +117,18 @@ function scene:destroyScene( event )
 	local group = self.view
 end
 
+-- "createScene" event is dispatched if scene's view does not exist
 scene:addEventListener( "createScene", scene )
+
+-- "enterScene" event is dispatched whenever scene transition has finished
 scene:addEventListener( "enterScene", scene )
+
+-- "exitScene" event is dispatched before next scene's transition begins
 scene:addEventListener( "exitScene", scene )
+
+-- "destroyScene" event is dispatched before view is unloaded, which can be
+-- automatically unloaded in low memory situations, or explicitly via a call to
+-- storyboard.purgeScene() or storyboard.removeScene().
 scene:addEventListener( "destroyScene", scene )
 
 return scene

@@ -1,33 +1,29 @@
-local storyboard = require( "storyboard" )
+local storyboard = require ('storyboard')
 local scene = storyboard.newScene()
-local myApp = require('myapp')
 local widget = require('widget')
+local myApp = require('myapp')
+
+widget.setTheme(myApp.theme)
 
 
 -- funzioni
+local views = {}
 local goBack = {}
 local accediProfilo = {}
 
 
--- Variabili
-local indietro
+-- variabili
 local accedi
 local titleBar
 local titleText
+local titleText
+local locationtxt
 
 
 
--- è il contenuto di testo dei sottomenù delle informazioni
-local strings = {}
-strings[1] = 'Cos\'è l\'area C'
-strings[2] = 'informazioni varie'
-strings[3] = 'Varchi e orari'
-strings[4] = 'Veicoli autorizzatti all\'acceso'
-strings[5] = 'Tariffe e pagamenti'
-strings[6] = 'Come cambiare targa'
-strings[7] = 'Come modificare i dati personali'
-
-
+local function ignoreTouch( event )
+	return true
+end
 
 
 
@@ -35,29 +31,19 @@ strings[7] = 'Come modificare i dati personali'
 
 
 function scene:createScene(event)
-    local group = self.view
+	local group = self.view
 
     ------ instanzio nav bar e bottoni
     titleBar = display.newImageRect(myApp.topBarBg, display.contentWidth, 50)
     titleBar.x = display.contentCenterX
     titleBar.y = 25 + display.topStatusBarContentHeight
 
-    titleText = display.newText( 'Informazioni', 0, 0, myApp.fontBold, 20 )
+    titleText = display.newText( 'Verifica targa', 0, 0, myApp.fontBold, 20 )
     titleText:setFillColor(0,0,0)
     titleText.x = display.contentCenterX
     titleText.y = titleBarHeight * 0.5 + display.topStatusBarContentHeight
 
-    indietro = widget.newButton({
-        id  = 'BtIndietro',
-        label = 'Indietro',
-        x = display.contentCenterX*0.3,
-        y = titleBarHeight * 0.5 + display.topStatusBarContentHeight,
-        color = { 0.062745,0.50980,0.99607 },
-        fontSize = 18,
-        onRelease = goBack
-    })
-
-    accedi = widget.newButton({
+	accedi = widget.newButton({
         id  = 'BtAccedi',
         label = 'Accedi',
         x = display.contentCenterX*1.75,
@@ -69,44 +55,34 @@ function scene:createScene(event)
     group:insert(titleBar)
     group:insert(titleText)
     group:insert(accedi)
-    group:insert(indietro)
- 
-    -- local background = display.newRect(0,0,display.contentWidth, display.contentHeight)
-    -- background:setFillColor(0.9, 0.9, 0.9)
+
+	-- local background = display.newRect(0,0,display.contentWidth, display.contentHeight)
+	-- background:setFillColor(0.9, 0.9, 0.9)
     -- background.x = display.contentCenterX
     -- background.y = display.contentCenterY
-    -- group:insert(background)
+	-- group:insert(background)
 
+    -- local statusBarBackground = display.newImageRect(myApp.topBarBg, display.contentWidth, display.topStatusBarContentHeight)
+    -- statusBarBackground.x = display.contentCenterX
+    -- statusBarBackground.y = display.topStatusBarContentHeight * 0.5
+    -- group:insert(statusBarBackground)
 
-    -- è il numero della riga della lista che è stato cliccato
-    local var = event.params.var
-    
-    -- scrivo le stringhe riferite a var
-    local myText = display.newText( strings[var], _W*0.5, _H*0.5, myApp.font, 20 )
+    local myText = display.newText( 'Verifica', _W*0.5, _H*0.5, myApp.font, 20 )
     myText:setFillColor(1) 
     group:insert(myText)
 
 end
 
 
-
-
-
-
-
 function AccediProfilo()
     storyboard.removeAll()
-    storyboard.gotoScene('accedi', { params = { var  = myApp.index } })
+    storyboard.gotoScene("accedi")
 end
 
 function goBack()
     storyboard.removeAll()
-    local sceneName = storyboard.getCurrentSceneName()
-    storyboard.removeScene( sceneName )
-    storyboard.gotoScene('informazioni', { params = { var  = 0 } })
+    storyboard.gotoScene(storyboard.getPrevious())
 end
-
-
 
 
 
@@ -122,25 +98,22 @@ end
 
 
 function scene:enterScene( event )
-    local group = self.view
+	local group = self.view
+
 end
 
 function scene:exitScene( event )
-    local group = self.view
+	local group = self.view
 
-    --
-    -- Clean up native objects
-    --
+	--
+	-- Clean up native objects
+	--
 
 end
-
 
 function scene:destroyScene( event )
-    local group = self.view
+	local group = self.view
 end
-
-
-
 -- "createScene" event is dispatched if scene's view does not exist
 scene:addEventListener( "createScene", scene )
 

@@ -1,18 +1,20 @@
 local storyboard = require ('storyboard')
 local scene = storyboard.newScene()
-
 local widget = require('widget')
 local myApp = require('myapp')
 
 widget.setTheme(myApp.theme)
 
+
+-- funzioni
 local titleText
 local locationtxt
 local views = {}
 local goBack = {}
 local accediProfilo = {}
 
-local titleBarHeight = 50
+
+-- variabili
 local accedi
 local titleBar
 local titleText
@@ -30,6 +32,7 @@ end
 function scene:createScene(event)
 	local group = self.view
 
+    ------ instanzio nav bar e bottoni
     titleBar = display.newImageRect(myApp.topBarBg, display.contentWidth, 50)
     titleBar.x = display.contentCenterX
     titleBar.y = 25 + display.topStatusBarContentHeight
@@ -54,40 +57,50 @@ function scene:createScene(event)
 
 	-- local background = display.newRect(0,0,display.contentWidth, display.contentHeight)
 	-- background:setFillColor(0.9, 0.9, 0.9)
- --    background.x = display.contentCenterX
- --    background.y = display.contentCenterY
+    -- background.x = display.contentCenterX
+    -- background.y = display.contentCenterY
 	-- group:insert(background)
 	-- background:addEventListener("touch", ignoreTouch)
 
- --    local statusBarBackground = display.newImageRect(myApp.topBarBg, display.contentWidth, display.topStatusBarContentHeight)
- --    statusBarBackground.x = display.contentCenterX
- --    statusBarBackground.y = display.topStatusBarContentHeight * 0.5
- --    group:insert(statusBarBackground)
+    -- local statusBarBackground = display.newImageRect(myApp.topBarBg, display.contentWidth, display.topStatusBarContentHeight)
+    -- statusBarBackground.x = display.contentCenterX
+    -- statusBarBackground.y = display.topStatusBarContentHeight * 0.5
+    -- group:insert(statusBarBackground)
 
 
+    local myText = display.newText( 'Acquista', _W*0.5, _H*0.5, myApp.font, 20 )
+    myText:setFillColor(1) 
+    group:insert(myText)
 end
 
 
--- function goToAccedi(event)
---         --scene:exitScene(event)
---         --myApp.tabBar:removeSelf()
---         myApp.tabBar.isVisible = false
---         storyboard.gotoScene("accedi")
--- end
+
+
+
+
+
+
+
+
 
 
 function AccediProfilo()
     storyboard.removeAll()
-
     storyboard.gotoScene("accedi", { params = { var = 0 } })
 end
 
 function goBack()
     storyboard.removeAll()
-    -- local sceneName = storyboard.getCurrentSceneName()
-    -- storyboard.removeScene( name )
     storyboard.gotoScene(storyboard.getPrevious())
 end
+
+
+
+
+
+
+
+
 
 
 function scene:enterScene( event )
@@ -108,9 +121,18 @@ function scene:destroyScene( event )
 	local group = self.view
 end
 
+-- "createScene" event is dispatched if scene's view does not exist
 scene:addEventListener( "createScene", scene )
+
+-- "enterScene" event is dispatched whenever scene transition has finished
 scene:addEventListener( "enterScene", scene )
+
+-- "exitScene" event is dispatched before next scene's transition begins
 scene:addEventListener( "exitScene", scene )
+
+-- "destroyScene" event is dispatched before view is unloaded, which can be
+-- automatically unloaded in low memory situations, or explicitly via a call to
+-- storyboard.purgeScene() or storyboard.removeScene().
 scene:addEventListener( "destroyScene", scene )
 
 return scene

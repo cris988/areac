@@ -1,18 +1,12 @@
 local storyboard = require ('storyboard')
 local scene = storyboard.newScene()
-
 local widget = require('widget')
 local myApp = require('myapp')
 
 widget.setTheme(myApp.theme)
 
-local _H = display.contentHeight
-local _W = display.contentWidth
-local titleBarHeight = 50
-local right_padding = 10
-local listaInfo
-local accedi
 
+-- titolo dei menù delle informazioni
 local strings = {}
 strings[1] = 'Cos\'è l\'area C'
 strings[2] = 'informazioni varie'
@@ -23,10 +17,7 @@ strings[6] = 'Come cambiare targa'
 strings[7] = 'Come modificare i dati personali'
 
 
-local titleText
-local locationtxt
-local titleBar
-local titleText
+-- funzioni
 local views = {}
 local goToAccedi = {}
 local onRowRender = {}
@@ -34,6 +25,17 @@ local onRowTouch = {}
 local makeList = {}
 local goBack = {}
 local accediProfilo = {}
+
+
+-- variabili
+local right_padding = 10
+local listaInfo
+local accedi
+local titleText
+local locationtxt
+local titleBar
+
+
 
 
 local function ignoreTouch( event )
@@ -48,6 +50,7 @@ end
 function scene:createScene(event)
 	local group = self.view
 
+    ------ instanzio nav bar e bottoni
     titleBar = display.newImageRect(myApp.topBarBg, display.contentWidth, 50)
     titleBar.x = display.contentCenterX
     titleBar.y = 25 + display.topStatusBarContentHeight
@@ -72,21 +75,33 @@ function scene:createScene(event)
 
 	-- local background = display.newRect(0,0,display.contentWidth, display.contentHeight)
 	-- background:setFillColor(0.9, 0.9, 0.9)
- --    background.x = display.contentCenterX
- --    background.y = display.contentCenterY
+    -- background.x = display.contentCenterX
+    -- background.y = display.contentCenterY
 	-- group:insert(background)
 
- --    local statusBarBackground = display.newImageRect(myApp.topBarBg, display.contentWidth, display.topStatusBarContentHeight)
- --    statusBarBackground.x = display.contentCenterX
- --    statusBarBackground.y = display.topStatusBarContentHeight * 0.5
- --    group:insert(statusBarBackground)
+    -- local statusBarBackground = display.newImageRect(myApp.topBarBg, display.contentWidth, display.topStatusBarContentHeight)
+    -- statusBarBackground.x = display.contentCenterX
+    -- statusBarBackground.y = display.topStatusBarContentHeight * 0.5
+    -- group:insert(statusBarBackground)
     
-
+    
     makeList()
 
     group:insert(listaInfo)
 end
 
+
+
+
+
+
+
+
+
+
+
+
+-- creo spazio per la lista
 function makeList()
     listaInfo = widget.newTableView
     {
@@ -118,19 +133,8 @@ function makeList()
     end
 end
 
-function AccediProfilo()
-    storyboard.removeAll()
-    storyboard.gotoScene("accedi", { params = { var = 0 } })
-end
 
-function goBack()
-    storyboard.removeAll()
-    -- local sceneName = storyboard.getCurrentSceneName()
-    -- storyboard.removeScene( name )
-    storyboard.gotoScene(storyboard.getPrevious())
-end
-
-
+-- imposto e riempio le righe della lista
 function onRowRender( event )
 
     -- Get reference to the row group
@@ -156,14 +160,12 @@ end
 
 
 
-
-
+-- gestisce le azioni dell'utente sulle righe della lista
 function onRowTouch( event )
     local row = event.target
-
-    print('sono in onRowT')
     if event.phase == "release" or event.phase == 'tap' then
-        print ('var informazioni ' .. event.target.index)
+        -- è il numero della riga della lista che è stato cliccato
+        myApp.index = event.target.index
         storyboard.gotoScene('info1', { params = { var = event.target.index } })
     end
                 
@@ -182,11 +184,35 @@ end
 
 
 
+
+
+
+
+function AccediProfilo()
+    storyboard.removeAll()
+    storyboard.gotoScene("accedi")
+end
+
+function goBack()
+    storyboard.removeAll()
+    storyboard.gotoScene(storyboard.getPrevious())
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function scene:enterScene( event )
 	local group = self.view
-    --storyboard.reloadScene()
-    --listaInfo:reloadData()
-
 end
 
 function scene:exitScene( event )
@@ -202,9 +228,18 @@ function scene:destroyScene( event )
 	local group = self.view
 end
 
+-- "createScene" event is dispatched if scene's view does not exist
 scene:addEventListener( "createScene", scene )
+
+-- "enterScene" event is dispatched whenever scene transition has finished
 scene:addEventListener( "enterScene", scene )
+
+-- "exitScene" event is dispatched before next scene's transition begins
 scene:addEventListener( "exitScene", scene )
+
+-- "destroyScene" event is dispatched before view is unloaded, which can be
+-- automatically unloaded in low memory situations, or explicitly via a call to
+-- storyboard.purgeScene() or storyboard.removeScene().
 scene:addEventListener( "destroyScene", scene )
 
 return scene

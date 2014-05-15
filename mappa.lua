@@ -1,24 +1,22 @@
 local storyboard = require ('storyboard')
 local scene = storyboard.newScene()
-
 local widget = require('widget')
 local myApp = require('myapp')
 
 widget.setTheme(myApp.theme)
 
-local titleText
-local locationtxt
+
+-- funzioni
 local views = {}
 local goBack = {}
 local accediProfilo = {}
 
-local _H = display.contentHeight
-local _W = display.contentWidth
-local titleBarHeight = 50
+
+-- variabili
 local accedi
 local titleBar
 local titleText
-
+local locationtxt
 
 local function ignoreTouch( event )
 	return true
@@ -32,6 +30,7 @@ end
 function scene:createScene(event)
 	local group = self.view
 
+    ------ instanzio nav bar e bottoni
     titleBar = display.newImageRect(myApp.topBarBg, display.contentWidth, 50)
     titleBar.x = display.contentCenterX
     titleBar.y = 25 + display.topStatusBarContentHeight
@@ -80,6 +79,9 @@ function scene:createScene(event)
 
     local contornoMappa = display.newRect( display.contentCenterX, display.contentCenterY+8, _W, _H*0.7 )
     group:insert(contornoMappa)
+    local myText = display.newText( 'Mappa', _W*0.5, _H*0.5, myApp.font, 20 )
+    myText:setFillColor(0) 
+    group:insert(myText)
 
     myMap = native.newMapView( display.contentCenterX, display.contentCenterY, _W, _H*0.7 )
     --myMap.x = display.contentCenterX
@@ -116,17 +118,33 @@ function scene:createScene(event)
     group:insert(myMap)
 end
 
+
+
+
+
+
+
+
+
+
+
 function AccediProfilo()
     storyboard.removeAll()
-    storyboard.gotoScene("accedi", { params = { var = 0 } })
+    storyboard.gotoScene("accedi")
 end
 
 function goBack()
     storyboard.removeAll()
-    -- local sceneName = storyboard.getCurrentSceneName()
-    -- storyboard.removeScene( name )
     storyboard.gotoScene(storyboard.getPrevious())
 end
+
+
+
+
+
+
+
+
 
 
 
@@ -150,9 +168,18 @@ function scene:destroyScene( event )
     --myMap:removeSelf()
 end
 
+-- "createScene" event is dispatched if scene's view does not exist
 scene:addEventListener( "createScene", scene )
+
+-- "enterScene" event is dispatched whenever scene transition has finished
 scene:addEventListener( "enterScene", scene )
+
+-- "exitScene" event is dispatched before next scene's transition begins
 scene:addEventListener( "exitScene", scene )
+
+-- "destroyScene" event is dispatched before view is unloaded, which can be
+-- automatically unloaded in low memory situations, or explicitly via a call to
+-- storyboard.purgeScene() or storyboard.removeScene().
 scene:addEventListener( "destroyScene", scene )
 
 return scene
