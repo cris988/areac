@@ -10,14 +10,19 @@ widget.setTheme(myApp.theme)
 local views = {}
 local goBack = {}
 local accediProfilo = {}
-
+local inputTarga = {}
+local AvantiScene = {}
 
 -- variabili
 local accedi
+local avanti
 local titleBar
 local titleText
 local titleText
 local locationtxt
+local campoTarga
+
+local string = "Inserisci la targa\nper controllare se il tuo\nveicolo è adibito ad accedere\nall\'area C e con che modalità"
 
 
 
@@ -32,6 +37,12 @@ end
 
 function scene:createScene(event)
 	local group = self.view
+
+    local background = display.newRect(0,0,display.contentWidth, display.contentHeight)
+    background:setFillColor(0.9, 0.9, 0.9)
+    background.x = display.contentCenterX
+    background.y = display.contentCenterY
+    group:insert(background)
 
     ------ instanzio nav bar e bottoni
     titleBar = display.newImageRect(myApp.topBarBg, display.contentWidth, 50)
@@ -56,22 +67,65 @@ function scene:createScene(event)
     group:insert(titleText)
     group:insert(accedi)
 
-	-- local background = display.newRect(0,0,display.contentWidth, display.contentHeight)
-	-- background:setFillColor(0.9, 0.9, 0.9)
-    -- background.x = display.contentCenterX
-    -- background.y = display.contentCenterY
-	-- group:insert(background)
 
     -- local statusBarBackground = display.newImageRect(myApp.topBarBg, display.contentWidth, display.topStatusBarContentHeight)
     -- statusBarBackground.x = display.contentCenterX
     -- statusBarBackground.y = display.topStatusBarContentHeight * 0.5
     -- group:insert(statusBarBackground)
 
-    local myText = display.newText( 'Verifica', _W*0.5, _H*0.5, myApp.font, 20 )
-    myText:setFillColor(1) 
-    group:insert(myText)
+    local options = {
+        text = string,
+        x = _W*0.5,
+        y = _H*0.425,
+        width = _W - 30,
+        height = 300,
+        fontSize = 18,
+        align = "center"
+    }
+    --Output the text box with the specified options
+    local areaT = display.newText( options )
+    areaT:setFillColor( 0, 0, 0 )
+    group:insert(areaT)
+
+
+    campoTarga = display.newImageRect('img/textArea.png', 564*0.5, 62*0.5)
+    campoTarga.x = _W*0.5
+    campoTarga.y = _H*0.45
+    -- campoTarga = native.newTextField( _W*0.5, _H*0.45, _W*0.60, 35, inputTarga)
+    -- campoTarga:addEventListener( "userInput", inputTarga )
+    group:insert(campoTarga)
+
+
+    avanti = widget.newButton({
+        id  = 'BtAvanti',
+        label = 'Avanti',
+        x = _W*0.5,
+        y = _H*0.7,
+        color = { 0.062745,0.50980,0.99607 },
+        fontSize = 26,
+        onRelease = AvantiScene
+    })
 
 end
+
+
+
+
+
+function inputTarga( event )
+    phase = event.phase
+    if phase == 'began' then
+        native.setKeyboardFocus( campoTarga )
+    end
+end
+
+
+
+
+
+
+
+
 
 
 function AccediProfilo()

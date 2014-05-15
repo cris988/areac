@@ -32,6 +32,12 @@ end
 function scene:createScene(event)
 	local group = self.view
 
+    local background = display.newRect(0,0,display.contentWidth, display.contentHeight)
+    background:setFillColor(0.9, 0.9, 0.9)
+    background.x = display.contentCenterX
+    background.y = display.contentCenterY
+    group:insert(background)
+
     ------ instanzio nav bar e bottoni
     titleBar = display.newImageRect(myApp.topBarBg, display.contentWidth, 50)
     titleBar.x = display.contentCenterX
@@ -54,13 +60,7 @@ function scene:createScene(event)
     group:insert(titleBar)
     group:insert(titleText)
     group:insert(accedi)
-
-	-- local background = display.newRect(0,0,display.contentWidth, display.contentHeight)
-	-- background:setFillColor(0.9, 0.9, 0.9)
-    -- background.x = display.contentCenterX
-    -- background.y = display.contentCenterY
-	-- group:insert(background)
-	-- background:addEventListener("touch", ignoreTouch)
+    
 
     -- local statusBarBackground = display.newImageRect(myApp.topBarBg, display.contentWidth, display.topStatusBarContentHeight)
     -- statusBarBackground.x = display.contentCenterX
@@ -69,7 +69,7 @@ function scene:createScene(event)
 
 
     local myText = display.newText( 'Acquista', _W*0.5, _H*0.5, myApp.font, 20 )
-    myText:setFillColor(1) 
+    myText:setFillColor(0) 
     group:insert(myText)
 end
 
