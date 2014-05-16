@@ -3,6 +3,7 @@ local scene = storyboard.newScene()
 local myApp = require('myapp')
 local widget = require('widget')
 
+widget.setTheme(myApp.theme)
 
 -- funzioni
 local goBack = {}
@@ -23,7 +24,7 @@ strings[1] = 'Cos\'è l\'area C'
 strings[2] = 'informazioni varie'
 strings[3] = 'Varchi e orari'
 strings[4] = 'Veicoli autorizzatti all\'acceso'
-strings[5] = 'Tariffe e pagamenti'
+strings[5] = 'Tariffe e metodi di pagamento'
 strings[6] = 'Come cambiare targa'
 strings[7] = 'Come modificare i dati personali'
 

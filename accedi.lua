@@ -16,8 +16,6 @@ local accediProfilo = {}
 local indietro
 local titleBar
 local titleText
-local titleText
-local locationtxt
 
 local function ignoreTouch( event )
 	return true
@@ -36,6 +34,8 @@ function scene:createScene(event)
     background.x = display.contentCenterX
     background.y = display.contentCenterY
 	group:insert(background)
+
+	myApp.tabBar.isVisible = false
 
 	------ instanzio nav bar e bottoni
 	titleBar = display.newImageRect(myApp.topBarBg, display.contentWidth, 50)
@@ -83,7 +83,14 @@ end
 
 function goBack()
     storyboard.removeAll()
-    storyboard.gotoScene(storyboard.getPrevious(), { params = { var = myApp.index } })
+
+    if storyboard.getPrevious() == 'acquista2' then
+    	storyboard.gotoScene(storyboard.getPrevious(), { params = { var = myApp.index, targa = myApp.targaAcquista } })
+    elseif storyboard.getPrevious() == 'verificatarga2' then
+    	storyboard.gotoScene(storyboard.getPrevious(), { params = { var = myApp.index, targa = myApp.targaVerifica } })
+    else
+    	storyboard.gotoScene(storyboard.getPrevious())
+    end
 end
 
 
@@ -107,6 +114,7 @@ end
 
 function scene:exitScene( event )
 	local group = self.view
+	myApp.tabBar.isVisible = true
 
     --
 	-- Clean up native objects

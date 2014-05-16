@@ -12,7 +12,7 @@ strings[1] = 'Cos\'è l\'area C'
 strings[2] = 'informazioni varie'
 strings[3] = 'Varchi e orari'
 strings[4] = 'Veicoli autorizzatti all\'acceso'
-strings[5] = 'Tariffe e pagamenti'
+strings[5] = 'Tariffe e metodi di pagamento'
 strings[6] = 'Come cambiare targa'
 strings[7] = 'Come modificare i dati personali'
 
@@ -112,11 +112,11 @@ function makeList()
         onRowRender = onRowRender,
         onRowTouch = onRowTouch,
         listener = scrollListener,
-        isLocked = false
+        isLocked = true
     }
-    for i = 1, 7 do
+    for i = 1, #strings do
 
-    local isCategory = false
+        local isCategory = false
         local rowHeight = 50
         local rowColor = { default={ 1, 1, 1 }, over={ 1, 0.5, 0, 0.2 } }
         local lineColor = { 0.8, 0.8, 0.8 }
