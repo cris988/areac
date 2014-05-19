@@ -101,6 +101,75 @@ _W = display.contentWidth
 
 
 
+require "sqlite3"
+local data_path=system.pathForFile("data.db",system.DocumentsDirectory);
+db = sqlite3.open(data_path);
+
+local sql = "CREATE TABLE IF NOT EXISTS settings (name,value);"
+db:exec(sql);
+
+
+
+
+function setSetting(name,value)   
+    sql="DELETE FROM settings WHERE name='"..name.."'";
+    db:exec( sql )
+    
+    sql="INSERT INTO settings (name,value) VALUES ('"..name.."',"..value..");";
+    db:exec( sql )    
+end
+
+function setSettingString(name,value)
+    setSetting(name,"'"..value.."'");
+end
+
+
+
+
+function getSetting(name)
+
+    local sql="SELECT * FROM settings WHERE name='"..name.."'";
+    local value=-1;
+
+    for row in db:nrows(sql) do
+        value=row.value;
+    end    
+
+    return value;
+end
+
+function getSettingString(name)
+    local sql="SELECT * FROM settings WHERE name='"..name.."'";
+    local value='';
+
+    for row in db:nrows(sql) do
+        value=row.value;
+    end    
+
+    return value;
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 -- local function handleLeftButton( event )

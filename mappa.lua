@@ -167,8 +167,7 @@ end
 function scene:exitScene( event )
 	local group = self.view
     myApp.targaVerifica = nil
-
-    --myMap:removeSelf()
+    myMap:removeSelf()
 	--
 	-- Clean up native objects
 	--
@@ -177,7 +176,6 @@ end
 
 function scene:destroyScene( event )
 	local group = self.view
-    --myMap:removeSelf()
 end
 
 -- "createScene" event is dispatched if scene's view does not exist
