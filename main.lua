@@ -9,7 +9,15 @@ local storyboard = require ( "storyboard" )
 local widget = require( "widget" )
 local myApp = require( "myapp" ) 
 
-
+--
+-- Handle Graphics 2.0 changes
+myApp.colorDivisor = 255
+myApp.isGraphics2 = true
+if tonumber( system.getInfo("build") ) < 2013.2000 then
+    -- we are a Graphics 1.0 build
+    myApp.colorDivisor = 1
+    myApp.isGraphics2 = false
+end
 
 --
 -- turn on debugging
@@ -32,13 +40,6 @@ end
 
 math.randomseed(os.time())
 
-
-
-
-
-
-
-
 --
 -- Load our fonts and define our styles
 --
@@ -49,7 +50,6 @@ local tabBarMiddle = "img/tabBar_tabSelectedMiddle7.png"
 local tabBarRight = "img/tabBar_tabSelectedRight7.png"
 
 myApp.topBarBg = "img/topBarBg7.png"
-
 
 
 local iconInfo = {
@@ -77,29 +77,10 @@ myApp.fontBoldItalic = "Helvetica-BoldItalic"
 widget.setTheme(myApp.theme)
 
 
-
-
-
 -- variabili globali
 titleBarHeight = 50
 _H = display.contentHeight
 _W = display.contentWidth
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -148,27 +129,6 @@ _W = display.contentWidth
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 -- instanzio tabBar
 myApp.tabBar = {}
 
@@ -176,7 +136,11 @@ myApp.tabBar = {}
 
 -- creo funzioni per la tabBar
 
-function myApp.showScreen1()
+function myApp.showHome()
+    myApp.showMappa()
+end
+
+function myApp.showMappa()
     myApp.tabBar:setSelected(1)
     storyboard.removeAll()
     -- storyboard.gotoScene("mappa", {time=250, effect="crossFade"})
@@ -184,7 +148,7 @@ function myApp.showScreen1()
     return true
 end
 
-function myApp.showScreen2()
+function myApp.showVerifica()
     myApp.tabBar:setSelected(2)
     storyboard.removeAll()
     -- storyboard.gotoScene("verificatarga", {time=250, effect="crossFade"})
@@ -192,7 +156,7 @@ function myApp.showScreen2()
     return true
 end
 
-function myApp.showScreen3()
+function myApp.showAcquista()
     myApp.tabBar:setSelected(3)
     storyboard.removeAll()
     -- storyboard.gotoScene("acquista", {time=250, effect="crossFade"})
@@ -200,18 +164,13 @@ function myApp.showScreen3()
     return true
 end
 
-function myApp.showScreen4() 
+function myApp.showInfo() 
     myApp.tabBar:setSelected(4)
     storyboard.removeAll()
     -- storyboard.gotoScene("informazioni", {time=250, effect="crossFade"})
     storyboard.gotoScene("informazioni")
     return true
 end
-
-
-
-
-
 
 -- creo pulsanti per la tabBar
 
@@ -226,7 +185,7 @@ local tabButtons = {
         },
         width = 32,
         height = 32,
-        onPress = myApp.showScreen1,
+        onPress = myApp.showMappa,
         selected = true
     },
     {
@@ -239,7 +198,7 @@ local tabButtons = {
         },
         width = 32,
         height = 32,
-        onPress = myApp.showScreen2,
+        onPress = myApp.showVerifica,
     },
     {
         label = "Acquista",
@@ -251,7 +210,7 @@ local tabButtons = {
         },
         width = 32,
         height = 32,
-        onPress = myApp.showScreen3,
+        onPress = myApp.showAcquista,
     },
     {
         label = "Informazioni",
@@ -263,13 +222,9 @@ local tabButtons = {
         },
         width = 32,
         height = 32,
-        onPress = myApp.showScreen4,
+        onPress = myApp.showInfo,
     }
 }
-
-
-
-
 
 
 
@@ -280,48 +235,39 @@ myApp.tabBar = widget.newTabBar{
     left = 0,
     width = display.contentWidth,
     backgroundFile = tabBarBackgroundFile,
-    tabSelectedLeftFile = tabBarLeft,      -- New
-    tabSelectedRightFile = tabBarRight,    -- New
-    tabSelectedMiddleFile = tabBarMiddle,      -- New
-    tabSelectedFrameWidth = 20,                                         -- New
-    tabSelectedFrameHeight = 50,                                        -- New    
-    height = 50,                                      -- New    
+    tabSelectedLeftFile = tabBarLeft, 
+    tabSelectedRightFile = tabBarRight,
+    tabSelectedMiddleFile = tabBarMiddle, 
+    tabSelectedFrameWidth = 20, 
+    tabSelectedFrameHeight = 50,   
+    height = 50,  
     top = display.contentHeight - 50,
     buttons = tabButtons
 }
 
+-- Sfondo + Logo Splash Screen
+
+local background = display.newRect(0,0, display.contentWidth, display.contentHeight)
+background:setFillColor(255/myApp.colorDivisor,255/myApp.colorDivisor,255/myApp.colorDivisor)
+background.x = display.contentCenterX
+background.y = display.contentCenterY
+
+local logo = display.newImageRect("Splash.png", 320, 480)
+logo.x = display.contentCenterX
+logo.y = display.contentCenterY
 
 
-
-
-
-
-
--- local background  = display.newRect(0, 0, display.contentWidth, display.contentHeight)
--- background:setFillColor(0.9,0.9,0.9)
--- background.x = display.contentCenterX
--- background.y = display.contentCenterY
-
-
-
-
-
-
-
-
-
-
-
-
+-- Rimuove Splash Screen
 
 local function closeSplash()
-
-    myApp.showScreen1()
+    display.remove(logo)
+    logo = nil
+    display.remove(background)
+    background = nil
+    myApp.showHome()
 end
 
-
-
-timer.performWithDelay(1, closeSplash)
+timer.performWithDelay(1500, closeSplash)
 
 
 
