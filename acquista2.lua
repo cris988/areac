@@ -15,6 +15,9 @@ local checkBoxListener = {}
 local makeList = {}
 local onRowRender = {}
 local onRowTouch = {}
+local infoView = {}
+local goBackInfo = {}
+local schermataAccesso = {}
 
 
 -- variabili
@@ -30,9 +33,14 @@ local checkMultiplo
 local checkboxSelected = true
 local listaInfo
 local right_padding = 10
-
-
-
+local myTextInfo
+local indietroInfo
+local titleTextInfo
+local titleBarInfo
+local backgroundInfo
+local myText
+local textGiornaliero
+local textMultiplo
 
 
 
@@ -55,6 +63,7 @@ strings[2] = 'Tariffe e metodi di pagamento'
 
 function scene:createScene(event)
     local group = self.view
+    print('crea')
 
     local background = display.newRect(0,0,display.contentWidth, display.contentHeight)
 	background:setFillColor(0.9, 0.9, 0.9)
@@ -67,7 +76,7 @@ function scene:createScene(event)
     titleBar.x = display.contentCenterX
     titleBar.y = 25 + display.topStatusBarContentHeight
 
-    titleText = display.newText( 'Profilo', 0, 0, myApp.fontBold, 20 )
+    titleText = display.newText( 'Acquista', 0, 0, myApp.fontBold, 20 )
     titleText:setFillColor(0,0,0)
     titleText.x = display.contentCenterX
     titleText.y = titleBarHeight * 0.5 + display.topStatusBarContentHeight
@@ -95,17 +104,44 @@ function scene:createScene(event)
     group:insert(indietro)
     group:insert(accedi)
 
-    myApp.targaAcquista = event.params.targa
-
 
 
 
 
     accesso = math.random(4)
 
+    myApp.targaAcquista = event.params.targa
 
-    -- l'auto può transitare
+    schermataAccesso(accesso)
+
+
     if accesso < 4 then
+        group:insert(myText)
+        group:insert(checkGiornaliero)
+        group:insert(checkMultiplo)
+        group:insert(textGiornaliero)
+        group:insert(textMultiplo)
+        group:insert(listaInfo)
+        group:insert(acquista)
+    else
+        group:insert(myText)
+    end
+
+
+end
+
+
+
+
+
+
+
+
+
+
+function schermataAccesso(numero)
+    -- l'auto può transitare
+    if numero < 4 then
         local options = {
             text = 'Seleziona il ticket da acquistare per questa targa: '..myApp.targaAcquista,
             x = _W*0.5,
@@ -115,9 +151,8 @@ function scene:createScene(event)
             fontSize = 16,
             align = "center"
         }
-        local myText = display.newText( options )
+        myText = display.newText( options )
         myText:setFillColor( 0 )
-        group:insert(myText)
 
 
 
@@ -147,26 +182,15 @@ function scene:createScene(event)
            onPress = checkBoxListener
         }
 
-        group:insert(checkGiornaliero)
-        group:insert(checkMultiplo)
-
-
-
-        local textGiornaliero = display.newText('Giornaliero                      5 €', _W*0.57, 190, myApp.font, 20)
+        
+        textGiornaliero = display.newText('Giornaliero                      5 €', _W*0.57, 190, myApp.font, 20)
         textGiornaliero:setFillColor( 0 )
-        group:insert(textGiornaliero)
-        local textMultiplo = display.newText('Multiplo                         30 €', _W*0.57, 240, myApp.font, 20)
+        textMultiplo = display.newText('Multiplo                         30 €', _W*0.57, 240, myApp.font, 20)
         textMultiplo:setFillColor( 0 )
-        group:insert(textMultiplo)
-
-
-
 
 
         makeList()
-        group:insert(listaInfo)
-
-
+        
 
         acquista = widget.newButton({
             id  = 'BtAcquista',
@@ -177,7 +201,7 @@ function scene:createScene(event)
             fontSize = 26,
             onRelease = acquistaTicket
         })
-        group:insert(acquista)
+        
 
 
     -- l'auto può transitare
@@ -191,19 +215,27 @@ function scene:createScene(event)
             fontSize = 18,
             align = "center"
         }
-        local myText = display.newText( options )
+        myText = display.newText( options )
         myText:setFillColor( 0 )
-        group:insert(myText)
     end
-
-
-
-
-
-
-
-
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -251,21 +283,20 @@ function makeList()
     {
         x = _W*0.5,
         y = _H*0.6,
-        height = 102,
+        height = 100,
         width = _W,
         onRowRender = onRowRender,
         onRowTouch = onRowTouch,
-        listener = scrollListener,
         isLocked = true,
-        noLines = true,
-        hideBackground = true,
     }
     for i = 1, #strings do
 
         local isCategory = false
         local rowHeight = 50
-        local rowColor = { default={ 0.90196, 0.90196, 0.90196 }, over={ 1, 0.5, 0, 0.2 } }
-        local lineColor = { 0.8, 0.8, 0.8 }
+        -- local rowColor = { default={ 0.90196, 0.90196, 0.90196 }, over={ 1, 0.5, 0, 0.2 } }
+        local rowColor = { default={ 230,230,230 }, over={ 255, 127, 0 } }
+        -- local lineColor = { 0.8, 0.8, 0.8 }
+        local lineColor = { 220, 220, 220 }
 
         -- Insert a row into the listaInfo
         listaInfo:insertRow(
@@ -273,7 +304,7 @@ function makeList()
             isCategory = isCategory,
             rowHeight = rowHeight,
             rowColor = rowColor,
-            --lineColor = lineColor,
+            lineColor = lineColor
             }
         )
     end
@@ -291,29 +322,24 @@ function onRowRender( event )
     local rowHeight = row.contentHeight
     local rowWidth = row.contentWidth
 
+    rowTitle = display.newText( row, strings[row.index], 0, 0, myApp.font, 18 )
+    rowTitle:setFillColor( 0 )
+    rowTitle.anchorX = 0
+    rowTitle.x = 20
+    rowTitle.y = rowHeight * 0.5
 
-    row.bg = display.newRect( 0, 0, rowWidth, rowHeight )
-    row.bg.anchorX = 0
-    row.bg.anchorY = 0
-    row.bg:setFillColor( 1, 1, 1 )
+    -- if row.index == 1 then 
+    --     row.index = 3
+    -- else
+    --     row.index = 5
+    -- end
 
-    row.rowTitle = display.newText( row, strings[row.index], 0, 0, myApp.font, 18 )
-    row.rowTitle:setFillColor( 0 )
-    row.rowTitle.anchorX = 0
-    row.rowTitle.x = 20
-    row.rowTitle.y = rowHeight * 0.5
-
-    row.rowArrow = display.newImage( row, "img/rowArrow.png", false )
-    row.rowArrow.x = row.contentWidth - right_padding
-    row.rowArrow.anchorX = 1
-    row.rowArrow.y = row.contentHeight * 0.5
-
-    row:insert( row.bg )
-    row:insert( row.rowTitle )
-    row:insert( row.rowArrow )
+    rowArrow = display.newImage( row, "img/rowArrow.png", false )
+    rowArrow.x = row.contentWidth - right_padding
+    rowArrow.anchorX = 1
+    rowArrow.y = row.contentHeight * 0.5
 
 end
-
 
 
 -- gestisce le azioni dell'utente sulle righe della lista
@@ -322,7 +348,8 @@ function onRowTouch( event )
     if event.phase == "release" or event.phase == 'tap' then
         -- è il numero della riga della lista che è stato cliccato
         myApp.index = event.target.index
-        storyboard.gotoScene('info1', { params = { var = event.target.index } })
+        -- storyboard.gotoScene('info1', { params = { var = event.target.index } })
+        infoView()
     end
                 
 -- --[[ This part handles the swipe left and right to show and hide the delete button ]]--
@@ -335,6 +362,72 @@ function onRowTouch( event )
  
 --     return true
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function infoView()
+    backgroundInfo = display.newRect(0,0,display.contentWidth, display.contentHeight)
+    backgroundInfo:setFillColor(0.9, 0.9, 0.9)
+    backgroundInfo.x = display.contentCenterX
+    backgroundInfo.y = display.contentCenterY
+
+    ------ instanzio nav bar e bottoni
+    titleBarInfo = display.newImageRect(myApp.topBarBg, display.contentWidth, 50)
+    titleBarInfo.x = display.contentCenterX
+    titleBarInfo.y = 25 + display.topStatusBarContentHeight
+
+    titleTextInfo = display.newText( '', 0, 0, myApp.fontBold, 20 )
+    titleTextInfo:setFillColor(0,0,0)
+    titleTextInfo.x = display.contentCenterX
+    titleTextInfo.y = titleBarHeight * 0.5 + display.topStatusBarContentHeight
+    if myApp.index == 1 then
+        titleTextInfo.text = 'Varchi e orari'
+    else
+        titleTextInfo.text = 'Pagamenti'
+    end
+
+    indietroInfo = widget.newButton({
+        id  = 'BtIndietroInfo',
+        label = 'Indietro',
+        x = display.contentCenterX*0.3,
+        y = titleBarHeight * 0.5 + display.topStatusBarContentHeight,
+        color = { 0.062745,0.50980,0.99607 },
+        fontSize = 18,
+        onRelease = goBackInfo
+    })
+
+    myApp.tabBar.isVisible = false
+    indietro.isEnable = false
+
+    -- scrivo le stringhe riferite all'indice
+    myTextInfo = display.newText( strings[myApp.index], _W*0.5, _H*0.5, myApp.font, 20 )
+    myTextInfo:setFillColor(0)
+end
+
+function goBackInfo()
+    myTextInfo:removeSelf()
+    indietroInfo:removeSelf()
+    titleTextInfo:removeSelf()
+    titleBarInfo:removeSelf()
+    backgroundInfo:removeSelf()
+    myApp.tabBar.isVisible = true
+    indietro.isEnable = true
+end
+
 
 
 
@@ -378,11 +471,12 @@ end
 
 function scene:enterScene( event )
     local group = self.view
+    print('entra')
 end
 
 function scene:exitScene( event )
     local group = self.view
- 
+    print('esce')
     --
     -- Clean up native objects
     --
@@ -392,6 +486,7 @@ end
 
 function scene:destroyScene( event )
     local group = self.view
+    print('distrugge')
 end
 
 

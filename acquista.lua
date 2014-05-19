@@ -138,8 +138,7 @@ function scene:createScene(event)
     campoInserimento = native.newTextField( 40, 85, 195, 28)
     campoInserimento.x = _W/2
     campoInserimento.y = _H*0.45
-    campoInserimento:setTextColor( 204,204,204 )
-    campoInserimento.size = 17
+    campoInserimento:setTextColor( 0.75,0.75,0.75 )
     campoInserimento.font = native.newFont( myApp.font, 17 )
     campoInserimento.align = "center"
     campoInserimento.hasBackground = false
@@ -150,16 +149,22 @@ function scene:createScene(event)
     btClear.y = _H*0.45
     btClear.alpha = 0
 
+
+    if myApp.targaAcquista == nil then
+    else 
+        campoInserimento.text = myApp.targaAcquista
+        campoInserimento:setTextColor( 0.75,0.75,0.75 )
+        btClear.alpha = 0.2
+        btClear:addEventListener( "touch", clearListener )
+    end
+
+
     gruppoInserimento:insert(sfondoInserimento)
     gruppoInserimento:insert(campoInserimento)
     gruppoInserimento:insert(btClear)
 
     group:insert(gruppoInserimento)
 
-    if myApp.targaAcquista == nil then
-    else 
-        campoInserimento.text = myApp.targaAcquista
-    end
 
     campoInserimento:addEventListener( "userInput", textListener)
 
@@ -206,7 +211,7 @@ function textListener( event )
     elseif event.phase == "ended" then
         if event.target.text == '' then
             btClear.alpha = 0
-            campoInserimento:setTextColor( 204,204,204)
+            campoInserimento:setTextColor( 0.75,0.75,0.75 )
 
         end
     end
@@ -287,7 +292,6 @@ function scene:exitScene( event )
     local group = self.view
     campoInserimento:removeSelf()
     myApp.targaAcquista = nil
-
 
     --
     -- Clean up native objects

@@ -128,7 +128,7 @@ end
 
 function scene:exitScene( event )
     local group = self.view
-
+    myApp.targaVerifica = nil
     --
     -- Clean up native objects
     --

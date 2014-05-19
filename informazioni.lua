@@ -111,7 +111,7 @@ function makeList()
         width = _W,
         onRowRender = onRowRender,
         onRowTouch = onRowTouch,
-        listener = scrollListener,
+        -- listener = scrollListener,
         isLocked = true
     }
     for i = 1, #strings do
@@ -217,7 +217,8 @@ end
 
 function scene:exitScene( event )
 	local group = self.view
-
+    myApp.targaVerifica = nil
+    
 	--
 	-- Clean up native objects
 	--

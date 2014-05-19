@@ -60,7 +60,7 @@ local iconInfo = {
     sheetContentHeight = 160
 }
 
-myApp.icons = graphics.newImageSheet("images/ios7icons.png", iconInfo)
+myApp.icons = graphics.newImageSheet("img/ios7icons.png", iconInfo)
 
 --widget.setTheme( "widget_theme_android" )
 myApp.theme = 'widget_theme_ios7'

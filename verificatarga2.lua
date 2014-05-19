@@ -11,7 +11,7 @@ local views = {}
 local goBack = {}
 local accediProfilo = {}
 local acquistaTicket = {}
-
+local schermataAccesso = {}
 
 
 -- variabili
@@ -22,8 +22,10 @@ local titleText
 local targa
 local accesso
 local acquista
-
-
+local myText1
+local myText2
+local myText3
+local myText4
 
 
 function scene:createScene(event)
@@ -40,7 +42,7 @@ function scene:createScene(event)
     titleBar.x = display.contentCenterX
     titleBar.y = 25 + display.topStatusBarContentHeight
 
-    titleText = display.newText( 'Profilo', 0, 0, myApp.fontBold, 20 )
+    titleText = display.newText( 'Verifica targa', 0, 0, myApp.fontBold, 20 )
     titleText:setFillColor(0,0,0)
     titleText.x = display.contentCenterX
     titleText.y = titleBarHeight * 0.5 + display.topStatusBarContentHeight
@@ -68,32 +70,63 @@ function scene:createScene(event)
     group:insert(indietro)
     group:insert(accedi)
 
-    myApp.targaVerifica = event.params.targa
 
 
 
+    
 
 
     accesso = math.random(4)
 
+    myApp.targaVerifica = event.params.targa
 
-    -- l'auto può transitare
+    schermataAccesso(accesso)
+
+    group:insert(myText1)
+    group:insert(myText2)
+    group:insert(myText3)
     if accesso < 4 then
-        local myText1 = display.newText( 'Il veicolo con targa '..myApp.targaVerifica,  _W*0.5, 100, myApp.font, 20)
-        myText1:setFillColor(0)
-        local myText2 = display.newText( '\nPUO\' ACCEDERE',  _W*0.5, 125, myApp.font, 20)
-        myText2:setFillColor(0.1333,0.54509,0.13334)
-        local myText3 = display.newText( '\n\nall\'area C',  _W*0.5, 150, myApp.font, 20)
-        myText3:setFillColor(0)
-        group:insert(myText1)
-        group:insert(myText2)
-        group:insert(myText3)
-
-
-
-        local myText4 = display.newText( 'ACCESSO A PAGAMENTO', _W*0.5, _H*0.5, myApp.font, 24 )
-        myText4:setFillColor(0.1333,0.54509,0.13334)
         group:insert(myText4)
+        group:insert(acquista)
+    end
+
+
+
+
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- l'auto può transitare o no
+
+function schermataAccesso (numero)
+    if numero < 4 then
+        myText1 = display.newText( 'Il veicolo con targa '..myApp.targaVerifica,  _W*0.5, 100, myApp.font, 20)
+        myText1:setFillColor(0)
+        myText2 = display.newText( '\nPUO\' ACCEDERE',  _W*0.5, 125, myApp.font, 20)
+        myText2:setFillColor(0.1333,0.54509,0.13334)
+        myText3 = display.newText( '\n\nall\'area C',  _W*0.5, 150, myApp.font, 20)
+        myText3:setFillColor(0)
+
+
+
+
+        myText4 = display.newText( 'ACCESSO A PAGAMENTO', _W*0.5, _H*0.5, myApp.font, 24 )
+        myText4:setFillColor(0.1333,0.54509,0.13334)
 
 
 
@@ -106,29 +139,17 @@ function scene:createScene(event)
             fontSize = 26,
             onRelease = acquistaTicket
         })
-        group:insert(acquista)
 
 
     -- l'auto può transitare
     else
-        local myText1 = display.newText( 'Il veicolo con targa '..myApp.targaVerifica,  _W*0.5, (_H*0.5)-25, myApp.font, 20)
+        myText1 = display.newText( 'Il veicolo con targa '..myApp.targaVerifica,  _W*0.5, (_H*0.5)-25, myApp.font, 20)
         myText1:setFillColor(0)
-        local myText2 = display.newText( '\nNON PUO\' ACCEDERE',  _W*0.5, _H*0.5, myApp.font, 20)
+        myText2 = display.newText( '\nNON PUO\' ACCEDERE',  _W*0.5, _H*0.5, myApp.font, 20)
         myText2:setFillColor(1,0,0)
-        local myText3 = display.newText( '\n\nall\'area C',  _W*0.5, (_H*0.5)+25, myApp.font, 20)
-        myText3:setFillColor(0)
-        group:insert(myText1)
-        group:insert(myText2)
-        group:insert(myText3)
+        myText3 = display.newText( '\n\nall\'area C',  _W*0.5, (_H*0.5)+25, myApp.font, 20)
+        myText3:setFillColor(0)  
     end
-
-
-
-
-
-
-
-
 end
 
 
@@ -136,8 +157,14 @@ end
 
 
 
-function acquistaTicket()
 
+
+
+
+
+function acquistaTicket()
+    myApp.tabBar:setSelected( 3 )
+    storyboard.gotoScene('acquista2', { params = { targa = myApp.targaVerifica } })
 end
 
 function AccediProfilo()

@@ -76,11 +76,23 @@ function scene:createScene(event)
     -- group:insert(statusBarBackground)
 
 
-    local contornoMappa = display.newRect( display.contentCenterX, display.contentCenterY+8, _W, _H*0.7 )
+
+
+
+
+    -- local contornoMappa = display.newRect( display.contentCenterX, display.contentCenterY+8, _W, _H*0.7 )
+    local contornoMappa = display.newRect( 0, 70, _W, _H-119 )
+    contornoMappa.anchorX, contornoMappa.anchorY = 0,0
     group:insert(contornoMappa)
     local myText = display.newText( 'Mappa', _W*0.5, _H*0.5, myApp.font, 20 )
     myText:setFillColor(0) 
     group:insert(myText)
+
+
+
+
+
+
 
     myMap = native.newMapView( display.contentCenterX, display.contentCenterY, _W, _H*0.7 )
     --myMap.x = display.contentCenterX
@@ -90,27 +102,27 @@ function scene:createScene(event)
     myMap:setCenter( 45.464224, 9.190321 )
     
     myMap:addMarker( 45.461462, 9.188465,
-        { title = 'Varco Via Giuseppe Mazzini', subtitle = 'Aperto dalle 7:00 alle 18:00' })
+        { title = 'Varco Via Giuseppe Mazzini', subtitle = 'Aperto dalle 7:00 alle 18:00' , imageFile = 'greenPin.png' })
     myMap:addMarker( 45.477366, 9.180947,
-        { title = 'Varco Via Legnano', subtitle = 'Aperto dalle 7:00 alle 18:00' })
+        { title = 'Varco Via Legnano', subtitle = 'Aperto dalle 7:00 alle 18:00' , imageFile = 'greenPin.png' })
     myMap:addMarker( 45.477631, 9.181296,
-        { title = 'Varco Via di Porta Tenaglia', subtitle = 'Aperto dalle 7:00 alle 18:00' })
+        { title = 'Varco Via di Porta Tenaglia', subtitle = 'Aperto dalle 7:00 alle 18:00' , imageFile = 'greenPin.png' })
     myMap:addMarker( 45.478300, 9.181657,
-        { title = 'Varco Via Moscova', subtitle = 'Aperto dalle 7:00 alle 18:00' })
+        { title = 'Varco Via Moscova', subtitle = 'Aperto dalle 7:00 alle 18:00' , imageFile = 'greenPin.png' })
     myMap:addMarker( 45.480798, 9.182773,
-        { title = 'Varco Via Volta', subtitle = 'Aperto dalle 7:00 alle 18:00' })
+        { title = 'Varco Via Volta', subtitle = 'Aperto dalle 7:00 alle 18:00' , imageFile = 'greenPin.png' })
     myMap:addMarker( 45.480328, 9.186689,
-        { title = 'Varco Corso Garibaldi', subtitle = 'Aperto dalle 7:00 alle 18:00' })
+        { title = 'Varco Corso Garibaldi', subtitle = 'Aperto dalle 7:00 alle 18:00' , imageFile = 'greenPin.png' })
     myMap:addMarker( 45.480110, 9.187966,
-        { title = 'Varco Via Milazzo', subtitle = 'Aperto dalle 7:00 alle 18:00' })
+        { title = 'Varco Via Milazzo', subtitle = 'Aperto dalle 7:00 alle 18:00' , imageFile = 'greenPin.png' })
     myMap:addMarker( 45.479637, 9.191952,
-        { title = 'Varco Via Castelfidardo', subtitle = 'Aperto dalle 7:00 alle 18:00' })  
+        { title = 'Varco Via Castelfidardo', subtitle = 'Aperto dalle 7:00 alle 18:00' , imageFile = 'greenPin.png' })  
     myMap:addMarker( 45.479637, 9.191952,
-        { title = 'Varco Via Turati', subtitle = 'Aperto dalle 7:00 alle 18:00' })
+        { title = 'Varco Via Turati', subtitle = 'Aperto dalle 7:00 alle 18:00' , imageFile = 'greenPin.png' })
     myMap:addMarker( 45.474100, 9.204687,
-        { title = 'Varco Corso Venezia', subtitle = 'Aperto dalle 7:00 alle 18:00' })
+        { title = 'Varco Corso Venezia', subtitle = 'Aperto dalle 7:00 alle 18:00' , imageFile = 'greenPin.png' })
     myMap:addMarker( 45.471534, 9.205188,
-        { title = 'Varco Via Baretti', subtitle = 'Aperto dalle 7:00 alle 18:00' })
+        { title = 'Varco Via Baretti', subtitle = 'Aperto dalle 7:00 alle 18:00' , imageFile = 'greenPin.png' })
 
     myMap.isLocationVisible = true
     myMap.isZoomEnabled = true
@@ -154,6 +166,7 @@ end
 
 function scene:exitScene( event )
 	local group = self.view
+    myApp.targaVerifica = nil
 
     --myMap:removeSelf()
 	--
