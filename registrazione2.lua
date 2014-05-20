@@ -59,6 +59,45 @@ function scene:createScene(event)
     background.y = display.contentCenterY
 	group:insert(background)
 
+<<<<<<< HEAD
+=======
+	myApp.tabBar.isVisible = false
+
+	------ instanzio nav bar e bottoni
+	titleBar = display.newImageRect(myApp.topBarBg, display.contentWidth, 50)
+    titleBar.x = display.contentCenterX
+    titleBar.y = 25 + display.topStatusBarContentHeight
+
+    titleText = display.newText( 'Registrazione', 0, 0, myApp.fontBold, 20 )
+    titleText:setFillColor(0,0,0)
+    titleText.x = display.contentCenterX
+    titleText.y = titleBarHeight * 0.5 + display.topStatusBarContentHeight
+
+	indietro = widget.newButton({
+	    id  = 'BtIndietro',
+	    label = 'Indietro',
+	    x = display.contentCenterX*0.3,
+	    y = titleBarHeight * 0.5 + display.topStatusBarContentHeight,
+	    color = { 0.062745,0.50980,0.99607 },
+	    fontSize = 18,
+	    onRelease = goBack
+	})
+	group:insert(titleBar)
+    group:insert(titleText)
+    group:insert(indietro)
+
+--    local statusBarBackground = display.newImageRect(myApp.topBarBg, display.contentWidth, display.topStatusBarContentHeight)
+--    statusBarBackground.x = display.contentCenterX
+--    statusBarBackground.y = display.topStatusBarContentHeight * 0.5
+--    group:insert(statusBarBackground)
+
+
+
+
+
+
+
+>>>>>>> FETCH_HEAD
 	-- testo in alto
     local options = {
         text = 'Inserisci nome utente e password desiderate:',
@@ -73,6 +112,17 @@ function scene:createScene(event)
     areaT:setFillColor( 0, 0, 0 )
     group:insert(areaT)
 
+<<<<<<< HEAD
+=======
+
+
+
+
+
+
+
+
+>>>>>>> FETCH_HEAD
     -- creazione textArea per nome
 
     local gruppoInserimentoNome = display.newGroup()
@@ -111,6 +161,15 @@ function scene:createScene(event)
 
 
 
+<<<<<<< HEAD
+=======
+
+
+
+
+
+
+>>>>>>> FETCH_HEAD
     -- creazione textArea per cognome
 
     local gruppoInserimentoCognome = display.newGroup()
@@ -149,6 +208,12 @@ function scene:createScene(event)
 
 
 
+<<<<<<< HEAD
+=======
+
+
+
+>>>>>>> FETCH_HEAD
 -- creazione textArea per email
 
     local gruppoInserimentoEmail = display.newGroup()
@@ -187,6 +252,19 @@ function scene:createScene(event)
     campoInserimentoEmail:addEventListener( "userInput", textListenerEmail)
 
 
+<<<<<<< HEAD
+=======
+
+
+
+
+
+
+
+
+
+
+>>>>>>> FETCH_HEAD
     -- creazione textArea per cellulare
 
     local gruppoInserimentoCell = display.newGroup()
@@ -225,10 +303,74 @@ function scene:createScene(event)
     campoInserimentoCell:addEventListener( "userInput", textListenerCell)
 
 
+<<<<<<< HEAD
+=======
+
+
+
+
+
+
+
+    -- creazione textArea per ripetere cellulare
+
+    local gruppoInserimentoRipeti = display.newGroup()
+
+    sfondoInserimentoRipeti = display.newImageRect('img/textArea.png', 564*0.45, 62*0.6)
+    sfondoInserimentoRipeti.x = _W*0.5
+    sfondoInserimentoRipeti.y = _H*0.80
+
+    campoInserimentoRipeti = native.newTextField( 40, 85, 195, 28)
+    campoInserimentoRipeti.x = _W/2
+    campoInserimentoRipeti.y = _H*0.80
+    campoInserimentoRipeti:setTextColor( 0.75,0.75,0.75 )
+    campoInserimentoRipeti.font = native.newFont( myApp.font, 17 )
+    campoInserimentoRipeti.align = "center"
+    campoInserimentoRipeti.hasBackground = false
+    campoInserimentoRipeti.placeholder = 'Ripeti cellulare'
+    campoInserimentoRipeti.inputType = 'phone'
+
+    if myApp.datiUtente.cellulare == '' then
+    else
+        campoInserimentoRipeti.text = myApp.datiUtente.cellulare
+        campoInserimentoRipeti:setTextColor( 0 )
+    end
+
+
+    btClearRipeti = display.newImage('img/delete.png', 10,10)
+    btClearRipeti.x = _W*0.85
+    btClearRipeti.y = _H*0.80
+    btClearRipeti.alpha = 0
+
+    gruppoInserimentoRipeti:insert(sfondoInserimentoRipeti)
+    gruppoInserimentoRipeti:insert(campoInserimentoRipeti)
+    gruppoInserimentoRipeti:insert(btClearRipeti)
+
+    campoInserimentoRipeti:addEventListener( "userInput", textListenerRipeti)
+
+
+
+
+
+
+>>>>>>> FETCH_HEAD
     group:insert(gruppoInserimentoNome)
     group:insert(gruppoInserimentoCognome)
     group:insert(gruppoInserimentoEmail)
     group:insert(gruppoInserimentoCell)
+<<<<<<< HEAD
+=======
+    group:insert(gruppoInserimentoRipeti)
+
+
+
+
+
+
+
+
+
+>>>>>>> FETCH_HEAD
 
 
     avanti = widget.newButton({
@@ -245,10 +387,31 @@ function scene:createScene(event)
 
 
 
+<<<<<<< HEAD
+=======
+
+
+
+>>>>>>> FETCH_HEAD
 end
 
 
 
+<<<<<<< HEAD
+=======
+
+
+
+
+
+
+
+
+
+
+
+
+>>>>>>> FETCH_HEAD
 -- fa il trim della stringa inserita dall'utente
 function trimString( s )
    return string.match( s,"^()%s*$") and "" or string.match(s,"^%s*(.*%S)" )
@@ -256,7 +419,21 @@ end
 
 
 
+<<<<<<< HEAD
 --gestisce le fasi dell'inserimento del nome
+=======
+
+
+
+
+
+
+
+
+
+
+--gestisce le fasi dell'inserimento della targa
+>>>>>>> FETCH_HEAD
 function textListenerNome( event )
     if event.phase == "began" then
         if event.target.text == '' then
@@ -298,7 +475,14 @@ function clearListenerNome( event )
 end
 
 
+<<<<<<< HEAD
 --gestisce le fasi dell'inserimento della cognome
+=======
+
+
+
+--gestisce le fasi dell'inserimento della targa
+>>>>>>> FETCH_HEAD
 function textListenerCognome( event )
     if event.phase == "began" then
         if event.target.text == '' then
@@ -340,7 +524,19 @@ function clearListenerCognome( event )
 end
 
 
+<<<<<<< HEAD
 --gestisce le fasi dell'inserimento della email
+=======
+
+
+
+
+
+
+
+
+--gestisce le fasi dell'inserimento della targa
+>>>>>>> FETCH_HEAD
 function textListenerEmail( event )
     if event.phase == "began" then
         if event.target.text == '' then
@@ -386,7 +582,20 @@ end
 
 
 
+<<<<<<< HEAD
 --gestisce le fasi dell'inserimento della cellulare
+=======
+
+
+
+
+
+
+
+
+
+--gestisce le fasi dell'inserimento della targa
+>>>>>>> FETCH_HEAD
 function textListenerCell( event )
     if event.phase == "began" then
         if event.target.text == '' then
@@ -427,6 +636,7 @@ function clearListenerCell( event )
     end
 end
 
+<<<<<<< HEAD
 function AvantiScene()
 	if 	not (campoInserimentoNome.text == '' or 
         campoInserimentoCognome.text == '' or 
@@ -434,6 +644,106 @@ function AvantiScene()
         campoInserimentoCell.text == '' )
 
     then	
+=======
+
+
+
+
+
+
+
+--gestisce le fasi dell'inserimento della targa
+function textListenerRipeti( event )
+    if event.phase == "began" then
+        if event.target.text == '' then
+        else
+            btClearRipeti.alpha = 0.2
+            btClearRipeti:addEventListener( "touch", clearListenerRipeti )
+        end
+        campoInserimentoRipeti:setTextColor( 0 )
+    elseif event.phase == "editing" then
+        
+        if(#event.target.text > 0) then
+            btClearRipeti.alpha = 0.2
+            btClearRipeti:addEventListener( "touch", clearListenerRipeti )
+        else
+            btClearRipeti.alpha = 0
+            btClearRipeti:removeEventListener( "touch", clearListenerRipeti )
+        end
+    elseif event.phase == "ended" then
+        if event.target.text == '' then
+            btClearRipeti.alpha = 0
+            campoInserimentoRipeti:setTextColor( 0.75,0.75,0.75 )
+
+        end
+    end
+end
+
+-- gestisce la comparsa del pulsate clear
+function clearListenerRipeti( event ) 
+    if(event.phase == "began") then
+        event.target.alpha = 0.8
+    elseif(event.phase == "cancelled") then
+        event.target.alpha = 0.2
+    elseif(event.phase == "ended") then
+        campoInserimentoRipeti.text = ''
+        native.setKeyboardFocus( campoInserimentoRipeti )
+        btClearRipeti.alpha = 0
+        btClearRipeti:removeEventListener( "touch", clearListenerRipeti )
+    end
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function goBack()
+    storyboard.removeAll()
+    campoInserimentoNome:removeSelf()
+    campoInserimentoCognome:removeSelf()
+    campoInserimentoEmail:removeSelf()
+    campoInserimentoCell:removeSelf()
+    campoInserimentoRipeti:removeSelf()
+    local sceneName = storyboard.getCurrentSceneName()
+    storyboard.removeScene( sceneName )
+ 	storyboard.gotoScene('registrazione')
+end
+
+function AvantiScene()
+	if 	campoInserimentoNome.text == '' or 
+        campoInserimentoCognome.text == '' or 
+        campoInserimentoEmail.text == '' or
+        campoInserimentoCell.text == '' or 
+        campoInserimentoRipeti.text == '' then
+
+	else
+		if campoInserimentoCell.text == campoInserimentoRipeti.text then
+>>>>>>> FETCH_HEAD
             myApp.datiUtente = {
 				username = myApp.datiUtente.username,
 				password = myApp.datiUtente.password,
@@ -444,12 +754,17 @@ function AvantiScene()
                 -- targa = '',
 			}
 			storyboard.gotoScene('registrazione3')
+<<<<<<< HEAD
+=======
+		end
+>>>>>>> FETCH_HEAD
 	end
 end
 
 
 
 
+<<<<<<< HEAD
 function scene:enterScene( event )
     print("ENTRA SCENA REGISTRAZIONE2")
     
@@ -460,22 +775,64 @@ function scene:enterScene( event )
     myApp.titleBar.indietro.scene = "registrazione"
     myApp.tabBar.isVisible = false
     myApp.titleBar.accedi.isVisible = false
+=======
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function scene:enterScene( event )
+	local group = self.view
+>>>>>>> FETCH_HEAD
 
 end
 
 function scene:exitScene( event )
+<<<<<<< HEAD
     print("ESCI SCENA REGISTRAZIONE2")
 
     myApp.tabBar.isVisible = false
+=======
+	local group = self.view
+
+	myApp.tabBar.isVisible = true
+	campoInserimentoNome:removeSelf()
+    campoInserimentoCognome:removeSelf()
+    campoInserimentoEmail:removeSelf()
+    campoInserimentoCell:removeSelf()
+    campoInserimentoRipeti:removeSelf()
+	
+	--
+	-- Clean up native objects
+	--
+>>>>>>> FETCH_HEAD
 
 end
 
 function scene:destroyScene( event )
+<<<<<<< HEAD
     print("DISTRUGGI SCENA REGISTRAZIONE2")
 end
 
 
 
+=======
+	local group = self.view
+end
+
+>>>>>>> FETCH_HEAD
 -- "createScene" event is dispatched if scene's view does not exist
 scene:addEventListener( "createScene", scene )
 

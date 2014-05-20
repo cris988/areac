@@ -95,11 +95,25 @@ function scene:enterScene( event )
 end
 
 function scene:exitScene( event )
+<<<<<<< HEAD
     print("ESCI SCENA MAPPA")
 end
 
 function scene:destroyScene( event )
     print("DISTRUGGI SCENA MAPPA")
+=======
+	local group = self.view
+    myApp.targaVerifica = nil
+    myMap:removeSelf()
+	--
+	-- Clean up native objects
+	--
+
+end
+
+function scene:destroyScene( event )
+	local group = self.view
+>>>>>>> FETCH_HEAD
 end
 
 -- "createScene" event is dispatched if scene's view does not exist

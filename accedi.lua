@@ -48,7 +48,49 @@ function scene:createScene(event)
     background.y = display.contentCenterY
 	group:insert(background)
 
+<<<<<<< HEAD
     -- Contenuto
+=======
+	myApp.tabBar.isVisible = false
+
+	------ instanzio nav bar e bottoni
+	titleBar = display.newImageRect(myApp.topBarBg, display.contentWidth, 50)
+    titleBar.x = display.contentCenterX
+    titleBar.y = 25 + display.topStatusBarContentHeight
+
+    titleText = display.newText( 'Accedi', 0, 0, myApp.fontBold, 20 )
+    titleText:setFillColor(0,0,0)
+    titleText.x = display.contentCenterX
+    titleText.y = titleBarHeight * 0.5 + display.topStatusBarContentHeight
+
+	indietro = widget.newButton({
+	    id  = 'BtIndietro',
+	    label = 'Indietro',
+	    x = display.contentCenterX*0.3,
+	    y = titleBarHeight * 0.5 + display.topStatusBarContentHeight,
+	    color = { 0.062745,0.50980,0.99607 },
+	    fontSize = 18,
+	    onRelease = goBack
+	})
+	group:insert(titleBar)
+    group:insert(titleText)
+    group:insert(indietro)
+
+
+ --    local statusBarBackground = display.newImageRect(myApp.topBarBg, display.contentWidth, display.topStatusBarContentHeight)
+ --    statusBarBackground.x = display.contentCenterX
+ --    statusBarBackground.y = display.topStatusBarContentHeight * 0.5
+ --    group:insert(statusBarBackground)
+
+ 
+ 
+
+
+
+
+
+
+>>>>>>> FETCH_HEAD
 
     local profiloImg = display.newImage('img/profilo.png', _W*0.5, _H*0.25)
 	group:insert(profiloImg)
@@ -141,6 +183,11 @@ function scene:createScene(event)
     --     sfondoInserimentoY = _H*0.80,
     --     campoInserimentoPlaceHolder = 'Password'
     -- }
+<<<<<<< HEAD
+=======
+
+    -- textArea:creaArea(optPassword)
+>>>>>>> FETCH_HEAD
 
     -- textArea:creaArea(optPassword)
 
@@ -327,14 +374,73 @@ function goBack()
     if storyboard.getPrevious() == 'acquista2' then
         storyboard.gotoScene(storyboard.getPrevious(), { params = { var = myApp.index, targa = myApp.targaAcquista } })
     elseif storyboard.getPrevious() == 'verificatarga2' then
+<<<<<<< HEAD
         storyboard.gotoScene(storyboard.getPrevious(), { params = { var = myApp.index, targa = myApp.targaVerifica } })
+=======
+    	storyboard.gotoScene(storyboard.getPrevious(), { params = { var = myApp.index, targa = myApp.targaVerifica } })
+>>>>>>> FETCH_HEAD
     elseif storyboard.getPrevious() == 'registrazione' then
         myApp.tabBar:setSelected( 1 )
         storyboard.gotoScene('mappa')
     else
         storyboard.gotoScene(storyboard.getPrevious())
     end
+<<<<<<< HEAD
 end]]--
+=======
+end
+
+function registrazioneScene()
+    myApp.datiUtente = {
+        username = '',
+        password = '',
+        nome = '',
+        cognome = '',
+        email = '',
+        cellulare = '',
+        targa = '',
+    }
+    storyboard.gotoScene('registrazione')
+end
+
+-- function accediScene()
+--     if campoInserimento.text == '' or campoInserimentoPass.text == '' then
+
+--     else
+--         print(getSettingString(campoInserimento.text))
+--         if getSettingString(campoInserimento.text) == '' then
+--         else
+--             storyboard.gotoScene('profilo', { params = { utente = campoInserimento.text } } )
+--         end
+--     end	
+-- end
+
+function accediScene()
+    if campoInserimento.text == '' or campoInserimentoPass.text == '' then
+
+    else
+       
+    end 
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+>>>>>>> FETCH_HEAD
 
 
 

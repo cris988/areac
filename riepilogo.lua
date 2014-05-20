@@ -6,17 +6,38 @@ local myApp = require('myapp')
 
 
 -- funzioni
+<<<<<<< HEAD
+=======
+local views = {}
+local goBack = {}
+>>>>>>> FETCH_HEAD
 local AvantiScene = {}
 
 
 
 -- variabili
+<<<<<<< HEAD
+=======
+local titleBar
+local titleText
+>>>>>>> FETCH_HEAD
 local indietro
 local utente
 local avanti
 local text1
 
 
+<<<<<<< HEAD
+=======
+
+
+
+
+
+
+
+
+>>>>>>> FETCH_HEAD
 function scene:createScene(event)
     local group = self.view
 
@@ -26,6 +47,47 @@ function scene:createScene(event)
     background.y = display.contentCenterY
 	group:insert(background)
 
+<<<<<<< HEAD
+=======
+	myApp.tabBar.isVisible = false
+
+	------ instanzio nav bar e bottoni
+	titleBar = display.newImageRect(myApp.topBarBg, display.contentWidth, 50)
+    titleBar.x = display.contentCenterX
+    titleBar.y = 25 + display.topStatusBarContentHeight
+
+    titleText = display.newText( 'Riepilogo', 0, 0, myApp.fontBold, 20 )
+    titleText:setFillColor(0,0,0)
+    titleText.x = display.contentCenterX
+    titleText.y = titleBarHeight * 0.5 + display.topStatusBarContentHeight
+
+	indietro = widget.newButton({
+	    id  = 'BtIndietro',
+	    label = 'Indietro',
+	    x = display.contentCenterX*0.3,
+	    y = titleBarHeight * 0.5 + display.topStatusBarContentHeight,
+	    color = { 0.062745,0.50980,0.99607 },
+	    fontSize = 18,
+	    onRelease = goBack
+	})
+	group:insert(titleBar)
+    group:insert(titleText)
+    group:insert(indietro)
+
+--    local statusBarBackground = display.newImageRect(myApp.topBarBg, display.contentWidth, display.topStatusBarContentHeight)
+--    statusBarBackground.x = display.contentCenterX
+--    statusBarBackground.y = display.topStatusBarContentHeight * 0.5
+--    group:insert(statusBarBackground)
+
+
+
+
+
+
+
+
+
+>>>>>>> FETCH_HEAD
 
 	-- testo in alto
     local options = {
@@ -63,6 +125,15 @@ function scene:createScene(event)
 
     group:insert(text1)
 
+<<<<<<< HEAD
+=======
+
+
+
+
+
+
+>>>>>>> FETCH_HEAD
     avanti = widget.newButton({
         id  = 'BtAvanti',
         label = 'Avanti',
@@ -80,7 +151,39 @@ function scene:createScene(event)
 end
 
 
+<<<<<<< HEAD
 function AvantiScene()
+=======
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function goBack()
+    storyboard.removeAll()
+    text1:removeSelf()
+    local sceneName = storyboard.getCurrentSceneName()
+    storyboard.removeScene( sceneName )
+ 	storyboard.gotoScene('registrazione3')
+end
+
+function AvantiScene()
+	if 	campoInserimento.text == '' then 
+
+	else
+>>>>>>> FETCH_HEAD
   --       myApp.datiUtente = {
 		-- 	username = myApp.datiUtente.username,
 		-- 	password = myApp.datiUtente.password,
@@ -104,10 +207,15 @@ function AvantiScene()
             cellulare = '',
             targa = '',
         }
+<<<<<<< HEAD
+=======
+	end
+>>>>>>> FETCH_HEAD
 end
 
 
 
+<<<<<<< HEAD
 function scene:enterScene( event )
     print("ENTRA SCENA RIEPILOGO")
     
@@ -118,16 +226,52 @@ function scene:enterScene( event )
     myApp.titleBar.indietro.scene = "registrazione3"
     myApp.tabBar.isVisible = false
     myApp.titleBar.accedi.isVisible = false
+=======
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function scene:enterScene( event )
+	local group = self.view
+>>>>>>> FETCH_HEAD
 
 end
 
 function scene:exitScene( event )
+<<<<<<< HEAD
     print("ESCI SCENA RIEPILOGO")
+=======
+	local group = self.view
+
+	myApp.tabBar.isVisible = true
+	
+	--
+	-- Clean up native objects
+	--
+>>>>>>> FETCH_HEAD
 
 end
 
 function scene:destroyScene( event )
+<<<<<<< HEAD
     print("DISTRUGGI SCENA RIEPILOGO")
+=======
+	local group = self.view
+>>>>>>> FETCH_HEAD
 end
 
 -- "createScene" event is dispatched if scene's view does not exist

@@ -13,15 +13,7 @@ print ("MAIN")
 display.setStatusBar( display.TranslucentStatusBar )
 
 
---
--- Handle Graphics 2.0 changes
-myApp.colorDivisor = 255
-myApp.isGraphics2 = true
-if tonumber( system.getInfo("build") ) < 2013.2000 then
-    -- we are a Graphics 1.0 build
-    myApp.colorDivisor = 1
-    myApp.isGraphics2 = false
-end
+
 
 --
 -- turn on debugging
@@ -43,6 +35,13 @@ function print(...)
 end
 
 math.randomseed(os.time())
+
+
+
+
+
+
+
 
 --
 -- Load our fonts and define our styles
@@ -81,7 +80,16 @@ myApp.fontBoldItalic = "Helvetica-BoldItalic"
 
 widget.setTheme(myApp.theme)
 
+<<<<<<< HEAD
 -- Dimensioni schermo
+=======
+
+
+
+
+-- variabili globali
+titleBarHeight = 50
+>>>>>>> FETCH_HEAD
 _H = display.contentHeight
 _W = display.contentWidth
 
@@ -121,6 +129,7 @@ end
 
 
 
+<<<<<<< HEAD
 function getSetting(name)
 
     local sql="SELECT * FROM settings WHERE name='"..name.."'";
@@ -143,11 +152,19 @@ function getSettingString(name)
 
     return value;
 end
+=======
 
 
 
 
 
+>>>>>>> FETCH_HEAD
+
+
+
+
+
+<<<<<<< HEAD
 myApp.utenti = {}
 myApp.utenti['admin'] = { password = 'admin' }
 
@@ -160,6 +177,11 @@ function myApp:getNumUtenti()
 end
 
 
+=======
+
+
+
+>>>>>>> FETCH_HEAD
 require "sqlite3"
 local data_path=system.pathForFile("data.db",system.DocumentsDirectory);
 db = sqlite3.open(data_path);
@@ -168,6 +190,11 @@ local sql = "CREATE TABLE IF NOT EXISTS settings (name,value);"
 db:exec(sql);
 
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> FETCH_HEAD
 function setSetting(name,value)   
     sql="DELETE FROM settings WHERE name='"..name.."'";
     db:exec( sql )
@@ -209,27 +236,124 @@ end
 
 
 
+<<<<<<< HEAD
+=======
+
+
+
+
+
+
+
+
+
+>>>>>>> FETCH_HEAD
 myApp.utenti = {}
 myApp.utenti['admin'] = { password = 'admin' }
 
 
+<<<<<<< HEAD
+=======
+
+
+
+
+
+
+>>>>>>> FETCH_HEAD
 function myApp:getNumUtenti()
     print(#myApp.utenti)
     return #myApp.utenti
 end
 
+<<<<<<< HEAD
 -- Instanzio tabBar
+=======
+
+
+
+
+
+
+
+
+
+
+-- local function handleLeftButton( event )
+--    if ( event.phase == "ended" ) then
+--       -- do stuff
+--    end
+--    return true
+-- end
+-- local function handleRightButton( event )
+--    if ( event.phase == "ended" ) then
+--       -- do stuff
+--    end
+--    return true
+-- end
+
+
+
+-- local leftButton = {
+--     onEvent = handleLeftButton,
+--     label = "Left",
+--     labelColor = { default =  {1, 1, 1}, over = { 0.5, 0.5, 0.5} },
+--     font = "HelveticaNeue-Light",
+--     isBackButton = true
+-- }
+-- local rightButton = {
+--    onEvent = handleRightButton,
+--    label = "Right",
+--    labelColor = { default =  {1, 1, 1}, over = { 0.5, 0.5, 0.5} },
+--    font = "HelveticaNeue-Light",
+--    isBackButton = false
+-- }
+
+
+-- local navBar = widget.newNavigationBar(options)
+-- options = {
+--    title = "Barra",
+--    backgroundColor = { 0.96, 0.62, 0.34 },
+--     --background = "images/topBarBgTest.png",
+--    titleColor = {1, 1, 1},
+--    font = "HelveticaNeue",
+--    leftButton = leftButton,
+--    rightButton = rightButton,
+--    includeStatusBar = true
+-- }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- instanzio tabBar
+>>>>>>> FETCH_HEAD
 myApp.tabBar = {}
 
 
 -- Funzioni tabBar
 
 
-function myApp.showHome()
-    myApp.showMappa()
-end
-
-function myApp.showMappa()
+function myApp.showScreen1()
     myApp.tabBar:setSelected(1)
     storyboard.removeAll()
     -- storyboard.gotoScene("mappa", {time=250, effect="crossFade"})
@@ -237,7 +361,7 @@ function myApp.showMappa()
     return true
 end
 
-function myApp.showVerifica()
+function myApp.showScreen2()
     myApp.tabBar:setSelected(2)
     storyboard.removeAll()
     -- storyboard.gotoScene("verificatarga", {time=250, effect="crossFade"})
@@ -245,7 +369,7 @@ function myApp.showVerifica()
     return true
 end
 
-function myApp.showAcquista()
+function myApp.showScreen3()
     myApp.tabBar:setSelected(3)
     storyboard.removeAll()
     -- storyboard.gotoScene("acquista", {time=250, effect="crossFade"})
@@ -253,7 +377,7 @@ function myApp.showAcquista()
     return true
 end
 
-function myApp.showInfo() 
+function myApp.showScreen4() 
     myApp.tabBar:setSelected(4)
     storyboard.removeAll()
     -- storyboard.gotoScene("informazioni", {time=250, effect="crossFade"})
@@ -262,7 +386,15 @@ function myApp.showInfo()
 end
 
 
+<<<<<<< HEAD
 -- Button per tabBar
+=======
+
+
+
+
+-- creo pulsanti per la tabBar
+>>>>>>> FETCH_HEAD
 
 local tabButtons = {
     {
@@ -275,7 +407,7 @@ local tabButtons = {
         },
         width = 32,
         height = 32,
-        onPress = myApp.showMappa,
+        onPress = myApp.showScreen1,
         selected = true
     },
     {
@@ -288,7 +420,7 @@ local tabButtons = {
         },
         width = 32,
         height = 32,
-        onPress = myApp.showVerifica,
+        onPress = myApp.showScreen2,
     },
     {
         label = "Acquista",
@@ -300,7 +432,7 @@ local tabButtons = {
         },
         width = 32,
         height = 32,
-        onPress = myApp.showAcquista,
+        onPress = myApp.showScreen3,
     },
     {
         label = "Informazioni",
@@ -312,12 +444,21 @@ local tabButtons = {
         },
         width = 32,
         height = 32,
-        onPress = myApp.showInfo,
+        onPress = myApp.showScreen4,
     }
 }
 
 
+<<<<<<< HEAD
 -- Creazione tabBar
+=======
+
+
+
+
+
+-- creo la tabBar
+>>>>>>> FETCH_HEAD
 
 myApp.tabBar = widget.newTabBar{
     top =  display.contentHeight - 50,
@@ -334,29 +475,38 @@ myApp.tabBar = widget.newTabBar{
     buttons = tabButtons
 }
 
--- Sfondo + Logo Splash Screen
-
-local background = display.newRect(0,0, display.contentWidth, display.contentHeight)
-background:setFillColor(255/myApp.colorDivisor,255/myApp.colorDivisor,255/myApp.colorDivisor)
-background.x = display.contentCenterX
-background.y = display.contentCenterY
-
-local logo = display.newImageRect("Splash.png", 320, 480)
-logo.x = display.contentCenterX
-logo.y = display.contentCenterY
 
 
--- Rimuove Splash Screen
+
+
+
+
+
+-- local background  = display.newRect(0, 0, display.contentWidth, display.contentHeight)
+-- background:setFillColor(0.9,0.9,0.9)
+-- background.x = display.contentCenterX
+-- background.y = display.contentCenterY
+
+
+
+
+
+
+
+
+
+
+
+
 
 local function closeSplash()
-    display.remove(logo)
-    logo = nil
-    display.remove(background)
-    background = nil
-    myApp.showHome()
+
+    myApp.showScreen1()
 end
 
-timer.performWithDelay(1500, closeSplash)
+
+
+timer.performWithDelay(1, closeSplash)
 
 
 

@@ -6,6 +6,11 @@ local myApp = require('myapp')
 
 
 -- funzioni
+<<<<<<< HEAD
+=======
+local views = {}
+local goBack = {}
+>>>>>>> FETCH_HEAD
 local textListener = {}
 local clearListener = {}
 local trimString = {}
@@ -14,6 +19,12 @@ local AvantiScene = {}
 
 
 -- variabili
+<<<<<<< HEAD
+=======
+local titleBar
+local titleText
+local indietro
+>>>>>>> FETCH_HEAD
 local campoInserimento
 local sfondoInserimento
 local btClear
@@ -26,6 +37,17 @@ local textDis
 local avanti
 
 
+<<<<<<< HEAD
+=======
+
+
+
+
+
+
+
+
+>>>>>>> FETCH_HEAD
 function scene:createScene(event)
     local group = self.view
 
@@ -37,6 +59,43 @@ function scene:createScene(event)
 
 	myApp.tabBar.isVisible = false
 
+<<<<<<< HEAD
+=======
+	------ instanzio nav bar e bottoni
+	titleBar = display.newImageRect(myApp.topBarBg, display.contentWidth, 50)
+    titleBar.x = display.contentCenterX
+    titleBar.y = 25 + display.topStatusBarContentHeight
+
+    titleText = display.newText( 'Registrazione', 0, 0, myApp.fontBold, 20 )
+    titleText:setFillColor(0,0,0)
+    titleText.x = display.contentCenterX
+    titleText.y = titleBarHeight * 0.5 + display.topStatusBarContentHeight
+
+	indietro = widget.newButton({
+	    id  = 'BtIndietro',
+	    label = 'Indietro',
+	    x = display.contentCenterX*0.3,
+	    y = titleBarHeight * 0.5 + display.topStatusBarContentHeight,
+	    color = { 0.062745,0.50980,0.99607 },
+	    fontSize = 18,
+	    onRelease = goBack
+	})
+	group:insert(titleBar)
+    group:insert(titleText)
+    group:insert(indietro)
+
+--    local statusBarBackground = display.newImageRect(myApp.topBarBg, display.contentWidth, display.topStatusBarContentHeight)
+--    statusBarBackground.x = display.contentCenterX
+--    statusBarBackground.y = display.topStatusBarContentHeight * 0.5
+--    group:insert(statusBarBackground)
+
+
+
+
+
+
+
+>>>>>>> FETCH_HEAD
 	-- testo in alto
     local options = {
         text = 'Inserisci la tua targa principale:',
@@ -52,7 +111,18 @@ function scene:createScene(event)
     group:insert(areaT)
 
 
+<<<<<<< HEAD
     -- creazione textArea per targa
+=======
+
+
+
+
+
+
+
+    -- creazione textArea per username
+>>>>>>> FETCH_HEAD
 
     local gruppoInserimento = display.newGroup()
 
@@ -78,12 +148,32 @@ function scene:createScene(event)
     gruppoInserimento:insert(campoInserimento)
     gruppoInserimento:insert(btClear)
 
+<<<<<<< HEAD
     campoInserimento:addEventListener( "userInput", textListenerTarga)
+=======
+    campoInserimento:addEventListener( "userInput", textListener)
+
+
+
+
+>>>>>>> FETCH_HEAD
 
     group:insert(gruppoInserimento)
 
 
+<<<<<<< HEAD
     -- creazione dei checkBox Profilo
+=======
+
+
+
+
+
+
+
+
+    -- creazione dei checkBox
+>>>>>>> FETCH_HEAD
 
     checkNonRes = widget.newSwitch
     {
@@ -118,8 +208,11 @@ function scene:createScene(event)
     group:insert(checkNonRes)
     group:insert(checkRes)
     group:insert(checkDis)
+<<<<<<< HEAD
 
     -- Testo checkBox
+=======
+>>>>>>> FETCH_HEAD
     
     textNonRes = display.newText('Non residente', _W*0.20, _H*0.5, myApp.font, 20)
     textNonRes:setFillColor( 0 )
@@ -136,6 +229,20 @@ function scene:createScene(event)
     group:insert(textDis)
 
 
+<<<<<<< HEAD
+=======
+
+
+
+
+
+
+
+
+
+
+
+>>>>>>> FETCH_HEAD
     avanti = widget.newButton({
         id  = 'BtAvanti',
         label = 'Avanti',
@@ -148,9 +255,40 @@ function scene:createScene(event)
     })
     group:insert(avanti)
 
+<<<<<<< HEAD
 end
 
 
+=======
+
+
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+>>>>>>> FETCH_HEAD
 -- Inibisce la doppia selezione dei checkBox
 function checkBoxListener( event )
     if event.target.isOn then
@@ -170,29 +308,78 @@ function checkBoxListener( event )
 end
 
 
+<<<<<<< HEAD
+=======
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+>>>>>>> FETCH_HEAD
 -- fa il trim della stringa inserita dall'utente
 function trimString( s )
    return string.match( s,"^()%s*$") and "" or string.match(s,"^%s*(.*%S)" )
 end
 
 
+<<<<<<< HEAD
 --gestisce le fasi dell'inserimento della targa
 function textListenerTarga( event )
+=======
+
+
+
+
+
+
+
+
+
+
+
+--gestisce le fasi dell'inserimento della targa
+function textListener( event )
+>>>>>>> FETCH_HEAD
     if event.phase == "began" then
         if event.target.text == '' then
         else
             btClear.alpha = 0.2
+<<<<<<< HEAD
             btClear:addEventListener( "touch", clearListenerTarga )
+=======
+            btClear:addEventListener( "touch", clearListener )
+>>>>>>> FETCH_HEAD
         end
         campoInserimento:setTextColor( 0 )
     elseif event.phase == "editing" then
         
         if(#event.target.text > 0) then
             btClear.alpha = 0.2
+<<<<<<< HEAD
             btClear:addEventListener( "touch", clearListenerTarga )
         else
             btClear.alpha = 0
             btClear:removeEventListener( "touch", clearListenerTarga )
+=======
+            btClear:addEventListener( "touch", clearListener )
+        else
+            btClear.alpha = 0
+            btClear:removeEventListener( "touch", clearListener )
+>>>>>>> FETCH_HEAD
         end
     elseif event.phase == "ended" then
         if event.target.text == '' then
@@ -204,7 +391,11 @@ function textListenerTarga( event )
 end
 
 -- gestisce la comparsa del pulsate clear
+<<<<<<< HEAD
 function clearListenerTarga( event ) 
+=======
+function clearListener( event ) 
+>>>>>>> FETCH_HEAD
     if(event.phase == "began") then
         event.target.alpha = 0.8
     elseif(event.phase == "cancelled") then
@@ -213,10 +404,55 @@ function clearListenerTarga( event )
         campoInserimento.text = ''
         native.setKeyboardFocus( campoInserimento )
         btClear.alpha = 0
+<<<<<<< HEAD
         btClear:removeEventListener( "touch", clearListenerTarga )
     end
 end
 
+=======
+        btClear:removeEventListener( "touch", clearListener )
+    end
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function goBack()
+    storyboard.removeAll()
+    campoInserimento:removeSelf()
+    local sceneName = storyboard.getCurrentSceneName()
+    storyboard.removeScene( sceneName )
+ 	storyboard.gotoScene('registrazione2')
+end
+
+>>>>>>> FETCH_HEAD
 function AvantiScene()
 	if 	campoInserimento.text == '' then 
 
@@ -262,6 +498,7 @@ function AvantiScene()
 end
 
 
+<<<<<<< HEAD
 function scene:enterScene( event )
     print("ENTRA SCENA REGISTRAZIONE3")
     
@@ -272,21 +509,62 @@ function scene:enterScene( event )
     myApp.titleBar.indietro.scene = "registrazione2"
     myApp.tabBar.isVisible = false
     myApp.titleBar.accedi.isVisible = false
+=======
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function scene:enterScene( event )
+	local group = self.view
+>>>>>>> FETCH_HEAD
 
 end
 
 function scene:exitScene( event )
+<<<<<<< HEAD
     print("ESCI SCENA REGISTRAZIONE3")
 
     myApp.tabBar.isVisible = false
+=======
+	local group = self.view
+
+	myApp.tabBar.isVisible = true
+	campoInserimento:removeSelf()
+	
+	--
+	-- Clean up native objects
+	--
+>>>>>>> FETCH_HEAD
 
 end
 
 function scene:destroyScene( event )
+<<<<<<< HEAD
     print("DISTRUGGI SCENA REGISTRAZIONE3")
 end
 
 
+=======
+	local group = self.view
+
+
+end
+>>>>>>> FETCH_HEAD
 
 -- "createScene" event is dispatched if scene's view does not exist
 scene:addEventListener( "createScene", scene )
