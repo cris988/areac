@@ -138,11 +138,7 @@ function textTarga()
 
     if targa == nil then
     else 
-<<<<<<< HEAD
         campoInserimento.text = targa
-=======
-        campoInserimento.text = myApp.targaVerifica
->>>>>>> FETCH_HEAD
         campoInserimento:setTextColor( 0 )
         btClear.alpha = 0.2
         btClear:addEventListener( "touch", clearListener )
@@ -258,12 +254,8 @@ function AvantiScene ()
     -- controllo se il formato della targa è giusto
     elseif #campoInserimento.text == 7 and campoInserimento.text:match( '[A-Za-z][A-Za-z][0-9][0-9][0-9][A-Za-z][A-Za-z]' ) then
         -- passo la targa come parametro facendogli il trim e l'upperCase
-<<<<<<< HEAD
         targa = trimString( campoInserimento.text ):upper()
         storyboard.reloadScene( )
-=======
-        storyboard.gotoScene('verificatarga2', { params = { targa = trimString( campoInserimento.text ):upper() } })
->>>>>>> FETCH_HEAD
     else
        campoInserimento:setTextColor(1,0,0)
     end
