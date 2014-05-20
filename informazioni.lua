@@ -1,9 +1,12 @@
 local storyboard = require ('storyboard')
-local scene = storyboard.newScene()
 local widget = require('widget')
 local myApp = require('myapp')
 
+print("INFORMAZIONI")
+
 widget.setTheme(myApp.theme)
+
+local scene = storyboard.newScene()
 
 
 -- titolo dei menù delle informazioni
@@ -19,86 +22,28 @@ strings[7] = 'Come modificare i dati personali'
 
 -- funzioni
 local views = {}
-local goToAccedi = {}
 local onRowRender = {}
 local onRowTouch = {}
 local makeList = {}
-local goBack = {}
-local accediProfilo = {}
 
 
 -- variabili
 local right_padding = 10
 local listaInfo
-local accedi
-local titleText
 local locationtxt
-local titleBar
-
-
-
 
 local function ignoreTouch( event )
 	return true
 end
 
-
-
-
-
-
 function scene:createScene(event)
 	local group = self.view
-
-    ------ instanzio nav bar e bottoni
-    titleBar = display.newImageRect(myApp.topBarBg, display.contentWidth, 50)
-    titleBar.x = display.contentCenterX
-    titleBar.y = 25 + display.topStatusBarContentHeight
-
-    titleText = display.newText( 'Informazioni', 0, 0, myApp.fontBold, 20 )
-    titleText:setFillColor(0,0,0)
-    titleText.x = display.contentCenterX
-    titleText.y = titleBarHeight * 0.5 + display.topStatusBarContentHeight
-
-    accedi = widget.newButton({
-        id  = 'BtAccedi',
-        label = 'Accedi',
-        x = display.contentCenterX*1.75,
-        y = titleBarHeight * 0.5 + display.topStatusBarContentHeight,
-        color = { 0.062745,0.50980,0.99607 },
-        fontSize = 18,
-        onRelease = AccediProfilo
-    })
-    group:insert(titleBar)
-    group:insert(titleText)
-    group:insert(accedi)
-
-	-- local background = display.newRect(0,0,display.contentWidth, display.contentHeight)
-	-- background:setFillColor(0.9, 0.9, 0.9)
-    -- background.x = display.contentCenterX
-    -- background.y = display.contentCenterY
-	-- group:insert(background)
-
-    -- local statusBarBackground = display.newImageRect(myApp.topBarBg, display.contentWidth, display.topStatusBarContentHeight)
-    -- statusBarBackground.x = display.contentCenterX
-    -- statusBarBackground.y = display.topStatusBarContentHeight * 0.5
-    -- group:insert(statusBarBackground)
-    
     
     makeList()
 
     group:insert(listaInfo)
+
 end
-
-
-
-
-
-
-
-
-
-
 
 
 -- creo spazio per la lista
@@ -166,7 +111,7 @@ function onRowTouch( event )
     if event.phase == "release" or event.phase == 'tap' then
         -- è il numero della riga della lista che è stato cliccato
         myApp.index = event.target.index
-        storyboard.gotoScene('info1', { params = { var = event.target.index } })
+        storyboard.gotoScene('info_details', { params = { var = event.target.index } })
     end
                 
 -- --[[ This part handles the swipe left and right to show and hide the delete button ]]--
@@ -181,51 +126,22 @@ function onRowTouch( event )
 end
 
 
-
-
-
-
-
-
-
-function AccediProfilo()
-    storyboard.removeAll()
-    storyboard.gotoScene("accedi")
-end
-
-function goBack()
-    storyboard.removeAll()
-    storyboard.gotoScene(storyboard.getPrevious())
-end
-
-
-
-
-
-
-
-
-
-
-
-
-
+------ EVENTI SCENA -------
 
 function scene:enterScene( event )
+    print("ENTRA SCENA INFORMAZIONI")
 	local group = self.view
+    myApp.titleBar.titleText.text = 'Info'
 end
 
 function scene:exitScene( event )
+    print("ESCI SCENA INFORMAZIONI")
 	local group = self.view
-    myApp.targaVerifica = nil
-    
-	--
-	-- Clean up native objects
-	--
 
 end
 
 function scene:destroyScene( event )
+    print("DISTRUGGI SCENA INFORMAZIONI")
 	local group = self.view
 end
 

@@ -39,6 +39,9 @@ local titleTextInfo
 local titleBarInfo
 local backgroundInfo
 local myText
+local myText1
+local myText2
+local myText3
 local textGiornaliero
 local textMultiplo
 
@@ -124,7 +127,10 @@ function scene:createScene(event)
         group:insert(listaInfo)
         group:insert(acquista)
     else
-        group:insert(myText)
+        -- group:insert(myText)
+        group:insert(myText1)
+        group:insert(myText2)
+        group:insert(myText3)
     end
 
 
@@ -206,17 +212,23 @@ function schermataAccesso(numero)
 
     -- l'auto può transitare
     else
-        local options = {
-            text = 'Il veicolo con targa '..myApp.targaAcquista..'\nNON PUO\' ACCEDERE all\'area C',
-            x = _W*0.5,
-            y = _H*0.5,
-            width = _W - 30,
-            -- height = 300,
-            fontSize = 18,
-            align = "center"
-        }
-        myText = display.newText( options )
-        myText:setFillColor( 0 )
+        -- local options = {
+        --     text = 'Il veicolo con targa '..myApp.targaAcquista..'\nNON PUO\' ACCEDERE all\'area C',
+        --     x = _W*0.5,
+        --     y = _H*0.5,
+        --     width = _W - 30,
+        --     -- height = 300,
+        --     fontSize = 18,
+        --     align = "center"
+        -- }
+        -- myText = display.newText( options )
+        -- myText:setFillColor( 0 )
+        myText1 = display.newText( 'Il veicolo con targa '..myApp.targaVerifica,  _W*0.5, (_H*0.5)-25, myApp.font, 20)
+        myText1:setFillColor(0)
+        myText2 = display.newText( '\nNON PUO\' ACCEDERE',  _W*0.5, _H*0.5, myApp.font, 20)
+        myText2:setFillColor(1,0,0)
+        myText3 = display.newText( '\n\nall\'area C',  _W*0.5, (_H*0.5)+25, myApp.font, 20)
+        myText3:setFillColor(0)  
     end
 end
 

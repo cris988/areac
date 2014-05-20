@@ -153,7 +153,7 @@ function scene:createScene(event)
     if myApp.targaAcquista == nil then
     else 
         campoInserimento.text = myApp.targaAcquista
-        campoInserimento:setTextColor( 0.75,0.75,0.75 )
+        campoInserimento:setTextColor( 0 )
         btClear.alpha = 0.2
         btClear:addEventListener( "touch", clearListener )
     end
@@ -254,6 +254,8 @@ function AvantiScene ()
     elseif #campoInserimento.text == 7 and campoInserimento.text:match( '[A-Za-z][A-Za-z][0-9][0-9][0-9][A-Za-z][A-Za-z]' ) then
         -- passo la targa come parametro facendogli il trim e l'upperCase
         storyboard.gotoScene('acquista2', { params = { targa = trimString( campoInserimento.text ):upper() } })
+    else
+       campoInserimento:setTextColor(1,0,0)
     end
 end
 

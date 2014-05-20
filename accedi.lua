@@ -2,6 +2,7 @@ local storyboard = require ('storyboard')
 local scene = storyboard.newScene()
 local widget = require('widget')
 local myApp = require('myapp')
+local textArea = require('textArea')
 
 widget.setTheme(myApp.theme)
 
@@ -55,7 +56,7 @@ function scene:createScene(event)
     titleBar.x = display.contentCenterX
     titleBar.y = 25 + display.topStatusBarContentHeight
 
-    titleText = display.newText( 'Profilo', 0, 0, myApp.fontBold, 20 )
+    titleText = display.newText( 'Accedi', 0, 0, myApp.fontBold, 20 )
     titleText:setFillColor(0,0,0)
     titleText.x = display.contentCenterX
     titleText.y = titleBarHeight * 0.5 + display.topStatusBarContentHeight
@@ -173,9 +174,24 @@ function scene:createScene(event)
     campoInserimento:addEventListener( "userInput", textListener)
 
 
+    -- local optUsername = {
+    --     sfondoInserimentoX = _W*0.5,
+    --     sfondoInserimentoY = _H*0.70,
+    --     campoInserimentoPlaceHolder = 'Username'
+    -- }
+
+    -- textArea:creaArea(optUsername)
+    -- -- creazione textArea per password
+    -- -- textArea.campoInserimento:addEventListener( "userInput", textArea:textListenerPass)
 
 
+    -- local optPassword = {
+    --     sfondoInserimentoX = _W*0.5,
+    --     sfondoInserimentoY = _H*0.80,
+    --     campoInserimentoPlaceHolder = 'Password'
+    -- }
 
+    -- textArea:creaArea(optPassword)
 
 
 
@@ -198,6 +214,7 @@ function scene:createScene(event)
     campoInserimentoPass.align = "center"
     campoInserimentoPass.hasBackground = false
     campoInserimentoPass.placeholder = 'Password'
+    -- campoInserimentoPass.isSecure = true
 
     btClearPass = display.newImage('img/delete.png', 10,10)
     btClearPass.x = _W*0.85
@@ -399,26 +416,46 @@ function goBack()
     	storyboard.gotoScene(storyboard.getPrevious(), { params = { var = myApp.index, targa = myApp.targaAcquista } })
     elseif storyboard.getPrevious() == 'verificatarga2' then
     	storyboard.gotoScene(storyboard.getPrevious(), { params = { var = myApp.index, targa = myApp.targaVerifica } })
+    elseif storyboard.getPrevious() == 'registrazione' then
+        myApp.tabBar:setSelected( 1 )
+        storyboard.gotoScene('mappa')
     else
     	storyboard.gotoScene(storyboard.getPrevious())
     end
 end
 
 function registrazioneScene()
-
+    myApp.datiUtente = {
+        username = '',
+        password = '',
+        nome = '',
+        cognome = '',
+        email = '',
+        cellulare = '',
+        targa = '',
+    }
+    storyboard.gotoScene('registrazione')
 end
+
+-- function accediScene()
+--     if campoInserimento.text == '' or campoInserimentoPass.text == '' then
+
+--     else
+--         print(getSettingString(campoInserimento.text))
+--         if getSettingString(campoInserimento.text) == '' then
+--         else
+--             storyboard.gotoScene('profilo', { params = { utente = campoInserimento.text } } )
+--         end
+--     end	
+-- end
 
 function accediScene()
-	
+    if campoInserimento.text == '' or campoInserimentoPass.text == '' then
+
+    else
+       
+    end 
 end
-
-
-
-
-
-
-
-
 
 
 

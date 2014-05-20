@@ -8,7 +8,6 @@ widget.setTheme(myApp.theme)
 
 -- funzioni
 local views = {}
-local goBack = {}
 local accediProfilo = {}
 
 
@@ -23,41 +22,8 @@ local function ignoreTouch( event )
 end
 
 
-
-
-
-
 function scene:createScene(event)
 	local group = self.view
-
-    local background = display.newRect(0,0,display.contentWidth, display.contentHeight)
-    background:setFillColor(0.9, 0.9, 0.9)
-    background.x = display.contentCenterX
-    background.y = display.contentCenterY
-    group:insert(background)
-
-    ------ instanzio nav bar e bottoni
-    titleBar = display.newImageRect(myApp.topBarBg, display.contentWidth, 50)
-    titleBar.x = display.contentCenterX
-    titleBar.y = 25 + display.topStatusBarContentHeight
-
-    titleText = display.newText( 'Mappa', 0, 0, myApp.fontBold, 20 )
-    titleText:setFillColor(0,0,0)
-    titleText.x = display.contentCenterX
-    titleText.y = titleBarHeight * 0.5 + display.topStatusBarContentHeight
-
-    accedi = widget.newButton({
-        id  = 'BtAccedi',
-        label = 'Accedi',
-        x = display.contentCenterX*1.75,
-        y = titleBarHeight * 0.5 + display.topStatusBarContentHeight,
-        color = { 0.062745,0.50980,0.99607 },
-        fontSize = 18,
-        onRelease = AccediProfilo
-    })
-    group:insert(titleBar)
-    group:insert(titleText)
-    group:insert(accedi)
 
     -- if ( system.getInfo( "environment" ) == "simulator" ) then
     --     local simulatorMessage = "Maps not supported in Corona Simulator.\nYou must build for iOS or Android to test native.newMapView() support."
@@ -69,17 +35,6 @@ function scene:createScene(event)
     -- group:insert(allertMap)
 
 
-
-    -- local statusBarBackground = display.newImageRect(myApp.topBarBg, display.contentWidth, display.topStatusBarContentHeight)
-    -- statusBarBackground.x = display.contentCenterX
-    -- statusBarBackground.y = display.topStatusBarContentHeight * 0.5
-    -- group:insert(statusBarBackground)
-
-
-
-
-
-
     -- local contornoMappa = display.newRect( display.contentCenterX, display.contentCenterY+8, _W, _H*0.7 )
     local contornoMappa = display.newRect( 0, 70, _W, _H-119 )
     contornoMappa.anchorX, contornoMappa.anchorY = 0,0
@@ -87,9 +42,6 @@ function scene:createScene(event)
     local myText = display.newText( 'Mappa', _W*0.5, _H*0.5, myApp.font, 20 )
     myText:setFillColor(0) 
     group:insert(myText)
-
-
-
 
 
 
@@ -130,54 +82,29 @@ function scene:createScene(event)
 end
 
 
-
-
-
-
-
-
-
-
-
-function AccediProfilo()
-    storyboard.removeAll()
-    storyboard.gotoScene("accedi")
-end
-
-function goBack()
-    storyboard.removeAll()
-    storyboard.gotoScene(storyboard.getPrevious())
-end
-
-
-
-
-
-
-
-
-
-
-
 function scene:enterScene( event )
+    print("ENTRA SCENA MAPPA")
 	local group = self.view
-
+    myApp.titleBar.titleText.text = "Mappa"
 end
 
 function scene:exitScene( event )
+    print("ESCI SCENA MAPPA")
 	local group = self.view
     myApp.targaVerifica = nil
-
-    --myMap:removeSelf()
+<<<<<<< HEAD
+=======
+    myMap:removeSelf()
 	--
 	-- Clean up native objects
 	--
+>>>>>>> FETCH_HEAD
 
 end
 
 function scene:destroyScene( event )
+    print("DISTRUGGI SCENA MAPPA")
 	local group = self.view
-    --myMap:removeSelf()
 end
 
 -- "createScene" event is dispatched if scene's view does not exist
