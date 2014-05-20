@@ -2,8 +2,6 @@ local storyboard = require ('storyboard')
 local widget = require('widget')
 local myApp = require('myapp')
 
-print("INFORMAZIONI")
-
 widget.setTheme(myApp.theme)
 
 local scene = storyboard.newScene()
@@ -37,8 +35,11 @@ local function ignoreTouch( event )
 end
 
 function scene:createScene(event)
-	local group = self.view
+
+    print("CREA SCENA INFORMAZIONI")
     
+	local group = self.view
+
     makeList()
 
     group:insert(listaInfo)
@@ -130,19 +131,19 @@ end
 
 function scene:enterScene( event )
     print("ENTRA SCENA INFORMAZIONI")
-	local group = self.view
-    myApp.titleBar.titleText.text = 'Info'
+    
+    -- Preparo titleBar
+
+    myApp.titleBar.titleText.text = "Informazioni"
+    myApp.titleBar.indietro.isVisible = false
 end
 
 function scene:exitScene( event )
     print("ESCI SCENA INFORMAZIONI")
-	local group = self.view
-
 end
 
 function scene:destroyScene( event )
     print("DISTRUGGI SCENA INFORMAZIONI")
-	local group = self.view
 end
 
 -- "createScene" event is dispatched if scene's view does not exist

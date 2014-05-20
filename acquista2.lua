@@ -7,9 +7,6 @@ widget.setTheme(myApp.theme)
 
 
 -- funzioni
-local views = {}
-local goBack = {}
-local accediProfilo = {}
 local acquistaTicket = {}
 local checkBoxListener = {}
 local makeList = {}
@@ -21,7 +18,6 @@ local schermataAccesso = {}
 
 
 -- variabili
-local indietro
 local accedi
 local titleBar
 local titleText
@@ -54,16 +50,6 @@ strings[2] = 'Tariffe e metodi di pagamento'
 
 
 
-
-
-
-
-
-
-
-
-
-
 function scene:createScene(event)
     local group = self.view
     print('crea')
@@ -73,43 +59,6 @@ function scene:createScene(event)
     background.x = display.contentCenterX
     background.y = display.contentCenterY
 	group:insert(background)
-
-	------ instanzio nav bar e bottoni
-	titleBar = display.newImageRect(myApp.topBarBg, display.contentWidth, 50)
-    titleBar.x = display.contentCenterX
-    titleBar.y = 25 + display.topStatusBarContentHeight
-
-    titleText = display.newText( 'Acquista', 0, 0, myApp.fontBold, 20 )
-    titleText:setFillColor(0,0,0)
-    titleText.x = display.contentCenterX
-    titleText.y = titleBarHeight * 0.5 + display.topStatusBarContentHeight
-
-	indietro = widget.newButton({
-	    id  = 'BtIndietro',
-	    label = 'Indietro',
-	    x = display.contentCenterX*0.3,
-	    y = titleBarHeight * 0.5 + display.topStatusBarContentHeight,
-	    color = { 0.062745,0.50980,0.99607 },
-	    fontSize = 18,
-	    onRelease = goBack
-	})
-	accedi = widget.newButton({
-        id  = 'BtAccedi',
-        label = 'Accedi',
-        x = display.contentCenterX*1.75,
-        y = titleBarHeight * 0.5 + display.topStatusBarContentHeight,
-        color = { 0.062745,0.50980,0.99607 },
-        fontSize = 18,
-        onRelease = AccediProfilo
-    })
-	group:insert(titleBar)
-    group:insert(titleText)
-    group:insert(indietro)
-    group:insert(accedi)
-
-
-
-
 
     accesso = math.random(4)
 
@@ -135,14 +84,6 @@ function scene:createScene(event)
 
 
 end
-
-
-
-
-
-
-
-
 
 
 function schermataAccesso(numero)

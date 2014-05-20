@@ -6,7 +6,7 @@ widget.setTheme(myApp.theme)
 
 local scene = storyboard.newScene()
 
-local section
+myApp.section = 1
 
 -- è il contenuto di testo dei sottomenù delle informazioni
 local strings = {}
@@ -29,38 +29,34 @@ function scene:createScene(event)
     background.y = display.contentCenterY
     group:insert(background)
 
+    -- scrivo le stringhe riferite a section
+    if event.params ~= nil then
+        myApp.section = event.params.var
+    end
+    myText = display.newText( strings[myApp.section], _W*0.5, _H*0.5, myApp.font, 20 )
+    myText:setFillColor(0) 
+    group:insert(myText)
+
 end
 
 function scene:enterScene( event )
-    local group = self.view
+    print("ENTRA SCENA INFO DETTAGLIO "..myApp.section)
 
-     -- è il numero della riga della lista che è stato cliccato
-    section = event.params.var
-
-    print("ENTRA SCENA INFO DETTAGLIO "..section)
+    -- Preparo titleBar
 
     myApp.titleBar.indietro.isVisible = true
     myApp.titleBar.titleText.text = 'Info'
+    myApp.titleBar.indietro.scene = 'informazioni'
 
-    -- scrivo le stringhe riferite a var
-    myText = display.newText( strings[section], _W*0.5, _H*0.5, myApp.font, 20 )
-    myText:setFillColor(0) 
-    group:insert(myText)
 end
 
-function scene:exitScene( event )
-    local group = self.view
-    
-    group:remove(myText)
-    
-    print("ESCI SCENA INFO DETTAGLIO "..section)
+function scene:exitScene( event )    
+    print("ESCI SCENA INFO DETTAGLIO "..myApp.section)
 
 end
 
 function scene:destroyScene( event )
-    local group = self.view
-
-    print("DISTRUGGI SCENA INFO DETTAGLIO "..section)
+    print("DISTRUGGI SCENA INFO DETTAGLIO "..myApp.section)
 end
 
 

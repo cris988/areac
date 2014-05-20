@@ -7,18 +7,13 @@ widget.setTheme(myApp.theme)
 
 
 -- funzioni
-local views = {}
-local goBack = {}
-local accediProfilo = {}
 local AvantiScene = {}
 local textListener = {}
 local clearListener = {}
 local trimString = {}
 
 -- variabili
-local accedi
 local avanti
-local titleBar
 local titleText
 local campoInserimento
 local sfondoInserimento
@@ -33,20 +28,10 @@ local function ignoreTouch( event )
 end
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 function scene:createScene(event)
+
+    print("CREA SCENA ACQUISTA")
+
 	local group = self.view
 
     local background = display.newRect(0,0,display.contentWidth, display.contentHeight)
@@ -55,25 +40,6 @@ function scene:createScene(event)
     background.y = display.contentCenterY
     group:insert(background)
 
-    ------ instanzio nav bar e bottoni
-    titleBar = display.newImageRect(myApp.topBarBg, display.contentWidth, 50)
-    titleBar.x = display.contentCenterX
-    titleBar.y = 25 + display.topStatusBarContentHeight
-
-    titleText = display.newText( 'Acquista', 0, 0, myApp.fontBold, 20 )
-    titleText:setFillColor(0,0,0)
-    titleText.x = display.contentCenterX
-    titleText.y = titleBarHeight * 0.5 + display.topStatusBarContentHeight
-
-	accedi = widget.newButton({
-        id  = 'BtAccedi',
-        label = 'Accedi',
-        x = display.contentCenterX*1.75,
-        y = titleBarHeight * 0.5 + display.topStatusBarContentHeight,
-        color = { 0.062745,0.50980,0.99607 },
-        fontSize = 18,
-        onRelease = AccediProfilo
-    })
     avanti = widget.newButton({
         id  = 'BtAvanti',
         label = 'Avanti',
@@ -83,25 +49,8 @@ function scene:createScene(event)
         fontSize = 26,
         onRelease = AvantiScene
     })
-    group:insert(titleBar)
-    group:insert(titleText)
-    group:insert(accedi)
     group:insert(avanti)
     
-
-    -- local statusBarBackground = display.newImageRect(myApp.topBarBg, display.contentWidth, display.topStatusBarContentHeight)
-    -- statusBarBackground.x = display.contentCenterX
-    -- statusBarBackground.y = display.topStatusBarContentHeight * 0.5
-    -- group:insert(statusBarBackground)
-
-
-
-
-
-
-
-
-
 
     -- testo in alto
     local options = {
@@ -116,16 +65,6 @@ function scene:createScene(event)
     local areaT = display.newText( options )
     areaT:setFillColor( 0, 0, 0 )
     group:insert(areaT)
-
-
-
-
-
-
-
-
-
-
 
     -- creazione textArea per targa
 
@@ -171,19 +110,6 @@ function scene:createScene(event)
 
 
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 -- fa il trim della stringa inserita dall'utente
 function trimString( s )
@@ -231,20 +157,6 @@ function clearListener( event )
     end
 end
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 -- funzioni per pulsanti
 
 function AvantiScene ()
@@ -259,50 +171,25 @@ function AvantiScene ()
     end
 end
 
-function AccediProfilo()
-    storyboard.removeAll()
-    storyboard.gotoScene("accedi")
-end
-
-function goBack()
-    storyboard.removeAll()
-    storyboard.gotoScene(storyboard.getPrevious())
-end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
 function scene:enterScene( event )
-    local group = self.view
+    print("ENTRA SCENA ACQUISTA")
+    
+    -- Preparo titleBar
 
+    myApp.titleBar.titleText.text = "Acquista"
+    myApp.titleBar.indietro.isVisible = false
 end
 
 function scene:exitScene( event )
-    local group = self.view
-    campoInserimento:removeSelf()
-    myApp.targaAcquista = nil
-
-    --
-    -- Clean up native objects
-    --
+    print("ESCI SCENA ACQUISTA")
 
 end
 
 function scene:destroyScene( event )
-    local group = self.view
+    print("DISTRUGGI SCENA ACQUISTA")
 end
 
 

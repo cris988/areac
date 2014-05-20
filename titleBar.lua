@@ -24,7 +24,7 @@ local myApp = require( "myapp" )
 		    y = bgTitle.height * 0.5 + display.topStatusBarContentHeight,
 		    color = { 0.062745,0.50980,0.99607 },
 		    fontSize = 18,
-		    onRelease = myApp.AccediProfilo
+		    onRelease = titleBar.accedi
 		})
 
 
@@ -44,6 +44,8 @@ local myApp = require( "myapp" )
 		    y = bgTitle.height * 0.5 + display.topStatusBarContentHeight,
 		    color = { 0.062745,0.50980,0.99607 },
 		    fontSize = 18,
+		    scene = '', -- Scena in cui andare
+		    optionsBack ={}, -- Parametri aggiuntivi da passare alla scena
 		   	onRelease = titleBar.goBack
 		})
 
@@ -57,16 +59,18 @@ local myApp = require( "myapp" )
 	end
 
 	function titleBar.goBack()
-		print("GOBACK")
-		local previous_scene_name = storyboard.getPrevious()
-
-		print( previous_scene_name ) 
-	    storyboard.gotoScene(storyboard.getPrevious())
+		print("GOBACK "..titleBar.indietro.scene)
+	    storyboard.gotoScene(titleBar.indietro.scene, titleBar.indietro.optionsBack)
 	end
 
 	function titleBar.profilo()
 	    storyboard.gotoScene("profilo")
 	end
+
+	function titleBar.accedi()
+	    storyboard.gotoScene("accedi")
+	end
+
 
 	return titleBar
 

@@ -6,8 +6,6 @@ local myApp = require('myapp')
 
 
 -- funzioni
-local views = {}
-local goBack = {}
 local textListener = {}
 local clearListener = {}
 local trimString = {}
@@ -16,9 +14,6 @@ local AvantiScene = {}
 
 
 -- variabili
-local titleBar
-local titleText
-local indietro
 local campoInserimento
 local sfondoInserimento
 local btClear
@@ -31,14 +26,6 @@ local textDis
 local avanti
 
 
-
-
-
-
-
-
-
-
 function scene:createScene(event)
     local group = self.view
 
@@ -49,40 +36,6 @@ function scene:createScene(event)
 	group:insert(background)
 
 	myApp.tabBar.isVisible = false
-
-	------ instanzio nav bar e bottoni
-	titleBar = display.newImageRect(myApp.topBarBg, display.contentWidth, 50)
-    titleBar.x = display.contentCenterX
-    titleBar.y = 25 + display.topStatusBarContentHeight
-
-    titleText = display.newText( 'Registrazione', 0, 0, myApp.fontBold, 20 )
-    titleText:setFillColor(0,0,0)
-    titleText.x = display.contentCenterX
-    titleText.y = titleBarHeight * 0.5 + display.topStatusBarContentHeight
-
-	indietro = widget.newButton({
-	    id  = 'BtIndietro',
-	    label = 'Indietro',
-	    x = display.contentCenterX*0.3,
-	    y = titleBarHeight * 0.5 + display.topStatusBarContentHeight,
-	    color = { 0.062745,0.50980,0.99607 },
-	    fontSize = 18,
-	    onRelease = goBack
-	})
-	group:insert(titleBar)
-    group:insert(titleText)
-    group:insert(indietro)
-
---    local statusBarBackground = display.newImageRect(myApp.topBarBg, display.contentWidth, display.topStatusBarContentHeight)
---    statusBarBackground.x = display.contentCenterX
---    statusBarBackground.y = display.topStatusBarContentHeight * 0.5
---    group:insert(statusBarBackground)
-
-
-
-
-
-
 
 	-- testo in alto
     local options = {
@@ -99,14 +52,7 @@ function scene:createScene(event)
     group:insert(areaT)
 
 
-
-
-
-
-
-
-
-    -- creazione textArea per username
+    -- creazione textArea per targa
 
     local gruppoInserimento = display.newGroup()
 
@@ -132,24 +78,12 @@ function scene:createScene(event)
     gruppoInserimento:insert(campoInserimento)
     gruppoInserimento:insert(btClear)
 
-    campoInserimento:addEventListener( "userInput", textListener)
-
-
-
-
+    campoInserimento:addEventListener( "userInput", textListenerTarga)
 
     group:insert(gruppoInserimento)
 
 
-
-
-
-
-
-
-
-
-    -- creazione dei checkBox
+    -- creazione dei checkBox Profilo
 
     checkNonRes = widget.newSwitch
     {
@@ -184,6 +118,8 @@ function scene:createScene(event)
     group:insert(checkNonRes)
     group:insert(checkRes)
     group:insert(checkDis)
+
+    -- Testo checkBox
     
     textNonRes = display.newText('Non residente', _W*0.20, _H*0.5, myApp.font, 20)
     textNonRes:setFillColor( 0 )
@@ -200,17 +136,6 @@ function scene:createScene(event)
     group:insert(textDis)
 
 
-
-
-
-
-
-
-
-
-
-
-
     avanti = widget.newButton({
         id  = 'BtAvanti',
         label = 'Avanti',
@@ -223,32 +148,7 @@ function scene:createScene(event)
     })
     group:insert(avanti)
 
-
-
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 -- Inibisce la doppia selezione dei checkBox
@@ -270,59 +170,29 @@ function checkBoxListener( event )
 end
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 -- fa il trim della stringa inserita dall'utente
 function trimString( s )
    return string.match( s,"^()%s*$") and "" or string.match(s,"^%s*(.*%S)" )
 end
 
 
-
-
-
-
-
-
-
-
-
-
-
 --gestisce le fasi dell'inserimento della targa
-function textListener( event )
+function textListenerTarga( event )
     if event.phase == "began" then
         if event.target.text == '' then
         else
             btClear.alpha = 0.2
-            btClear:addEventListener( "touch", clearListener )
+            btClear:addEventListener( "touch", clearListenerTarga )
         end
         campoInserimento:setTextColor( 0 )
     elseif event.phase == "editing" then
         
         if(#event.target.text > 0) then
             btClear.alpha = 0.2
-            btClear:addEventListener( "touch", clearListener )
+            btClear:addEventListener( "touch", clearListenerTarga )
         else
             btClear.alpha = 0
-            btClear:removeEventListener( "touch", clearListener )
+            btClear:removeEventListener( "touch", clearListenerTarga )
         end
     elseif event.phase == "ended" then
         if event.target.text == '' then
@@ -334,7 +204,7 @@ function textListener( event )
 end
 
 -- gestisce la comparsa del pulsate clear
-function clearListener( event ) 
+function clearListenerTarga( event ) 
     if(event.phase == "began") then
         event.target.alpha = 0.8
     elseif(event.phase == "cancelled") then
@@ -343,46 +213,8 @@ function clearListener( event )
         campoInserimento.text = ''
         native.setKeyboardFocus( campoInserimento )
         btClear.alpha = 0
-        btClear:removeEventListener( "touch", clearListener )
+        btClear:removeEventListener( "touch", clearListenerTarga )
     end
-end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function goBack()
-    storyboard.removeAll()
-    campoInserimento:removeSelf()
-    local sceneName = storyboard.getCurrentSceneName()
-    storyboard.removeScene( sceneName )
- 	storyboard.gotoScene('registrazione2')
 end
 
 function AvantiScene()
@@ -430,47 +262,31 @@ function AvantiScene()
 end
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 function scene:enterScene( event )
-	local group = self.view
+    print("ENTRA SCENA REGISTRAZIONE3")
+    
+    -- Preparo titleBar
+
+    myApp.titleBar.titleText.text = "Registrazione"
+    myApp.titleBar.indietro.isVisible = true
+    myApp.titleBar.indietro.scene = "registrazione2"
+    myApp.tabBar.isVisible = false
+    myApp.titleBar.accedi.isVisible = false
 
 end
 
 function scene:exitScene( event )
-	local group = self.view
+    print("ESCI SCENA REGISTRAZIONE3")
 
-	myApp.tabBar.isVisible = true
-	campoInserimento:removeSelf()
-	
-	--
-	-- Clean up native objects
-	--
+    myApp.tabBar.isVisible = false
 
 end
 
 function scene:destroyScene( event )
-	local group = self.view
-
-
+    print("DISTRUGGI SCENA REGISTRAZIONE3")
 end
+
+
 
 -- "createScene" event is dispatched if scene's view does not exist
 scene:addEventListener( "createScene", scene )

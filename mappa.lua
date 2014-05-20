@@ -23,6 +23,9 @@ end
 
 
 function scene:createScene(event)
+
+    print("CREA SCENA MAPPA")
+
 	local group = self.view
 
     -- if ( system.getInfo( "environment" ) == "simulator" ) then
@@ -84,27 +87,19 @@ end
 
 function scene:enterScene( event )
     print("ENTRA SCENA MAPPA")
-	local group = self.view
+
+    -- Preparo titleBar
+
     myApp.titleBar.titleText.text = "Mappa"
+    myApp.titleBar.indietro.isVisible = false
 end
 
 function scene:exitScene( event )
     print("ESCI SCENA MAPPA")
-	local group = self.view
-    myApp.targaVerifica = nil
-<<<<<<< HEAD
-=======
-    myMap:removeSelf()
-	--
-	-- Clean up native objects
-	--
->>>>>>> FETCH_HEAD
-
 end
 
 function scene:destroyScene( event )
     print("DISTRUGGI SCENA MAPPA")
-	local group = self.view
 end
 
 -- "createScene" event is dispatched if scene's view does not exist

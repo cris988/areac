@@ -13,6 +13,15 @@ print ("MAIN")
 display.setStatusBar( display.TranslucentStatusBar )
 
 
+--
+-- Handle Graphics 2.0 changes
+myApp.colorDivisor = 255
+myApp.isGraphics2 = true
+if tonumber( system.getInfo("build") ) < 2013.2000 then
+    -- we are a Graphics 1.0 build
+    myApp.colorDivisor = 1
+    myApp.isGraphics2 = false
+end
 
 --
 -- turn on debugging
@@ -34,13 +43,6 @@ function print(...)
 end
 
 math.randomseed(os.time())
-
-
-
-
-
-
-
 
 --
 -- Load our fonts and define our styles
@@ -79,43 +81,20 @@ myApp.fontBoldItalic = "Helvetica-BoldItalic"
 
 widget.setTheme(myApp.theme)
 
-
-<<<<<<< HEAD
--- Dimensioni Schermo
-titleBarHeight = 50 -- DA ELIMINARE
-=======
-
-
-
--- variabili globali
-titleBarHeight = 50
->>>>>>> FETCH_HEAD
+-- Dimensioni schermo
 _H = display.contentHeight
 _W = display.contentWidth
 
+titleBarHeight = 50
+
 -- Instanzio titleBar 
-print( tostring(titleBar ))
-for k,v in pairs(titleBar) do
-    print(k.." ",v)
-end
 myApp.titleBar = titleBar.new()
 
-<<<<<<< HEAD
--- Instanzio tabBar 
-=======
 
+-- Distrugge le scene all'uscita
+storyboard.purgeOnSceneChange = true
 
-
-
-
-
-
-
-
-
-
-
-
+-- Database Utenti
 
 
 require "sqlite3"
@@ -124,7 +103,6 @@ db = sqlite3.open(data_path);
 
 local sql = "CREATE TABLE IF NOT EXISTS settings (name,value);"
 db:exec(sql);
-
 
 
 
@@ -170,20 +148,8 @@ end
 
 
 
-
-
-
-
-
-
-
-
 myApp.utenti = {}
 myApp.utenti['admin'] = { password = 'admin' }
-
-
-
-
 
 
 
@@ -194,88 +160,76 @@ function myApp:getNumUtenti()
 end
 
 
+require "sqlite3"
+local data_path=system.pathForFile("data.db",system.DocumentsDirectory);
+db = sqlite3.open(data_path);
+
+local sql = "CREATE TABLE IF NOT EXISTS settings (name,value);"
+db:exec(sql);
+
+
+function setSetting(name,value)   
+    sql="DELETE FROM settings WHERE name='"..name.."'";
+    db:exec( sql )
+    
+    sql="INSERT INTO settings (name,value) VALUES ('"..name.."',"..value..");";
+    db:exec( sql )    
+end
+
+function setSettingString(name,value)
+    setSetting(name,"'"..value.."'");
+end
 
 
 
 
+function getSetting(name)
+
+    local sql="SELECT * FROM settings WHERE name='"..name.."'";
+    local value=-1;
+
+    for row in db:nrows(sql) do
+        value=row.value;
+    end    
+
+    return value;
+end
+
+function getSettingString(name)
+    local sql="SELECT * FROM settings WHERE name='"..name.."'";
+    local value='';
+
+    for row in db:nrows(sql) do
+        value=row.value;
+    end    
+
+    return value;
+end
 
 
 
 
-
--- local function handleLeftButton( event )
---    if ( event.phase == "ended" ) then
---       -- do stuff
---    end
---    return true
--- end
--- local function handleRightButton( event )
---    if ( event.phase == "ended" ) then
---       -- do stuff
---    end
---    return true
--- end
+myApp.utenti = {}
+myApp.utenti['admin'] = { password = 'admin' }
 
 
+function myApp:getNumUtenti()
+    print(#myApp.utenti)
+    return #myApp.utenti
+end
 
--- local leftButton = {
---     onEvent = handleLeftButton,
---     label = "Left",
---     labelColor = { default =  {1, 1, 1}, over = { 0.5, 0.5, 0.5} },
---     font = "HelveticaNeue-Light",
---     isBackButton = true
--- }
--- local rightButton = {
---    onEvent = handleRightButton,
---    label = "Right",
---    labelColor = { default =  {1, 1, 1}, over = { 0.5, 0.5, 0.5} },
---    font = "HelveticaNeue-Light",
---    isBackButton = false
--- }
-
-
--- local navBar = widget.newNavigationBar(options)
--- options = {
---    title = "Barra",
---    backgroundColor = { 0.96, 0.62, 0.34 },
---     --background = "images/topBarBgTest.png",
---    titleColor = {1, 1, 1},
---    font = "HelveticaNeue",
---    leftButton = leftButton,
---    rightButton = rightButton,
---    includeStatusBar = true
--- }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
--- instanzio tabBar
->>>>>>> FETCH_HEAD
+-- Instanzio tabBar
 myApp.tabBar = {}
 
--- Funczioni tabBar
 
-function myApp.showScreen1()
+-- Funzioni tabBar
+
+
+function myApp.showHome()
+    myApp.showMappa()
+end
+
+function myApp.showMappa()
     myApp.tabBar:setSelected(1)
     storyboard.removeAll()
     -- storyboard.gotoScene("mappa", {time=250, effect="crossFade"})
@@ -283,7 +237,7 @@ function myApp.showScreen1()
     return true
 end
 
-function myApp.showScreen2()
+function myApp.showVerifica()
     myApp.tabBar:setSelected(2)
     storyboard.removeAll()
     -- storyboard.gotoScene("verificatarga", {time=250, effect="crossFade"})
@@ -291,7 +245,7 @@ function myApp.showScreen2()
     return true
 end
 
-function myApp.showScreen3()
+function myApp.showAcquista()
     myApp.tabBar:setSelected(3)
     storyboard.removeAll()
     -- storyboard.gotoScene("acquista", {time=250, effect="crossFade"})
@@ -299,7 +253,7 @@ function myApp.showScreen3()
     return true
 end
 
-function myApp.showScreen4() 
+function myApp.showInfo() 
     myApp.tabBar:setSelected(4)
     storyboard.removeAll()
     -- storyboard.gotoScene("informazioni", {time=250, effect="crossFade"})
@@ -307,16 +261,8 @@ function myApp.showScreen4()
     return true
 end
 
-<<<<<<< HEAD
+
 -- Button per tabBar
-=======
-
-
-
-
-
--- creo pulsanti per la tabBar
->>>>>>> FETCH_HEAD
 
 local tabButtons = {
     {
@@ -329,7 +275,7 @@ local tabButtons = {
         },
         width = 32,
         height = 32,
-        onPress = myApp.showScreen1,
+        onPress = myApp.showMappa,
         selected = true
     },
     {
@@ -342,7 +288,7 @@ local tabButtons = {
         },
         width = 32,
         height = 32,
-        onPress = myApp.showScreen2,
+        onPress = myApp.showVerifica,
     },
     {
         label = "Acquista",
@@ -354,7 +300,7 @@ local tabButtons = {
         },
         width = 32,
         height = 32,
-        onPress = myApp.showScreen3,
+        onPress = myApp.showAcquista,
     },
     {
         label = "Informazioni",
@@ -366,21 +312,12 @@ local tabButtons = {
         },
         width = 32,
         height = 32,
-        onPress = myApp.showScreen4,
+        onPress = myApp.showInfo,
     }
 }
 
 
-
-<<<<<<< HEAD
 -- Creazione tabBar
-=======
-
-
-
-
--- creo la tabBar
->>>>>>> FETCH_HEAD
 
 myApp.tabBar = widget.newTabBar{
     top =  display.contentHeight - 50,
@@ -397,36 +334,29 @@ myApp.tabBar = widget.newTabBar{
     buttons = tabButtons
 }
 
+-- Sfondo + Logo Splash Screen
+
+local background = display.newRect(0,0, display.contentWidth, display.contentHeight)
+background:setFillColor(255/myApp.colorDivisor,255/myApp.colorDivisor,255/myApp.colorDivisor)
+background.x = display.contentCenterX
+background.y = display.contentCenterY
+
+local logo = display.newImageRect("Splash.png", 320, 480)
+logo.x = display.contentCenterX
+logo.y = display.contentCenterY
 
 
-
-
-
-
-
--- local background  = display.newRect(0, 0, display.contentWidth, display.contentHeight)
--- background:setFillColor(0.9,0.9,0.9)
--- background.x = display.contentCenterX
--- background.y = display.contentCenterY
-
-
-
-
-
-
-
-
-
-
-
-
+-- Rimuove Splash Screen
 
 local function closeSplash()
-
-    myApp.showScreen1()
+    display.remove(logo)
+    logo = nil
+    display.remove(background)
+    background = nil
+    myApp.showHome()
 end
 
+timer.performWithDelay(1500, closeSplash)
 
 
-timer.performWithDelay(1, closeSplash)
 
