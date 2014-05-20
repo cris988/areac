@@ -53,8 +53,6 @@ local avanti
 function scene:createScene(event)
     local group = self.view
 
-    print('crea 2')
-
 	local background = display.newRect(0,0,display.contentWidth, display.contentHeight)
 	background:setFillColor(0.9, 0.9, 0.9)
     background.x = display.contentCenterX
@@ -750,8 +748,6 @@ end
 
 function scene:destroyScene( event )
 	local group = self.view
-
-    print('distruggi 2')
 end
 
 -- "createScene" event is dispatched if scene's view does not exist

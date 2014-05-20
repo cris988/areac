@@ -46,8 +46,6 @@ local avanti
 function scene:createScene(event)
     local group = self.view
 
-    print('crea 1')
-
 	local background = display.newRect(0,0,display.contentWidth, display.contentHeight)
 	background:setFillColor(0.9, 0.9, 0.9)
     background.x = display.contentCenterX
@@ -467,6 +465,7 @@ function AvantiScene()
 	    		email = '',
 	    		cellulare = '',
 	    		targa = '',
+	    		tipo = ''
 			}
 
 			storyboard.gotoScene('registrazione2')
@@ -515,7 +514,6 @@ end
 
 function scene:destroyScene( event )
 	local group = self.view
-	print('distruggi 1')
 
 end
 

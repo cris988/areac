@@ -416,6 +416,9 @@ function goBack()
     	storyboard.gotoScene(storyboard.getPrevious(), { params = { var = myApp.index, targa = myApp.targaAcquista } })
     elseif storyboard.getPrevious() == 'verificatarga2' then
     	storyboard.gotoScene(storyboard.getPrevious(), { params = { var = myApp.index, targa = myApp.targaVerifica } })
+    elseif storyboard.getPrevious() == 'registrazione' then
+        myApp.tabBar:setSelected( 1 )
+        storyboard.gotoScene('mappa')
     else
     	storyboard.gotoScene(storyboard.getPrevious())
     end
@@ -434,18 +437,25 @@ function registrazioneScene()
     storyboard.gotoScene('registrazione')
 end
 
+-- function accediScene()
+--     if campoInserimento.text == '' or campoInserimentoPass.text == '' then
+
+--     else
+--         print(getSettingString(campoInserimento.text))
+--         if getSettingString(campoInserimento.text) == '' then
+--         else
+--             storyboard.gotoScene('profilo', { params = { utente = campoInserimento.text } } )
+--         end
+--     end	
+-- end
+
 function accediScene()
     if campoInserimento.text == '' or campoInserimentoPass.text == '' then
 
     else
-        print(getSettingString(campoInserimento.text))
-        if getSettingString(campoInserimento.text) == '' then
-        else
-            storyboard.gotoScene('profilo', { params = { utente = campoInserimento.text } } )
-        end
-    end	
+       
+    end 
 end
-
 
 
 

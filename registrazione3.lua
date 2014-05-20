@@ -42,8 +42,6 @@ local avanti
 function scene:createScene(event)
     local group = self.view
 
-    print('crea 3')
-
 	local background = display.newRect(0,0,display.contentWidth, display.contentHeight)
 	background:setFillColor(0.9, 0.9, 0.9)
     background.x = display.contentCenterX
@@ -123,7 +121,7 @@ function scene:createScene(event)
     campoInserimento.font = native.newFont( myApp.font, 17 )
     campoInserimento.align = "center"
     campoInserimento.hasBackground = false
-    campoInserimento.placeholder = 'Nome'
+    campoInserimento.placeholder = 'Targa principale'
 
     btClear = display.newImage('img/delete.png', 10,10)
     btClear.x = _W*0.85
@@ -266,6 +264,8 @@ function checkBoxListener( event )
             checkRes:setState( { isOn = false } )
             checkDis:setState( { isOn = false } )
         end
+    else 
+        event.target:setState( { isOn = true } )
     end
 end
 
@@ -389,16 +389,43 @@ function AvantiScene()
 	if 	campoInserimento.text == '' then 
 
 	else
-        myApp.datiUtente = {
-			username = myApp.datiUtente.username,
-			password = myApp.datiUtente.password,
-            nome = myApp.datiUtente.nome,
-            cognome = myApp.datiUtente.cognome,
-            email = myApp.datiUtente.email,
-            cellulare = myApp.datiUtente.cellulare,
-            targa = campoInserimento.text
-		}
-		-- storyboard.gotoScene('registrazione4')
+        if checkNonRes.isOn then
+            myApp.datiUtente = {
+    			username = myApp.datiUtente.username,
+    			password = myApp.datiUtente.password,
+                nome = myApp.datiUtente.nome,
+                cognome = myApp.datiUtente.cognome,
+                email = myApp.datiUtente.email,
+                cellulare = myApp.datiUtente.cellulare,
+                targa = campoInserimento.text,
+                tipo = 'Non residente'
+    		}
+            storyboard.gotoScene('riepilogo')
+        elseif checkRes.isOn then
+            myApp.datiUtente = {
+                username = myApp.datiUtente.username,
+                password = myApp.datiUtente.password,
+                nome = myApp.datiUtente.nome,
+                cognome = myApp.datiUtente.cognome,
+                email = myApp.datiUtente.email,
+                cellulare = myApp.datiUtente.cellulare,
+                targa = campoInserimento.text,
+                tipo = 'Residente'
+            }
+            storyboard.gotoScene('riepilogo')
+        elseif checkDis.isOn then
+            myApp.datiUtente = {
+                username = myApp.datiUtente.username,
+                password = myApp.datiUtente.password,
+                nome = myApp.datiUtente.nome,
+                cognome = myApp.datiUtente.cognome,
+                email = myApp.datiUtente.email,
+                cellulare = myApp.datiUtente.cellulare,
+                targa = campoInserimento.text,
+                tipo = 'Disabile'
+            }
+            storyboard.gotoScene('riepilogo')
+        end
 	end
 end
 
@@ -442,7 +469,6 @@ end
 function scene:destroyScene( event )
 	local group = self.view
 
-    print('distruggi 3')
 
 end
 
