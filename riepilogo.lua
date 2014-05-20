@@ -16,9 +16,8 @@ local AvantiScene = {}
 local titleBar
 local titleText
 local indietro
-local utente
+local textDati
 local avanti
-local text1
 
 
 
@@ -79,7 +78,7 @@ function scene:createScene(event)
 
 	-- testo in alto
     local options = {
-        text = 'Controlla con attenzione i tuoi dati, non saranno facilmente modificabii:',
+        text = 'Controlla con attenzione!\nQuesti dati NON saranno più modificabili dall\'applicazione.',
         x = _W*0.5,
         y = _H*0.425,
         width = _W - 30,
@@ -88,30 +87,43 @@ function scene:createScene(event)
         align = "center"
     }
     local areaT = display.newText( options )
-    areaT:setFillColor( 0, 0, 0 )
+    areaT:setFillColor{ 255,0,0 }
     group:insert(areaT)
 
 
 
 
     local txt = {}
-    txt[1] = 'Username:\n\t' ..myApp.datiUtente.username
-    txt[2] = 'Nome:\n\t' ..myApp.datiUtente.nome
-    txt[3] = 'Cognome:\n\t' ..myApp.datiUtente.cognome
-    txt[4] = 'Email:\n\t' ..myApp.datiUtente.email
-    txt[5] = 'Cellulare:\n\t' ..myApp.datiUtente.cellulare
-    txt[6] = 'Targa principale:\n\t'..myApp.datiUtente.targa
+    txt[1] = 'Username:\t' .. myApp.datiUtente.username .. '\n'
+    txt[2] = 'Nome:\t' .. myApp.datiUtente.nome .. '\n'
+    txt[3] = 'Cognome:\t' .. myApp.datiUtente.cognome .. '\n'
+    if storyboard.getPrevious() == 'registrazione3' then
+        txt[4] = 'Codice fiscale:\t' .. myApp.datiUtente.cf .. '\n'
+        txt[5] = 'Numero patete:\t' .. myApp.datiUtente.patete .. '\n'
+        txt[6] = 'Via:\t' .. myApp.datiUtente.via .. '\n'
+        txt[7] = 'Numero civico:\t' .. myApp.datiUtente.civico .. '\n'
+        txt[8] = 'CAP:\t' .. myApp.datiUtente.cap .. '\n'
+    -- elseif storyboard.getPrevious() == 'registrazione3' then    
+    --     txt[9] = 'Pass:\t' .. myApp.datiUtente.pass .. '\n'
+    end
 
 
-    text1 = native.newTextField(_W*0.5,_H*0.5, _W-30, _H*0.5)
-    text1.text = txt[1]..'\n'..txt[2]..'\n'..txt[3]..'\n'..txt[4]..'\n'..txt[5]..'\n'..txt[6]
-    text1.align = 'left'
-    text1.font = native.newFont( myApp.fontSize, 19 )
-    text1.hasBackground = false
-    text1:setTextColor(0)
+
+
+
+    textDati = native.newTextField(_W*0.5,_H*0.6, _W-30, _H*0.4)
+    if storyboard.getPrevious() == 'registrazione2' then
+        textDati.text = txt[1]..'\n'..txt[2]..'\n'..txt[3]..'\nTipo:\tNon residente a Milano'
+    elseif storyboard.getPrevious() == 'registrazione3' then
+        textDati.text = txt[1]..'\n'..txt[2]..'\n'..txt[3]..'\n'..txt[4]..'\n'..txt[5]..'\n'..txt[6]..'\n'..txt[7]..'\n'..txt[8]
+    end
+    textDati.align = 'left'
+    textDati.font = native.newFont( myApp.fontSize, 19 )
+    textDati.hasBackground = false
+    textDati:setTextColor(0)
     
 
-    group:insert(text1)
+    group:insert(textDati)
 
 
 
@@ -155,40 +167,14 @@ end
 
 function goBack()
     storyboard.removeAll()
-    text1:removeSelf()
-    local sceneName = storyboard.getCurrentSceneName()
-    storyboard.removeScene( sceneName )
- 	storyboard.gotoScene('registrazione3')
+    -- textDati:removeSelf()
+    -- local sceneName = storyboard.getCurrentSceneName()
+    -- storyboard.removeScene( sceneName )
+ 	storyboard.gotoScene('registrazione2')
 end
 
 function AvantiScene()
-	if 	campoInserimento.text == '' then 
-
-	else
-  --       myApp.datiUtente = {
-		-- 	username = myApp.datiUtente.username,
-		-- 	password = myApp.datiUtente.password,
-  --           nome = myApp.datiUtente.nome,
-  --           cognome = myApp.datiUtente.cognome,
-  --           email = myApp.datiUtente.email,
-  --           cellulare = myApp.datiUtente.cellulare,
-  --           targa = myApp.datiUtente.targa
-		-- }
-		-- storyboard.gotoScene('registrazione4')
-
-
-        utente = myApp.datiUtente
-    
-        myApp.datiUtente = {
-            username = '',
-            password = '',
-            nome = '',
-            cognome = '',
-            email = '',
-            cellulare = '',
-            targa = '',
-        }
-	end
+    storyboard.gotoScene('registrazione3')
 end
 
 
@@ -220,7 +206,8 @@ function scene:exitScene( event )
 	local group = self.view
 
 	myApp.tabBar.isVisible = true
-	
+	textDati:removeSelf()
+
 	--
 	-- Clean up native objects
 	--

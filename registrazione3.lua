@@ -8,8 +8,16 @@ local myApp = require('myapp')
 -- funzioni
 local views = {}
 local goBack = {}
-local textListener = {}
-local clearListener = {}
+local textListenerCf = {}
+local clearListenerCf = {}
+local textListenerPatente = {}
+local clearListenerPatente = {}
+local textListenerVia = {}
+local clearListenerVia = {}
+local textListenerNum = {}
+local clearListenerNum = {}
+local textListenerCap = {}
+local clearListenerCap = {}
 local trimString = {}
 local AvantiScene = {}
 
@@ -19,18 +27,69 @@ local AvantiScene = {}
 local titleBar
 local titleText
 local indietro
-local campoInserimento
-local sfondoInserimento
-local btClear
-local checkNonRes
-local checkRes
-local checkDis
-local textNonRes
-local textRes
-local textDis
+local campoInserimentoCf
+local sfondoInserimentoCf
+local btClearCf
+local campoInserimentoPatente
+local sfondoInserimentoPatente
+local btClearPatente
+local campoInserimentoVia
+local sfondoInserimentoVia
+local btClearVia
+local campoInserimentoNum
+local sfondoInserimentoNum
+local btClearNum
+local campoInserimentoCap
+local sfondoInserimentoCap
+local btClearCap
 local avanti
+local valori
 
 
+
+
+
+
+
+-- Create two tables to hold data for days and years      
+local days = {}
+local years = {}
+
+-- Populate the "days" table
+for d = 1, 31 do
+    days[d] = d
+end
+
+-- Populate the "years" table
+for y = 1, 48 do
+    years[y] = 1969 + y
+end
+
+-- Configure the picker wheel columns
+local columnData = 
+{
+    -- Days
+    {
+        align = "left",
+        width = 60,
+        startIndex = 1,
+        labels = days
+    },
+    -- Months
+    { 
+        align = "right",
+        width = 150,
+        startIndex = 1,
+        labels = { "Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre" }
+    },
+    -- Years
+    {
+        align = "center",
+        width = 80,
+        startIndex = 31,
+        labels = years
+    }
+}
 
 
 
@@ -86,7 +145,7 @@ function scene:createScene(event)
 
 	-- testo in alto
     local options = {
-        text = 'Inserisci la tua targa principale:',
+        text = 'Inserisci i dati. Potranno anche essere modificati in seguito dall\'applicazione',
         x = _W*0.5,
         y = _H*0.425,
         width = _W - 30,
@@ -95,7 +154,7 @@ function scene:createScene(event)
         align = "center"
     }
     local areaT = display.newText( options )
-    areaT:setFillColor( 0, 0, 0 )
+    areaT:setFillColor{ 255,0,0 }
     group:insert(areaT)
 
 
@@ -106,101 +165,206 @@ function scene:createScene(event)
 
 
 
-    -- creazione textArea per username
 
-    local gruppoInserimento = display.newGroup()
+    -- creazione textArea per Cf
 
-    sfondoInserimento = display.newImageRect('img/textArea.png', 564*0.45, 62*0.6)
-    sfondoInserimento.x = _W*0.5
-    sfondoInserimento.y = _H*0.30
+    local gruppoInserimentoCf = display.newGroup()
 
-    campoInserimento = native.newTextField( 40, 85, 195, 28)
-    campoInserimento.x = _W/2
-    campoInserimento.y = _H*0.30
-    campoInserimento:setTextColor( 0.75,0.75,0.75 )
-    campoInserimento.font = native.newFont( myApp.font, 17 )
-    campoInserimento.align = "center"
-    campoInserimento.hasBackground = false
-    campoInserimento.placeholder = 'Targa principale'
+    sfondoInserimentoCf = display.newImageRect('img/textArea.png', 564*0.45, 62*0.6)
+    sfondoInserimentoCf.x = _W*0.5
+    sfondoInserimentoCf.y = _H*0.37
 
-    btClear = display.newImage('img/delete.png', 10,10)
-    btClear.x = _W*0.85
-    btClear.y = _H*0.30
-    btClear.alpha = 0
+    campoInserimentoCf = native.newTextField( 40, 85, 195, 28)
+    campoInserimentoCf.x = _W/2
+    campoInserimentoCf.y = _H*0.37
+    campoInserimentoCf:setTextColor( 0.75,0.75,0.75 )
+    campoInserimentoCf.font = native.newFont( myApp.font, 17 )
+    campoInserimentoCf.align = "center"
+    campoInserimentoCf.hasBackground = false
+    campoInserimentoCf.placeholder = 'Codice fiscale'
 
-    gruppoInserimento:insert(sfondoInserimento)
-    gruppoInserimento:insert(campoInserimento)
-    gruppoInserimento:insert(btClear)
+    btClearCf = display.newImage('img/delete.png', 10,10)
+    btClearCf.x = _W*0.85
+    btClearCf.y = _H*0.37
+    btClearCf.alpha = 0
 
-    campoInserimento:addEventListener( "userInput", textListener)
+    gruppoInserimentoCf:insert(sfondoInserimentoCf)
+    gruppoInserimentoCf:insert(campoInserimentoCf)
+    gruppoInserimentoCf:insert(btClearCf)
 
-
-
-
-
-    group:insert(gruppoInserimento)
+    campoInserimentoCf:addEventListener( "userInput", textListenerCf)
 
 
 
 
 
+    -- creazione textArea per num patente
+
+    local gruppoInserimentoPatente = display.newGroup()
+
+    sfondoInserimentoPatente = display.newImageRect('img/textArea.png', 564*0.45, 62*0.6)
+    sfondoInserimentoPatente.x = _W*0.5
+    sfondoInserimentoPatente.y = _H*0.47
+
+    campoInserimentoPatente = native.newTextField( 40, 85, 195, 28)
+    campoInserimentoPatente.x = _W/2
+    campoInserimentoPatente.y = _H*0.47
+    campoInserimentoPatente:setTextColor( 0.75,0.75,0.75 )
+    campoInserimentoPatente.font = native.newFont( myApp.font, 17 )
+    campoInserimentoPatente.align = "center"
+    campoInserimentoPatente.hasBackground = false
+    campoInserimentoPatente.placeholder = 'Numero di patente'
+
+    btClearPatente = display.newImage('img/delete.png', 10,10)
+    btClearPatente.x = _W*0.85
+    btClearPatente.y = _H*0.47
+    btClearPatente.alpha = 0
+
+    gruppoInserimentoPatente:insert(sfondoInserimentoPatente)
+    gruppoInserimentoPatente:insert(campoInserimentoPatente)
+    gruppoInserimentoPatente:insert(btClearPatente)
+
+    campoInserimentoPatente:addEventListener( "userInput", textListenerPatente)
+
+
+    -- creazione textArea per indirizzo
+
+    local gruppoInserimentoVia = display.newGroup()
+
+    sfondoInserimentoVia = display.newImageRect('img/textArea.png', 564*0.45, 62*0.6)
+    sfondoInserimentoVia.x = _W*0.5
+    sfondoInserimentoVia.y = _H*0.57
+
+    campoInserimentoVia = native.newTextField( 40, 85, 195, 28)
+    campoInserimentoVia.x = _W/2
+    campoInserimentoVia.y = _H*0.57
+    campoInserimentoVia:setTextColor( 0.75,0.75,0.75 )
+    campoInserimentoVia.font = native.newFont( myApp.font, 17 )
+    campoInserimentoVia.align = "center"
+    campoInserimentoVia.hasBackground = false
+    campoInserimentoVia.placeholder = 'Via di domicilio'
+
+    btClearVia = display.newImage('img/delete.png', 10,10)
+    btClearVia.x = _W*0.85
+    btClearVia.y = _H*0.57
+    btClearVia.alpha = 0
+
+    gruppoInserimentoVia:insert(sfondoInserimentoVia)
+    gruppoInserimentoVia:insert(campoInserimentoVia)
+    gruppoInserimentoVia:insert(btClearVia)
+
+    campoInserimentoVia:addEventListener( "userInput", textListenerVia)
+
+
+
+
+    -- creazione textArea per numero civico
+
+    local gruppoInserimentoNum = display.newGroup()
+
+    sfondoInserimentoNum = display.newImageRect('img/textArea.png', 564*0.45, 62*0.6)
+    sfondoInserimentoNum.x = _W*0.5
+    sfondoInserimentoNum.y = _H*0.67
+
+    campoInserimentoNum = native.newTextField( 40, 85, 195, 28)
+    campoInserimentoNum.x = _W/2
+    campoInserimentoNum.y = _H*0.67
+    campoInserimentoNum:setTextColor( 0.75,0.75,0.75 )
+    campoInserimentoNum.font = native.newFont( myApp.font, 17 )
+    campoInserimentoNum.align = "center"
+    campoInserimentoNum.hasBackground = false
+    campoInserimentoNum.placeholder = 'Numero civico'
+
+    btClearNum = display.newImage('img/delete.png', 10,10)
+    btClearNum.x = _W*0.85
+    btClearNum.y = _H*0.67
+    btClearNum.alpha = 0
+
+    gruppoInserimentoNum:insert(sfondoInserimentoNum)
+    gruppoInserimentoNum:insert(campoInserimentoNum)
+    gruppoInserimentoNum:insert(btClearNum)
+
+    campoInserimentoNum:addEventListener( "userInput", textListenerNum)
+
+
+
+
+    -- creazione textArea per cap
+
+    local gruppoInserimentoCap = display.newGroup()
+
+    sfondoInserimentoCap = display.newImageRect('img/textArea.png', 564*0.45, 62*0.6)
+    sfondoInserimentoCap.x = _W*0.5
+    sfondoInserimentoCap.y = _H*0.77
+
+    campoInserimentoCap = native.newTextField( 40, 85, 195, 28)
+    campoInserimentoCap.x = _W/2
+    campoInserimentoCap.y = _H*0.77
+    campoInserimentoCap:setTextColor( 0.75,0.75,0.75 )
+    campoInserimentoCap.font = native.newFont( myApp.font, 17 )
+    campoInserimentoCap.align = "center"
+    campoInserimentoCap.hasBackground = false
+    campoInserimentoCap.placeholder = 'CAP'
+
+    btClearCap = display.newImage('img/delete.png', 10,10)
+    btClearCap.x = _W*0.85
+    btClearCap.y = _H*0.77
+    btClearCap.alpha = 0
+
+    gruppoInserimentoCap:insert(sfondoInserimentoCap)
+    gruppoInserimentoCap:insert(campoInserimentoCap)
+    gruppoInserimentoCap:insert(btClearCap)
+
+    campoInserimentoCap:addEventListener( "userInput", textListenerCap)
 
 
 
 
 
-    -- creazione dei checkBox
-
-    checkNonRes = widget.newSwitch
-    {
-       x = _W*0.10,
-       y = _H*0.5,
-       style = "checkbox",
-       id = "Non residente",
-       initialSwitchState = true,
-       onPress = checkBoxListener
-    }
-     
-    checkRes = widget.newSwitch
-    {
-       x = _W*0.10,
-       y = _H*0.65,
-       style = "checkbox",
-       id = "Residente",
-       initialSwitchState = false,
-       onPress = checkBoxListener
-    }
-
-    checkDis = widget.newSwitch
-    {
-       x = _W*0.10,
-       y = _H*0.8,
-       style = "checkbox",
-       id = "Disabile",
-       initialSwitchState = false,
-       onPress = checkBoxListener
-    }
-
-    group:insert(checkNonRes)
-    group:insert(checkRes)
-    group:insert(checkDis)
-    
-    textNonRes = display.newText('Non residente', _W*0.20, _H*0.5, myApp.font, 20)
-    textNonRes:setFillColor( 0 )
-    textNonRes.anchorX = 0
-    textRes = display.newText('Residente', _W*0.20, _H*0.65, myApp.font, 20)
-    textRes:setFillColor( 0 )
-    textRes.anchorX = 0
-    textDis = display.newText('Disabile', _W*0.20, _H*0.80, myApp.font, 20)
-    textDis:setFillColor( 0 )
-    textDis.anchorX = 0
-
-    group:insert(textNonRes)
-    group:insert(textRes)
-    group:insert(textDis)
+    group:insert(gruppoInserimentoCf)
+    group:insert(gruppoInserimentoPatente)
+    group:insert(gruppoInserimentoVia)
+    group:insert(gruppoInserimentoNum)
+    group:insert(gruppoInserimentoCap)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    if myApp.datiUtente.cf == '' then
+    else
+        campoInserimentoCf.text = myApp.datiUtente.cf
+        campoInserimentoCf:setTextColor( 0 )
+
+        campoInserimentoPatente.text = myApp.datiUtente.patente
+        campoInserimentoPatente:setTextColor( 0 )
+
+        campoInserimentoVia.text = myApp.datiUtente.via
+        campoInserimentoVia:setTextColor( 0 )
+
+        campoInserimentoNum.text = myApp.datiUtente.civico
+        campoInserimentoNum:setTextColor( 0 )
+
+        campoInserimentoCap.text = myApp.datiUtente.cap
+        campoInserimentoCap:setTextColor( 0 )
+    end
 
 
 
@@ -241,54 +405,6 @@ end
 
 
 
-
-
-
-
-
-
-
-
-
-
--- Inibisce la doppia selezione dei checkBox
-function checkBoxListener( event )
-    if event.target.isOn then
-        if event.target.id == 'Residente' then
-            checkNonRes:setState( { isOn = false } )
-            checkDis:setState( { isOn = false } )
-        elseif event.target.id == 'Disabile' then
-            checkNonRes:setState( { isOn = false } )
-            checkRes:setState( { isOn = false } )
-        else
-            checkRes:setState( { isOn = false } )
-            checkDis:setState( { isOn = false } )
-        end
-    else 
-        event.target:setState( { isOn = true } )
-    end
-end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 -- fa il trim della stringa inserita dall'utente
 function trimString( s )
    return string.match( s,"^()%s*$") and "" or string.match(s,"^%s*(.*%S)" )
@@ -306,51 +422,222 @@ end
 
 
 
---gestisce le fasi dell'inserimento della targa
-function textListener( event )
+--gestisce le fasi dell'inserimento della codice fiscale
+function textListenerCf( event )
     if event.phase == "began" then
         if event.target.text == '' then
         else
-            btClear.alpha = 0.2
-            btClear:addEventListener( "touch", clearListener )
+            btClearCf.alpha = 0.2
+            btClearCf:addEventListener( "touch", clearListenerCf )
         end
-        campoInserimento:setTextColor( 0 )
+        campoInserimentoCf:setTextColor( 0 )
     elseif event.phase == "editing" then
         
         if(#event.target.text > 0) then
-            btClear.alpha = 0.2
-            btClear:addEventListener( "touch", clearListener )
+            btClearCf.alpha = 0.2
+            btClearCf:addEventListener( "touch", clearListenerCf )
         else
-            btClear.alpha = 0
-            btClear:removeEventListener( "touch", clearListener )
+            btClearCf.alpha = 0
+            btClearCf:removeEventListener( "touch", clearListenerCf )
         end
     elseif event.phase == "ended" then
         if event.target.text == '' then
-            btClear.alpha = 0
-            campoInserimento:setTextColor( 0.75,0.75,0.75 )
+            btClearCf.alpha = 0
+            campoInserimentoCf:setTextColor( 0.75,0.75,0.75 )
 
         end
     end
 end
 
 -- gestisce la comparsa del pulsate clear
-function clearListener( event ) 
+function clearListenerCf( event ) 
     if(event.phase == "began") then
         event.target.alpha = 0.8
     elseif(event.phase == "cancelled") then
         event.target.alpha = 0.2
     elseif(event.phase == "ended") then
-        campoInserimento.text = ''
-        native.setKeyboardFocus( campoInserimento )
-        btClear.alpha = 0
-        btClear:removeEventListener( "touch", clearListener )
+        campoInserimentoCf.text = ''
+        native.setKeyboardFocus( campoInserimentoCf )
+        btClearCf.alpha = 0
+        btClearCf:removeEventListener( "touch", clearListenerCf )
     end
 end
 
 
 
 
+--gestisce le fasi dell'inserimento del numero patente
+function textListenerPatente( event )
+    if event.phase == "began" then
+        if event.target.text == '' then
+        else
+            btClearPatente.alpha = 0.2
+            btClearPatente:addEventListener( "touch", clearListenerPatente )
+        end
+        campoInserimentoPatente:setTextColor( 0 )
+    elseif event.phase == "editing" then
+        
+        if(#event.target.text > 0) then
+            btClearPatente.alpha = 0.2
+            btClearPatente:addEventListener( "touch", clearListenerPatente )
+        else
+            btClearPatente.alpha = 0
+            btClearPatente:removeEventListener( "touch", clearListenerPatente )
+        end
+    elseif event.phase == "ended" then
+        if event.target.text == '' then
+            btClearPatente.alpha = 0
+            campoInserimentoPatente:setTextColor( 0.75,0.75,0.75 )
 
+        end
+    end
+end
+
+-- gestisce la comparsa del pulsate clear
+function clearListenerPatente( event ) 
+    if(event.phase == "began") then
+        event.target.alpha = 0.8
+    elseif(event.phase == "cancelled") then
+        event.target.alpha = 0.2
+    elseif(event.phase == "ended") then
+        campoInserimentoPatente.text = ''
+        native.setKeyboardFocus( campoInserimentoPatente )
+        btClearPatente.alpha = 0
+        btClearPatente:removeEventListener( "touch", clearListenerPatente )
+    end
+end
+
+
+
+
+--gestisce le fasi dell'inserimento della indirizzo
+function textListenerVia( event )
+    if event.phase == "began" then
+        if event.target.text == '' then
+        else
+            btClearVia.alpha = 0.2
+            btClearVia:addEventListener( "touch", clearListenerVia )
+        end
+        campoInserimentoVia:setTextColor( 0 )
+    elseif event.phase == "editing" then
+        
+        if(#event.target.text > 0) then
+            btClearVia.alpha = 0.2
+            btClearVia:addEventListener( "touch", clearListenerVia )
+        else
+            btClearVia.alpha = 0
+            btClearVia:removeEventListener( "touch", clearListenerVia )
+        end
+    elseif event.phase == "ended" then
+        if event.target.text == '' then
+            btClearVia.alpha = 0
+            campoInserimentoVia:setTextColor( 0.75,0.75,0.75 )
+
+        end
+    end
+end
+
+-- gestisce la comparsa del pulsate clear
+function clearListenerVia( event ) 
+    if(event.phase == "began") then
+        event.target.alpha = 0.8
+    elseif(event.phase == "cancelled") then
+        event.target.alpha = 0.2
+    elseif(event.phase == "ended") then
+        campoInserimentoVia.text = ''
+        native.setKeyboardFocus( campoInserimentoVia )
+        btClearVia.alpha = 0
+        btClearVia:removeEventListener( "touch", clearListenerVia )
+    end
+end
+
+
+
+
+--gestisce le fasi dell'inserimento della numero civico
+function textListenerNum( event )
+    if event.phase == "began" then
+        if event.target.text == '' then
+        else
+            btClearNum.alpha = 0.2
+            btClearNum:addEventListener( "touch", clearListenerNum )
+        end
+        campoInserimentoNum:setTextColor( 0 )
+    elseif event.phase == "editing" then
+        
+        if(#event.target.text > 0) then
+            btClearNum.alpha = 0.2
+            btClearNum:addEventListener( "touch", clearListenerNum )
+        else
+            btClearNum.alpha = 0
+            btClearNum:removeEventListener( "touch", clearListenerNum )
+        end
+    elseif event.phase == "ended" then
+        if event.target.text == '' then
+            btClearNum.alpha = 0
+            campoInserimentoNum:setTextColor( 0.75,0.75,0.75 )
+
+        end
+    end
+end
+
+-- gestisce la comparsa del pulsate clear
+function clearListenerNum( event ) 
+    if(event.phase == "began") then
+        event.target.alpha = 0.8
+    elseif(event.phase == "cancelled") then
+        event.target.alpha = 0.2
+    elseif(event.phase == "ended") then
+        campoInserimentoNum.text = ''
+        native.setKeyboardFocus( campoInserimentoNum )
+        btClearNum.alpha = 0
+        btClearNum:removeEventListener( "touch", clearListenerNum )
+    end
+end
+
+
+
+
+--gestisce le fasi dell'inserimento della CAP
+function textListenerCap( event )
+    if event.phase == "began" then
+        if event.target.text == '' then
+        else
+            btClearCap.alpha = 0.2
+            btClearCap:addEventListener( "touch", clearListenerCap )
+        end
+        campoInserimentoCap:setTextColor( 0 )
+    elseif event.phase == "editing" then
+        
+        if(#event.target.text > 0) then
+            btClearCap.alpha = 0.2
+            btClearCap:addEventListener( "touch", clearListenerCap )
+        else
+            btClearCap.alpha = 0
+            btClearCap:removeEventListener( "touch", clearListenerCap )
+        end
+    elseif event.phase == "ended" then
+        if event.target.text == '' then
+            btClearCap.alpha = 0
+            campoInserimentoCap:setTextColor( 0.75,0.75,0.75 )
+
+        end
+    end
+end
+
+-- gestisce la comparsa del pulsate clear
+function clearListenerCap( event ) 
+    if(event.phase == "began") then
+        event.target.alpha = 0.8
+    elseif(event.phase == "cancelled") then
+        event.target.alpha = 0.2
+    elseif(event.phase == "ended") then
+        campoInserimentoCap.text = ''
+        native.setKeyboardFocus( campoInserimentoCap )
+        btClearCap.alpha = 0
+        btClearCap:removeEventListener( "touch", clearListenerCap )
+    end
+end
 
 
 
@@ -379,54 +666,42 @@ end
 
 function goBack()
     storyboard.removeAll()
-    campoInserimento:removeSelf()
+    campoInserimentoCf:removeSelf()
+    campoInserimentoPatente:removeSelf()
+    campoInserimentoVia:removeSelf()
+    campoInserimentoNum:removeSelf()
+    campoInserimentoCap:removeSelf()
     local sceneName = storyboard.getCurrentSceneName()
     storyboard.removeScene( sceneName )
- 	storyboard.gotoScene('registrazione2')
+    storyboard.gotoScene('riepilogo')
 end
 
 function AvantiScene()
-	if 	campoInserimento.text == '' then 
+    if  campoInserimentoCf.text == '' or 
+        campoInserimentoPatente.text == '' or 
+        campoInserimentoVia.text == '' or
+        campoInserimentoNum.text == '' or 
+        campoInserimentoCap.text == '' then
 
-	else
-        if checkNonRes.isOn then
-            myApp.datiUtente = {
-    			username = myApp.datiUtente.username,
-    			password = myApp.datiUtente.password,
-                nome = myApp.datiUtente.nome,
-                cognome = myApp.datiUtente.cognome,
-                email = myApp.datiUtente.email,
-                cellulare = myApp.datiUtente.cellulare,
-                targa = campoInserimento.text,
-                tipo = 'Non residente'
-    		}
-            storyboard.gotoScene('riepilogo')
-        elseif checkRes.isOn then
-            myApp.datiUtente = {
-                username = myApp.datiUtente.username,
-                password = myApp.datiUtente.password,
-                nome = myApp.datiUtente.nome,
-                cognome = myApp.datiUtente.cognome,
-                email = myApp.datiUtente.email,
-                cellulare = myApp.datiUtente.cellulare,
-                targa = campoInserimento.text,
-                tipo = 'Residente'
-            }
-            storyboard.gotoScene('riepilogo')
-        elseif checkDis.isOn then
-            myApp.datiUtente = {
-                username = myApp.datiUtente.username,
-                password = myApp.datiUtente.password,
-                nome = myApp.datiUtente.nome,
-                cognome = myApp.datiUtente.cognome,
-                email = myApp.datiUtente.email,
-                cellulare = myApp.datiUtente.cellulare,
-                targa = campoInserimento.text,
-                tipo = 'Disabile'
-            }
-            storyboard.gotoScene('riepilogo')
-        end
-	end
+    else
+        myApp.datiUtente = {
+            username = myApp.datiUtente.username,
+            password = myApp.datiUtente.password,
+            nome = myApp.datiUtente.nome,
+            cognome = myApp.datiUtente.cognome,
+            tipo = myApp.datiUtente.tipo,
+            email = myApp.datiUtente.email,
+            cellulare = myApp.datiUtente.cellulare,
+            targa = myApp.datiUtente.targa,
+            cf = campoInserimentoCf.text,
+            patente = campoInserimentoPatente.text,
+            via = campoInserimentoVia.text,
+            civico = campoInserimentoNum.text,
+            cap = campoInserimentoCap.text,
+        }
+
+        storyboard.gotoScene('riepilogo')
+    end
 end
 
 
@@ -458,7 +733,11 @@ function scene:exitScene( event )
 	local group = self.view
 
 	myApp.tabBar.isVisible = true
-	campoInserimento:removeSelf()
+	campoInserimentoCf:removeSelf()
+    campoInserimentoPatente:removeSelf()
+    campoInserimentoVia:removeSelf()
+    campoInserimentoNum:removeSelf()
+    campoInserimentoCap:removeSelf()
 	
 	--
 	-- Clean up native objects

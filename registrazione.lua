@@ -128,10 +128,8 @@ function scene:createScene(event)
     campoInserimentoUser.placeholder = 'Username'
 
   
-  	print(myApp.datiUtente.username)
     if myApp.datiUtente.username == '' then
     else
-    	print(myApp.datiUtente.username)
     	campoInserimentoUser.text = myApp.datiUtente.username
     	campoInserimentoUser:setTextColor( 0 )
     end
@@ -443,11 +441,11 @@ end
 
 function goBack()
     storyboard.removeAll()
-    campoInserimentoUser:removeSelf()
-    campoInserimentoPass:removeSelf()
-    campoInserimentoPass2:removeSelf()
-    local sceneName = storyboard.getCurrentSceneName()
-    storyboard.removeScene( sceneName )
+    -- campoInserimentoUser:removeSelf()
+    -- campoInserimentoPass:removeSelf()
+    -- campoInserimentoPass2:removeSelf()
+    -- local sceneName = storyboard.getCurrentSceneName()
+    -- storyboard.removeScene( sceneName )
  	storyboard.gotoScene('accedi')
 end
 
@@ -460,12 +458,12 @@ function AvantiScene()
 			myApp.datiUtente = {
 				username = campoInserimentoUser.text,
 				password = campoInserimentoPass.text,
-				nome = '',
-	    		cognome = '',
-	    		email = '',
-	    		cellulare = '',
-	    		targa = '',
-	    		tipo = ''
+				-- nome = '',
+	   --  		cognome = '',
+	   --  		email = '',
+	   --  		cellulare = '',
+	   --  		targa = '',
+	   --  		tipo = '',
 			}
 
 			storyboard.gotoScene('registrazione2')

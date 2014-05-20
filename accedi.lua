@@ -430,9 +430,15 @@ function registrazioneScene()
         password = '',
         nome = '',
         cognome = '',
-        email = '',
+        tipo = ',',
+        targa  = '',
         cellulare = '',
-        targa = '',
+        email = '',
+        cf = '',
+        patente = '',
+        via = '',
+        civico = '',
+        cap = '',
     }
     storyboard.gotoScene('registrazione')
 end
