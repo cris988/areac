@@ -43,53 +43,11 @@ local campoInserimentoCap
 local sfondoInserimentoCap
 local btClearCap
 local avanti
-local valori
 
 
 
 
 
-
-
--- Create two tables to hold data for days and years      
-local days = {}
-local years = {}
-
--- Populate the "days" table
-for d = 1, 31 do
-    days[d] = d
-end
-
--- Populate the "years" table
-for y = 1, 48 do
-    years[y] = 1969 + y
-end
-
--- Configure the picker wheel columns
-local columnData = 
-{
-    -- Days
-    {
-        align = "left",
-        width = 60,
-        startIndex = 1,
-        labels = days
-    },
-    -- Months
-    { 
-        align = "right",
-        width = 150,
-        startIndex = 1,
-        labels = { "Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre" }
-    },
-    -- Years
-    {
-        align = "center",
-        width = 80,
-        startIndex = 31,
-        labels = years
-    }
-}
 
 
 
@@ -673,7 +631,7 @@ function goBack()
     campoInserimentoCap:removeSelf()
     local sceneName = storyboard.getCurrentSceneName()
     storyboard.removeScene( sceneName )
-    storyboard.gotoScene('riepilogo')
+    storyboard.gotoScene('registrazione2')
 end
 
 function AvantiScene()

@@ -159,12 +159,12 @@ end
 
 
 
-
-
 myApp.utenti = {}
-myApp.utenti['admin'] = { password = 'admin' }
+myApp.utenti[1] = { username = 'nonres', password = 'nonres' , nome = 'qwe', cognome = 'qwe', tipo = 'Non residente', targa = 'qw123qw', cellulare = '123123', mail = 'qwe@qw.qw'}
+myApp.utenti[2] = { username = 'res', password = 'res' , nome = 'qwe', cognome = 'qwe', tipo = 'Residente' , targa = 'qw123qw', cellulare = '123123', mail = 'qwe@qw.qw', cf = 'ad12', patente = '123', via = 'via qwe', civico = '3', cap = '1231'}
+myApp.utenti[3] = { username = 'dis', password = 'dis' , nome = 'qwe', cognome = 'qwe', tipo = 'Disabile' , targa = 'qw123qw', cellulare = '123123', mail = 'qwe@qw.qw', pass = '123'}
 
-
+myApp.utenteLoggato = 0
 
 
 

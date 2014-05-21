@@ -439,6 +439,7 @@ function registrazioneScene()
         via = '',
         civico = '',
         cap = '',
+        pass = '',
     }
     storyboard.gotoScene('registrazione')
 end
@@ -459,7 +460,16 @@ function accediScene()
     if campoInserimento.text == '' or campoInserimentoPass.text == '' then
 
     else
-       
+        local indice = myApp:getNumUtenti()
+        for i = 1, indice, 1 do
+            if myApp.utenti[i].username == campoInserimento.text and
+                myApp.utenti[i].password == campoInserimentoPass.text then
+
+                storyboard.gotoScene('profilo')
+            end
+        end
+
+
     end 
 end
 

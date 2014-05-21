@@ -441,11 +441,11 @@ end
 
 function goBack()
     storyboard.removeAll()
-    -- campoInserimentoUser:removeSelf()
-    -- campoInserimentoPass:removeSelf()
-    -- campoInserimentoPass2:removeSelf()
-    -- local sceneName = storyboard.getCurrentSceneName()
-    -- storyboard.removeScene( sceneName )
+    campoInserimentoUser:removeSelf()
+    campoInserimentoPass:removeSelf()
+    campoInserimentoPass2:removeSelf()
+    local sceneName = storyboard.getCurrentSceneName()
+    storyboard.removeScene( sceneName )
  	storyboard.gotoScene('accedi')
 end
 

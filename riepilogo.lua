@@ -9,7 +9,7 @@ local myApp = require('myapp')
 local views = {}
 local goBack = {}
 local AvantiScene = {}
-
+local salvaUtente = {}
 
 
 -- variabili
@@ -99,23 +99,28 @@ function scene:createScene(event)
     txt[3] = 'Cognome:\t' .. myApp.datiUtente.cognome .. '\n'
     if storyboard.getPrevious() == 'registrazione3' then
         txt[4] = 'Codice fiscale:\t' .. myApp.datiUtente.cf .. '\n'
-        txt[5] = 'Numero patete:\t' .. myApp.datiUtente.patete .. '\n'
+        txt[5] = 'Numero patente:\t' .. myApp.datiUtente.patente .. '\n'
         txt[6] = 'Via:\t' .. myApp.datiUtente.via .. '\n'
         txt[7] = 'Numero civico:\t' .. myApp.datiUtente.civico .. '\n'
         txt[8] = 'CAP:\t' .. myApp.datiUtente.cap .. '\n'
-    -- elseif storyboard.getPrevious() == 'registrazione3' then    
-    --     txt[9] = 'Pass:\t' .. myApp.datiUtente.pass .. '\n'
+    elseif storyboard.getPrevious() == 'registrazione4' then    
+        txt[4] = 'Pass:\t' .. myApp.datiUtente.pass .. '\n'
     end
 
 
 
 
 
-    textDati = native.newTextField(_W*0.5,_H*0.6, _W-30, _H*0.4)
+    textDati = native.newTextField(_W*0.5,_H*0.615, _W-30, _H*0.55)
+
     if storyboard.getPrevious() == 'registrazione2' then
         textDati.text = txt[1]..'\n'..txt[2]..'\n'..txt[3]..'\nTipo:\tNon residente a Milano'
+        textDati.size = 17
     elseif storyboard.getPrevious() == 'registrazione3' then
         textDati.text = txt[1]..'\n'..txt[2]..'\n'..txt[3]..'\n'..txt[4]..'\n'..txt[5]..'\n'..txt[6]..'\n'..txt[7]..'\n'..txt[8]
+    elseif storyboard.getPrevious() == 'registrazione4' then
+        textDati.text = txt[1]..'\n'..txt[2]..'\n'..txt[3]..'\n'..txt[4]
+    
     end
     textDati.align = 'left'
     textDati.font = native.newFont( myApp.fontSize, 19 )
@@ -123,7 +128,7 @@ function scene:createScene(event)
     textDati:setTextColor(0)
     
 
-    group:insert(textDati)
+    -- group:insert(textDati)
 
 
 
@@ -167,14 +172,16 @@ end
 
 function goBack()
     storyboard.removeAll()
-    -- textDati:removeSelf()
-    -- local sceneName = storyboard.getCurrentSceneName()
-    -- storyboard.removeScene( sceneName )
+    textDati:removeSelf()
+    local sceneName = storyboard.getCurrentSceneName()
+    storyboard.removeScene( sceneName )
  	storyboard.gotoScene('registrazione2')
 end
 
 function AvantiScene()
-    storyboard.gotoScene('registrazione3')
+
+    salvaUtente()
+    storyboard.gotoScene('profilo')
 end
 
 
@@ -182,7 +189,43 @@ end
 
 
 
-
+function salvaUtente()
+    local i = myApp:getNumUtenti()
+    if myApp.datiUtente.tipo == 'Residente' then
+        myApp.utenti[i+1] = {
+            username = myApp.datiUtente.username,
+            password = myApp.datiUtente.password,
+            nome = myApp.datiUtente.nome,
+            cognome = myApp.datiUtente.cognome,
+            tipo = myApp.datiUtente.tipo,
+            targa  = myApp.datiUtente.targa,
+            cellulare = myApp.datiUtente.cellulare,
+            email = myApp.datiUtente.email,
+            cf = myApp.datiUtente.cf,
+            patente = myApp.datiUtente.patente,
+            via = myApp.datiUtente.via,
+            civico = myApp.datiUtente.civico,
+            cap = myApp.datiUtente.cap,
+        }
+    elseif myApp.datiUtente.tipo == 'Disabile' then
+        myApp.utenti[i+1] = {
+            username = myApp.datiUtente.username,
+            password = myApp.datiUtente.password,
+            nome = myApp.datiUtente.nome,
+            cognome = myApp.datiUtente.cognome,
+            tipo = myApp.datiUtente.tipo,
+            pass = myApp.datiUtente.pass,
+        }
+    else
+        myApp.utenti[i+1] = {
+            username = myApp.datiUtente.username,
+            password = myApp.datiUtente.password,
+            nome = myApp.datiUtente.nome,
+            cognome = myApp.datiUtente.cognome,
+            tipo = myApp.datiUtente.tipo,
+        }
+    end
+end
 
 
 

@@ -67,8 +67,8 @@ function scene:createScene(event)
 
 
 
-	print(getSettingString('qwe'))
-	print(event.params.utente)
+
+
 
 
 
@@ -95,7 +95,8 @@ end
 function goBack()
     storyboard.removeAll()
 
-    if storyboard.getPrevious() == 'accedi' then
+    if storyboard.getPrevious() == 'accedi' or
+    	storyboard.getPrevious() == 'riepilogo' then
     	storyboard.gotoScene('mappa')
     else
     	storyboard.gotoScene(storyboard.getPrevious())
