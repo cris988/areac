@@ -341,14 +341,17 @@ function scene:enterScene( event )
 
     myApp.titleBar.titleText.text = "Profilo utente"
     myApp.titleBar.indietro.isVisible = true
-    myApp.titleBar.accedi.isVisible = false
+    
+    if myApp.utenteLoggato == 0 then
+        myApp.titleBar.accedi.isVisible = false
+    else
+        myApp.titleBar.profilo.isVisible = false
+    end
 
     myApp.titleBar.indietro.scene = storyboard.getPrevious()
 
     if storyboard.getPrevious() == 'acquista2' then
-        myApp.titleBar.indietro.optionsBack =  { params = { var = myApp.index, targa = myApp.targaAcquista } }
-    elseif storyboard.getPrevious() == 'verificatarga2' then
-        myApp.titleBar.indietro.optionsBack = { params = { var = myApp.index, targa = myApp.targaVerifica } }
+        myApp.titleBar.indietro.optionsBack =  { params = { targa = myApp.targaAcquista } }
     elseif storyboard.getPrevious() == 'registrazione' then
         myApp.tabBar:setSelected( 1 )
         myApp.titleBar.indietro.scene = 'mappa'

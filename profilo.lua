@@ -47,7 +47,7 @@ function scene:createScene(event)
     
 
     -- testo in alto
-    local options = {
+    local optionsNome = {
         text = myApp.utenti[myApp.utenteLoggato].nome ..' '.. myApp.utenti[myApp.utenteLoggato].cognome,
         x = _W*0.5,
         y = _H*0.175,
@@ -55,14 +55,90 @@ function scene:createScene(event)
         fontSize = 26,
         align = "center"
     }
-    local areaT = display.newText( options )
+    local areaT = display.newText( optionsNome )
     areaT:setFillColor( 0, 0, 0 )
     group:insert(areaT)
 
 
 
+    local optionsTarga1 = {
+        text = 'TARGA PRINCIPALE:',
+        x = _W*0.5,
+        y = _H*0.27,
+        font = myApp.font,
+        fontSize = 13,
+        align = 'center'
+    }
+    local text1 = display.newText( optionsTarga1 )
+    text1:setFillColor( 0, 0, 0 )
+    group:insert(text1)
+
+    local optionsTarga2 = {
+        text = myApp.utenti[myApp.utenteLoggato].targa:upper(),
+        x = _W*0.5,
+        y = _H*0.31,
+        font = myApp.font,
+        fontSize = 20,
+        align = 'center'
+    }
+    local text2 = display.newText( optionsTarga2 )
+    text2:setFillColor( 0, 0, 0 )
+    group:insert(text2)    
 
 
+
+    local optionsMulti1 = {
+        text = 'INGRESSI MULTIPLI ACQUISTATI RIMANENTI:',
+        x = _W*0.5,
+        y = _H*0.37,
+        font = myApp.font,
+        fontSize = 13,
+        align = 'center'
+    }
+    local text3 = display.newText( optionsMulti1 )
+    text3:setFillColor( 0, 0, 0 )
+    group:insert(text3)
+
+    local optionsMulti2 = {
+        text = 'NIL',
+        x = _W*0.5,
+        y = _H*0.41,
+        font = myApp.font,
+        fontSize = 20,
+        align = 'center'
+    }
+    local text4 = display.newText( optionsMulti2 )
+    text4:setFillColor( 0, 0, 0 )
+    group:insert(text4)
+
+
+
+    if myApp.utenti[myApp.utenteLoggato].tipo == 'Residente' then
+       local optionsGratis1 = {
+        text = 'INGRESSI GRATUITI RIMANENTI:',
+        x = _W*0.5,
+        y = _H*0.47,
+        font = myApp.font,
+        fontSize = 13,
+        align = 'center'
+    }
+    local text5 = display.newText( optionsGratis1 )
+    text5:setFillColor( 0, 0, 0 )
+    group:insert(text5)
+
+    local optionsGratis2 = {
+        text = 'NIL',
+        x = _W*0.5,
+        y = _H*0.51,
+        font = myApp.font,
+        fontSize = 20,
+        align = 'center'
+    }
+    local text6 = display.newText( optionsGratis2 )
+    text6:setFillColor( 0, 0, 0 )
+    group:insert(text6)
+ 
+    end
 
 
 end
@@ -119,8 +195,6 @@ end
 
 
 
-
-
 function scene:enterScene( event )
     print("ENTRA SCENA PROFILO")
     
@@ -129,25 +203,24 @@ function scene:enterScene( event )
     myApp.titleBar.titleText.text = "Profilo"
     myApp.titleBar.indietro.isVisible = true
     
-	myApp.titleBar.indietro.scene = storyboard.getPrevious()
-
-    if storyboard.getPrevious() == 'acquista2' then
-        myApp.titleBar.indietro.optionsBack =  { params = { var = myApp.index, targa = myApp.targaAcquista } }
-    elseif storyboard.getPrevious() == 'verificatarga2' then
-        myApp.titleBar.indietro.optionsBack = { params = { var = myApp.index, targa = myApp.targaVerifica } }
-    elseif storyboard.getPrevious() == 'riepilogo' or
-    	storyboard.getPrevious() == 'accedi' then
-        myApp.tabBar:setSelected( 1 )
-        myApp.titleBar.indietro.scene = 'mappa'
-    end
-
-    myApp.tabBar.isVisible = false
     if myApp.utenteLoggato == 0 then
         myApp.titleBar.accedi.isVisible = false
     else
         myApp.titleBar.profilo.isVisible = false
     end
 
+	myApp.titleBar.indietro.scene = storyboard.getPrevious()
+
+    if storyboard.getPrevious() == 'acquista2' then
+        myApp.titleBar.indietro.optionsBack =  { params = { var = myApp.index, targa = myApp.targaAcquista } }
+    elseif storyboard.getPrevious() == 'verificatarga2' then
+        myApp.titleBar.indietro.optionsBack = { params = { var = myApp.index, targa = myApp.targaVerifica } }
+    elseif storyboard.getPrevious() == 'riepilogo' or storyboard.getPrevious() == 'accedi' then
+        myApp.tabBar:setSelected( 1 )
+        myApp.titleBar.indietro.scene = 'mappa'
+    end
+
+    myApp.tabBar.isVisible = false
 end
 
 function scene:exitScene( event )

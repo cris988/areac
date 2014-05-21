@@ -136,6 +136,11 @@ function scene:enterScene( event )
 
     myApp.titleBar.titleText.text = "Informazioni"
     myApp.titleBar.indietro.isVisible = false
+    if myApp.utenteLoggato == 0 then
+        myApp.titleBar.accedi.isVisible = true
+    else
+        myApp.titleBar.profilo.isVisible = true
+    end
 end
 
 function scene:exitScene( event )

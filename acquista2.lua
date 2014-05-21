@@ -19,8 +19,6 @@ local schermataAccesso = {}
 
 -- variabili
 local accedi
-local titleBar
-local titleText
 local targa
 local accesso
 local acquista
@@ -40,6 +38,8 @@ local myText2
 local myText3
 local textGiornaliero
 local textMultiplo
+local gruppoInfoView
+local index
 
 
 
@@ -53,6 +53,8 @@ strings[2] = 'Tariffe e metodi di pagamento'
 function scene:createScene(event)
     local group = self.view
     print('crea')
+
+    myApp.tabBar.isVisible = true
 
     local background = display.newRect(0,0,display.contentWidth, display.contentHeight)
 	background:setFillColor(0.9, 0.9, 0.9)
@@ -76,7 +78,6 @@ function scene:createScene(event)
         group:insert(listaInfo)
         group:insert(acquista)
     else
-        -- group:insert(myText)
         group:insert(myText1)
         group:insert(myText2)
         group:insert(myText3)
@@ -153,18 +154,7 @@ function schermataAccesso(numero)
 
     -- l'auto può transitare
     else
-        -- local options = {
-        --     text = 'Il veicolo con targa '..myApp.targaAcquista..'\nNON PUO\' ACCEDERE all\'area C',
-        --     x = _W*0.5,
-        --     y = _H*0.5,
-        --     width = _W - 30,
-        --     -- height = 300,
-        --     fontSize = 18,
-        --     align = "center"
-        -- }
-        -- myText = display.newText( options )
-        -- myText:setFillColor( 0 )
-        myText1 = display.newText( 'Il veicolo con targa '..myApp.targaVerifica,  _W*0.5, (_H*0.5)-25, myApp.font, 20)
+        myText1 = display.newText( 'Il veicolo con targa '..myApp.targaAcquista,  _W*0.5, (_H*0.5)-25, myApp.font, 20)
         myText1:setFillColor(0)
         myText2 = display.newText( '\nNON PUO\' ACCEDERE',  _W*0.5, _H*0.5, myApp.font, 20)
         myText2:setFillColor(1,0,0)
@@ -281,12 +271,6 @@ function onRowRender( event )
     rowTitle.x = 20
     rowTitle.y = rowHeight * 0.5
 
-    -- if row.index == 1 then 
-    --     row.index = 3
-    -- else
-    --     row.index = 5
-    -- end
-
     rowArrow = display.newImage( row, "img/rowArrow.png", false )
     rowArrow.x = row.contentWidth - right_padding
     rowArrow.anchorX = 1
@@ -295,25 +279,17 @@ function onRowRender( event )
 end
 
 
+
+
+
 -- gestisce le azioni dell'utente sulle righe della lista
 function onRowTouch( event )
     local row = event.target
     if event.phase == "release" or event.phase == 'tap' then
         -- è il numero della riga della lista che è stato cliccato
-        myApp.index = event.target.index
-        -- storyboard.gotoScene('info1', { params = { var = event.target.index } })
+        index = event.target.index
         infoView()
     end
-                
--- --[[ This part handles the swipe left and right to show and hide the delete button ]]--
---     if (event.phase == "swipeLeft") then
---             transition.to( rowGroup.del, {time=rowGroup.del.transtime,maskX=-rowGroup.del.width/2,onComplete=rowGroup.del.setActive} )
---     elseif (event.phase == "swipeRight") then
---             transition.to( rowGroup.del, {time=rowGroup.del.transtime,maskX=rowGroup.del.width/2,onComplete=rowGroup.del.setInactive} )
---     end
--- --[[ End of delete handling ]]--
- 
---     return true
 end
 
 
@@ -333,6 +309,13 @@ end
 
 
 function infoView()
+    myApp.titleBar.indietro.isVisible = false
+    if myApp.utenteLoggato == 0 then
+        myApp.titleBar.accedi.isVisible = false
+    else
+        myApp.titleBar.profilo.isVisible = false
+    end
+
     backgroundInfo = display.newRect(0,0,display.contentWidth, display.contentHeight)
     backgroundInfo:setFillColor(0.9, 0.9, 0.9)
     backgroundInfo.x = display.contentCenterX
@@ -347,7 +330,7 @@ function infoView()
     titleTextInfo:setFillColor(0,0,0)
     titleTextInfo.x = display.contentCenterX
     titleTextInfo.y = titleBarHeight * 0.5 + display.topStatusBarContentHeight
-    if myApp.index == 1 then
+    if index == 1 then
         titleTextInfo.text = 'Varchi e orari'
     else
         titleTextInfo.text = 'Pagamenti'
@@ -364,10 +347,9 @@ function infoView()
     })
 
     myApp.tabBar.isVisible = false
-    indietro.isEnable = false
 
     -- scrivo le stringhe riferite all'indice
-    myTextInfo = display.newText( strings[myApp.index], _W*0.5, _H*0.5, myApp.font, 20 )
+    myTextInfo = display.newText( strings[index], _W*0.5, _H*0.5, myApp.font, 20 )
     myTextInfo:setFillColor(0)
 end
 
@@ -378,7 +360,12 @@ function goBackInfo()
     titleBarInfo:removeSelf()
     backgroundInfo:removeSelf()
     myApp.tabBar.isVisible = true
-    indietro.isEnable = true
+    myApp.titleBar.indietro.isVisible = true
+    if myApp.utenteLoggato == 0 then
+        myApp.titleBar.accedi.isVisible = true
+    else
+        myApp.titleBar.profilo.isVisible = true
+    end
 end
 
 
@@ -401,48 +388,35 @@ function acquistaTicket()
 
 end
 
-function AccediProfilo()
-    storyboard.removeAll()
-    storyboard.gotoScene("accedi")
-end
-function goBack()
-    storyboard.removeAll()
-    local sceneName = storyboard.getCurrentSceneName()
-    storyboard.removeScene( sceneName )
-    storyboard.gotoScene('acquista')
-end
-
-
-
-
-
-
 
 
 
 
 
 function scene:enterScene( event )
-    local group = self.view
-    print('entra')
+    print("ENTRA SCENA RIEPILOGO")
+    
+    -- Preparo titleBar
+
+    myApp.titleBar.titleText.text = "Acquista"
+    myApp.titleBar.indietro.isVisible = true
+    myApp.titleBar.indietro.scene = 'acquista'
+    if myApp.utenteLoggato == 0 then
+        myApp.titleBar.accedi.isVisible = true
+    else
+        myApp.titleBar.profilo.isVisible = true
+    end
+
 end
 
 function scene:exitScene( event )
-    local group = self.view
-    print('esce')
-    --
-    -- Clean up native objects
-    --
-
+    print("ESCI SCENA RIEPILOGO")
+    
 end
-
 
 function scene:destroyScene( event )
-    local group = self.view
-    print('distrugge')
+    print("DISTRUGGI SCENA RIEPILOGO")
 end
-
-
 
 -- "createScene" event is dispatched if scene's view does not exist
 scene:addEventListener( "createScene", scene )
