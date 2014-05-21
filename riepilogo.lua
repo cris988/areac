@@ -6,26 +6,14 @@ local myApp = require('myapp')
 
 
 -- funzioni
-local views = {}
-local goBack = {}
 local AvantiScene = {}
 local salvaUtente = {}
 
 
 -- variabili
-local titleBar
-local titleText
 local indietro
 local textDati
 local avanti
-
-
-
-
-
-
-
-
 
 
 function scene:createScene(event)
@@ -36,44 +24,6 @@ function scene:createScene(event)
     background.x = display.contentCenterX
     background.y = display.contentCenterY
 	group:insert(background)
-
-	myApp.tabBar.isVisible = false
-
-	------ instanzio nav bar e bottoni
-	titleBar = display.newImageRect(myApp.topBarBg, display.contentWidth, 50)
-    titleBar.x = display.contentCenterX
-    titleBar.y = 25 + display.topStatusBarContentHeight
-
-    titleText = display.newText( 'Riepilogo', 0, 0, myApp.fontBold, 20 )
-    titleText:setFillColor(0,0,0)
-    titleText.x = display.contentCenterX
-    titleText.y = titleBarHeight * 0.5 + display.topStatusBarContentHeight
-
-	indietro = widget.newButton({
-	    id  = 'BtIndietro',
-	    label = 'Indietro',
-	    x = display.contentCenterX*0.3,
-	    y = titleBarHeight * 0.5 + display.topStatusBarContentHeight,
-	    color = { 0.062745,0.50980,0.99607 },
-	    fontSize = 18,
-	    onRelease = goBack
-	})
-	group:insert(titleBar)
-    group:insert(titleText)
-    group:insert(indietro)
-
---    local statusBarBackground = display.newImageRect(myApp.topBarBg, display.contentWidth, display.topStatusBarContentHeight)
---    statusBarBackground.x = display.contentCenterX
---    statusBarBackground.y = display.topStatusBarContentHeight * 0.5
---    group:insert(statusBarBackground)
-
-
-
-
-
-
-
-
 
 
 	-- testo in alto
@@ -127,14 +77,9 @@ function scene:createScene(event)
     textDati.hasBackground = false
     textDati:setTextColor(0)
     
+    group:insert(textDati)
 
     -- group:insert(textDati)
-
-
-
-
-
-
 
     avanti = widget.newButton({
         id  = 'BtAvanti',
@@ -155,35 +100,11 @@ end
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function goBack()
-    storyboard.removeAll()
-    textDati:removeSelf()
-    local sceneName = storyboard.getCurrentSceneName()
-    storyboard.removeScene( sceneName )
- 	storyboard.gotoScene('registrazione2')
-end
-
 function AvantiScene()
 
     salvaUtente()
     storyboard.gotoScene('profilo')
 end
-
 
 
 
@@ -240,25 +161,26 @@ end
 
 
 
+
 function scene:enterScene( event )
-	local group = self.view
+    print("ENTRA SCENA RIEPILOGO")
+    
+    -- Preparo titleBar
+
+    myApp.titleBar.titleText.text = "Registrazione"
+    myApp.titleBar.indietro.isVisible = true
+    myApp.titleBar.indietro.scene = storyboard.getPrevious()
+    myApp.tabBar.isVisible = false
+    myApp.titleBar.accedi.isVisible = false
 
 end
 
 function scene:exitScene( event )
-	local group = self.view
-
-	myApp.tabBar.isVisible = true
-	textDati:removeSelf()
-
-	--
-	-- Clean up native objects
-	--
-
+    print("ESCI SCENA RIEPILOGO")
 end
 
 function scene:destroyScene( event )
-	local group = self.view
+    print("DISTRUGGI SCENA RIEPILOGO")
 end
 
 -- "createScene" event is dispatched if scene's view does not exist

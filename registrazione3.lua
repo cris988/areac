@@ -7,7 +7,6 @@ local myApp = require('myapp')
 
 -- funzioni
 local views = {}
-local goBack = {}
 local textListenerCf = {}
 local clearListenerCf = {}
 local textListenerPatente = {}
@@ -24,9 +23,6 @@ local AvantiScene = {}
 
 
 -- variabili
-local titleBar
-local titleText
-local indietro
 local campoInserimentoCf
 local sfondoInserimentoCf
 local btClearCf
@@ -51,11 +47,6 @@ local avanti
 
 
 
-
-
-
-
-
 function scene:createScene(event)
     local group = self.view
 
@@ -67,38 +58,18 @@ function scene:createScene(event)
 
 	myApp.tabBar.isVisible = false
 
-	------ instanzio nav bar e bottoni
-	titleBar = display.newImageRect(myApp.topBarBg, display.contentWidth, 50)
-    titleBar.x = display.contentCenterX
-    titleBar.y = 25 + display.topStatusBarContentHeight
 
-    titleText = display.newText( 'Registrazione', 0, 0, myApp.fontBold, 20 )
-    titleText:setFillColor(0,0,0)
-    titleText.x = display.contentCenterX
-    titleText.y = titleBarHeight * 0.5 + display.topStatusBarContentHeight
-
-	indietro = widget.newButton({
-	    id  = 'BtIndietro',
-	    label = 'Indietro',
-	    x = display.contentCenterX*0.3,
-	    y = titleBarHeight * 0.5 + display.topStatusBarContentHeight,
-	    color = { 0.062745,0.50980,0.99607 },
-	    fontSize = 18,
-	    onRelease = goBack
-	})
-	group:insert(titleBar)
-    group:insert(titleText)
-    group:insert(indietro)
-
---    local statusBarBackground = display.newImageRect(myApp.topBarBg, display.contentWidth, display.topStatusBarContentHeight)
---    statusBarBackground.x = display.contentCenterX
---    statusBarBackground.y = display.topStatusBarContentHeight * 0.5
---    group:insert(statusBarBackground)
-
-
-
-
-
+    avanti = widget.newButton({
+        id  = 'BtAvanti',
+        label = 'Avanti',
+        x = _W*0.5,
+        y = _H*0.925,
+        color = { 0.062745,0.50980,0.99607 },
+        fontSize = 26,
+        font = myApp.font,
+        onRelease = AvantiScene
+    })
+    group:insert(avanti)
 
 
 	-- testo in alto
@@ -114,13 +85,6 @@ function scene:createScene(event)
     local areaT = display.newText( options )
     areaT:setFillColor{ 255,0,0 }
     group:insert(areaT)
-
-
-
-
-
-
-
 
 
 
@@ -146,6 +110,7 @@ function scene:createScene(event)
     btClearCf.y = _H*0.37
     btClearCf.alpha = 0
 
+
     gruppoInserimentoCf:insert(sfondoInserimentoCf)
     gruppoInserimentoCf:insert(campoInserimentoCf)
     gruppoInserimentoCf:insert(btClearCf)
@@ -156,7 +121,9 @@ function scene:createScene(event)
 
 
 
+
     -- creazione textArea per num patente
+
 
     local gruppoInserimentoPatente = display.newGroup()
 
@@ -183,6 +150,8 @@ function scene:createScene(event)
     gruppoInserimentoPatente:insert(btClearPatente)
 
     campoInserimentoPatente:addEventListener( "userInput", textListenerPatente)
+
+
 
 
     -- creazione textArea per indirizzo
@@ -212,6 +181,7 @@ function scene:createScene(event)
     gruppoInserimentoVia:insert(btClearVia)
 
     campoInserimentoVia:addEventListener( "userInput", textListenerVia)
+
 
 
 
@@ -293,19 +263,6 @@ function scene:createScene(event)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
     if myApp.datiUtente.cf == '' then
     else
         campoInserimentoCf.text = myApp.datiUtente.cf
@@ -327,27 +284,8 @@ function scene:createScene(event)
 
 
 
-
-
-
-
-
-
-    avanti = widget.newButton({
-        id  = 'BtAvanti',
-        label = 'Avanti',
-        x = _W*0.5,
-        y = _H*0.925,
-        color = { 0.062745,0.50980,0.99607 },
-        fontSize = 26,
-        font = myApp.font,
-        onRelease = AvantiScene
-    })
-    group:insert(avanti)
-
-
-
 end
+
 
 
 
@@ -367,6 +305,7 @@ end
 function trimString( s )
    return string.match( s,"^()%s*$") and "" or string.match(s,"^%s*(.*%S)" )
 end
+
 
 
 
@@ -522,7 +461,6 @@ function textListenerNum( event )
         end
         campoInserimentoNum:setTextColor( 0 )
     elseif event.phase == "editing" then
-        
         if(#event.target.text > 0) then
             btClearNum.alpha = 0.2
             btClearNum:addEventListener( "touch", clearListenerNum )
@@ -534,10 +472,11 @@ function textListenerNum( event )
         if event.target.text == '' then
             btClearNum.alpha = 0
             campoInserimentoNum:setTextColor( 0.75,0.75,0.75 )
-
         end
     end
 end
+
+
 
 -- gestisce la comparsa del pulsate clear
 function clearListenerNum( event ) 
@@ -612,28 +551,6 @@ end
 
 
 
-
-
-
-
-
-
-
-
-
-
-function goBack()
-    storyboard.removeAll()
-    campoInserimentoCf:removeSelf()
-    campoInserimentoPatente:removeSelf()
-    campoInserimentoVia:removeSelf()
-    campoInserimentoNum:removeSelf()
-    campoInserimentoCap:removeSelf()
-    local sceneName = storyboard.getCurrentSceneName()
-    storyboard.removeScene( sceneName )
-    storyboard.gotoScene('registrazione2')
-end
-
 function AvantiScene()
     if  campoInserimentoCf.text == '' or 
         campoInserimentoPatente.text == '' or 
@@ -663,51 +580,31 @@ function AvantiScene()
 end
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 function scene:enterScene( event )
-	local group = self.view
+    print("ENTRA SCENA REGISTRAZIONE3")
+    
+    -- Preparo titleBar
+
+    myApp.titleBar.titleText.text = "Registrazione"
+    myApp.titleBar.indietro.isVisible = true
+    myApp.titleBar.indietro.scene = "registrazione2"
+    myApp.tabBar.isVisible = false
+    myApp.titleBar.accedi.isVisible = false
 
 end
 
 function scene:exitScene( event )
-	local group = self.view
+    print("ESCI SCENA REGISTRAZIONE3")
 
-	myApp.tabBar.isVisible = true
-	campoInserimentoCf:removeSelf()
-    campoInserimentoPatente:removeSelf()
-    campoInserimentoVia:removeSelf()
-    campoInserimentoNum:removeSelf()
-    campoInserimentoCap:removeSelf()
-	
-	--
-	-- Clean up native objects
-	--
+    myApp.tabBar.isVisible = false
 
 end
 
 function scene:destroyScene( event )
-	local group = self.view
-
-
+    print("DISTRUGGI SCENA REGISTRAZIONE3")
 end
+
+
 
 -- "createScene" event is dispatched if scene's view does not exist
 scene:addEventListener( "createScene", scene )

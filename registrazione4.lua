@@ -47,28 +47,7 @@ function scene:createScene(event)
 
 	myApp.tabBar.isVisible = false
 
-	------ instanzio nav bar e bottoni
-	titleBar = display.newImageRect(myApp.topBarBg, display.contentWidth, 50)
-    titleBar.x = display.contentCenterX
-    titleBar.y = 25 + display.topStatusBarContentHeight
-
-    titleText = display.newText( 'Registrazione', 0, 0, myApp.fontBold, 20 )
-    titleText:setFillColor(0,0,0)
-    titleText.x = display.contentCenterX
-    titleText.y = titleBarHeight * 0.5 + display.topStatusBarContentHeight
-
-	indietro = widget.newButton({
-	    id  = 'BtIndietro',
-	    label = 'Indietro',
-	    x = display.contentCenterX*0.3,
-	    y = titleBarHeight * 0.5 + display.topStatusBarContentHeight,
-	    color = { 0.062745,0.50980,0.99607 },
-	    fontSize = 18,
-	    onRelease = goBack
-	})
-	group:insert(titleBar)
-    group:insert(titleText)
-    group:insert(indietro)
+    group:insert(background)
 
 --    local statusBarBackground = display.newImageRect(myApp.topBarBg, display.contentWidth, display.topStatusBarContentHeight)
 --    statusBarBackground.x = display.contentCenterX
@@ -76,7 +55,17 @@ function scene:createScene(event)
 --    group:insert(statusBarBackground)
 
 
-
+    avanti = widget.newButton({
+        id  = 'BtAvanti',
+        label = 'Avanti',
+        x = _W*0.5,
+        y = _H*0.925,
+        color = { 0.062745,0.50980,0.99607 },
+        fontSize = 26,
+        font = myApp.font,
+        onRelease = AvantiScene
+    })
+    group:insert(avanti)
 
 
 
@@ -94,10 +83,6 @@ function scene:createScene(event)
     local areaT = display.newText( options )
     areaT:setFillColor{ 255,0,0 }
     group:insert(areaT)
-
-
-
-
 
 
 
@@ -144,46 +129,11 @@ function scene:createScene(event)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
     if myApp.datiUtente.pass == '' then
     else
         campoInserimentoPass.text = myApp.datiUtente.pass
         campoInserimentoPass:setTextColor( 0 )
     end
-
-
-
-
-
-
-
-
-
-
-    avanti = widget.newButton({
-        id  = 'BtAvanti',
-        label = 'Avanti',
-        x = _W*0.5,
-        y = _H*0.925,
-        color = { 0.062745,0.50980,0.99607 },
-        fontSize = 26,
-        font = myApp.font,
-        onRelease = AvantiScene
-    })
-    group:insert(avanti)
-
 
 
 end
@@ -268,29 +218,6 @@ end
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function goBack()
-    storyboard.removeAll()
-    campoInserimentoPass:removeSelf()
-    local sceneName = storyboard.getCurrentSceneName()
-    storyboard.removeScene( sceneName )
-    storyboard.gotoScene('registrazione2')
-end
-
 function AvantiScene()
     if  campoInserimentoPass.text == '' then
 
@@ -319,40 +246,31 @@ end
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 function scene:enterScene( event )
-	local group = self.view
+    print("ENTRA SCENA REGISTRAZIONE4")
+    
+    -- Preparo titleBar
+
+    myApp.titleBar.titleText.text = "Registrazione"
+    myApp.titleBar.indietro.isVisible = true
+    myApp.titleBar.indietro.scene = "registrazione2"
+    myApp.tabBar.isVisible = false
+    myApp.titleBar.accedi.isVisible = false
 
 end
 
 function scene:exitScene( event )
-	local group = self.view
+    print("ESCI SCENA REGISTRAZIONE4")
 
-	myApp.tabBar.isVisible = true
-	campoInserimentoPass:removeSelf()
-	
-	--
-	-- Clean up native objects
-	--
+    myApp.tabBar.isVisible = false
 
 end
 
 function scene:destroyScene( event )
-	local group = self.view
-
-
+    print("DISTRUGGI SCENA REGISTRAZIONE4")
 end
+
+
 
 -- "createScene" event is dispatched if scene's view does not exist
 scene:addEventListener( "createScene", scene )

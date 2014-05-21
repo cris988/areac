@@ -54,40 +54,18 @@ function scene:createScene(event)
     background.y = display.contentCenterY
 	group:insert(background)
 
-	myApp.tabBar.isVisible = false
 
-	------ instanzio nav bar e bottoni
-	titleBar = display.newImageRect(myApp.topBarBg, display.contentWidth, 50)
-    titleBar.x = display.contentCenterX
-    titleBar.y = 25 + display.topStatusBarContentHeight
-
-    titleText = display.newText( 'Registrazione', 0, 0, myApp.fontBold, 20 )
-    titleText:setFillColor(0,0,0)
-    titleText.x = display.contentCenterX
-    titleText.y = titleBarHeight * 0.5 + display.topStatusBarContentHeight
-
-	indietro = widget.newButton({
-	    id  = 'BtIndietro',
-	    label = 'Indietro',
-	    x = display.contentCenterX*0.3,
-	    y = titleBarHeight * 0.5 + display.topStatusBarContentHeight,
-	    color = { 0.062745,0.50980,0.99607 },
-	    fontSize = 18,
-	    onRelease = goBack
-	})
-	group:insert(titleBar)
-    group:insert(titleText)
-    group:insert(indietro)
-
---    local statusBarBackground = display.newImageRect(myApp.topBarBg, display.contentWidth, display.topStatusBarContentHeight)
---    statusBarBackground.x = display.contentCenterX
---    statusBarBackground.y = display.topStatusBarContentHeight * 0.5
---    group:insert(statusBarBackground)
-
-
-
-
-
+    avanti = widget.newButton({
+        id  = 'BtAvanti',
+        label = 'Avanti',
+        x = _W*0.5,
+        y = _H*0.925,
+        color = { 0.062745,0.50980,0.99607 },
+        fontSize = 26,
+        font = myApp.font,
+        onRelease = AvantiScene
+    })
+    group:insert(avanti)
 
 
 	-- testo in alto
@@ -103,14 +81,6 @@ function scene:createScene(event)
     local areaT = display.newText( options )
     areaT:setFillColor( 0, 0, 0 )
     group:insert(areaT)
-
-
-
-
-
-
-
-
 
     -- creazione textArea per nome
 
@@ -150,12 +120,6 @@ function scene:createScene(event)
 
 
 
-
-
-
-
-
-
     -- creazione textArea per cognome
 
     local gruppoInserimentoCognome = display.newGroup()
@@ -183,6 +147,7 @@ function scene:createScene(event)
     gruppoInserimentoCognome:insert(btClearCognome)
 
     campoInserimentoCognome:addEventListener( "userInput", textListenerCognome)
+
 
 
 
@@ -252,6 +217,7 @@ function scene:createScene(event)
 
 
 
+
     if myApp.datiUtente.cognome == '' then
     else
         campoInserimentoCognome.text = myApp.datiUtente.cognome
@@ -268,34 +234,13 @@ function scene:createScene(event)
             checkDis:setState( { isOn = true } )
             checkRes:setState( { isOn = false } )
             checkNonRes:setState( { isOn = false } )
+        end
     end
-    end
+
     
 
 
-
-
-
-
-    avanti = widget.newButton({
-        id  = 'BtAvanti',
-        label = 'Avanti',
-        x = _W*0.5,
-        y = _H*0.925,
-        color = { 0.062745,0.50980,0.99607 },
-        fontSize = 26,
-        font = myApp.font,
-        onRelease = AvantiScene
-    })
-    group:insert(avanti)
-
-
-
-
-
-
 end
-
 
 
 
@@ -327,20 +272,6 @@ end
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 -- fa il trim della stringa inserita dall'utente
 function trimString( s )
    return string.match( s,"^()%s*$") and "" or string.match(s,"^%s*(.*%S)" )
@@ -348,17 +279,7 @@ end
 
 
 
-
-
-
-
-
-
-
-
-
-
---gestisce le fasi dell'inserimento della targa
+--gestisce le fasi dell'inserimento del nome
 function textListenerNome( event )
     if event.phase == "began" then
         if event.target.text == '' then
@@ -400,10 +321,7 @@ function clearListenerNome( event )
 end
 
 
-
-
-
---gestisce le fasi dell'inserimento della targa
+--gestisce le fasi dell'inserimento della cognome
 function textListenerCognome( event )
     if event.phase == "began" then
         if event.target.text == '' then
@@ -448,47 +366,6 @@ end
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function goBack()
-    storyboard.removeAll()
-    campoInserimentoNome:removeSelf()
-    campoInserimentoCognome:removeSelf()
-    local sceneName = storyboard.getCurrentSceneName()
-    storyboard.removeScene( sceneName )
- 	storyboard.gotoScene('registrazione')
-end
-
 function AvantiScene()
 	if 	campoInserimentoNome.text == '' or 
         campoInserimentoCognome.text == '' then
@@ -500,9 +377,6 @@ function AvantiScene()
                 password = myApp.datiUtente.password,
                 nome = campoInserimentoNome.text,
                 cognome = campoInserimentoCognome.text,
-                -- email = myApp.datiUtente.email,
-                -- cellulare = myApp.datiUtente.cellulare,
-                -- targa = campoInserimento.text,
                 tipo = 'Non residente'
             }
             storyboard.gotoScene('riepilogo')
@@ -512,9 +386,6 @@ function AvantiScene()
                 password = myApp.datiUtente.password,
                 nome = campoInserimentoNome.text,
                 cognome = campoInserimentoCognome.text,
-                -- email = myApp.datiUtente.email,
-                -- cellulare = myApp.datiUtente.cellulare,
-                -- targa = campoInserimento.text,
                 tipo = 'Residente'
             }
             storyboard.gotoScene('registrazione3')
@@ -524,13 +395,11 @@ function AvantiScene()
                 password = myApp.datiUtente.password,
                 nome = campoInserimentoNome.text,
                 cognome = campoInserimentoCognome.text,
-                -- email = myApp.datiUtente.email,
-                -- cellulare = myApp.datiUtente.cellulare,
-                -- targa = campoInserimento.text,
                 tipo = 'Disabile'
             }
             storyboard.gotoScene('registrazione4')
         end
+
 	end
 end
 
@@ -541,34 +410,31 @@ end
 
 
 
-
-
-
-
-
-
-
 function scene:enterScene( event )
-	local group = self.view
+    print("ENTRA SCENA REGISTRAZIONE2")
+    
+    -- Preparo titleBar
+
+    myApp.titleBar.titleText.text = "Registrazione"
+    myApp.titleBar.indietro.isVisible = true
+    myApp.titleBar.indietro.scene = "registrazione"
+    myApp.tabBar.isVisible = false
+    myApp.titleBar.accedi.isVisible = false
 
 end
 
 function scene:exitScene( event )
-	local group = self.view
+    print("ESCI SCENA REGISTRAZIONE2")
 
-	myApp.tabBar.isVisible = true
-	campoInserimentoNome:removeSelf()
-    campoInserimentoCognome:removeSelf()
-	
-	--
-	-- Clean up native objects
-	--
+    myApp.tabBar.isVisible = false
 
 end
 
 function scene:destroyScene( event )
-	local group = self.view
+    print("DISTRUGGI SCENA REGISTRAZIONE2")
 end
+
+
 
 -- "createScene" event is dispatched if scene's view does not exist
 scene:addEventListener( "createScene", scene )

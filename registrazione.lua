@@ -6,23 +6,18 @@ local myApp = require('myapp')
 
 
 -- funzioni
-local views = {}
-local goBack = {}
 local textListenerUser = {}
 local clearListenerUser = {}
 local textListenerPass = {}
 local clearListenerPass = {}
 local textListenerPass2 = {}
 local clearListenerPass2 = {}
-local trimString = {}
 local AvantiScene = {}
 
 
 
 -- variabili
-local titleBar
 local titleText
-local indietro
 local campoInserimentoUser
 local sfondoInserimentoUser
 local btClearUser
@@ -36,13 +31,6 @@ local avanti
 
 
 
-
-
-
-
-
-
-
 function scene:createScene(event)
     local group = self.view
 
@@ -51,42 +39,6 @@ function scene:createScene(event)
     background.x = display.contentCenterX
     background.y = display.contentCenterY
 	group:insert(background)
-
-	myApp.tabBar.isVisible = false
-
-	------ instanzio nav bar e bottoni
-	titleBar = display.newImageRect(myApp.topBarBg, display.contentWidth, 50)
-    titleBar.x = display.contentCenterX
-    titleBar.y = 25 + display.topStatusBarContentHeight
-
-    titleText = display.newText( 'Registrazione', 0, 0, myApp.fontBold, 20 )
-    titleText:setFillColor(0,0,0)
-    titleText.x = display.contentCenterX
-    titleText.y = titleBarHeight * 0.5 + display.topStatusBarContentHeight
-
-	indietro = widget.newButton({
-	    id  = 'BtIndietro',
-	    label = 'Indietro',
-	    x = display.contentCenterX*0.3,
-	    y = titleBarHeight * 0.5 + display.topStatusBarContentHeight,
-	    color = { 0.062745,0.50980,0.99607 },
-	    fontSize = 18,
-	    onRelease = goBack
-	})
-	group:insert(titleBar)
-    group:insert(titleText)
-    group:insert(indietro)
-
---    local statusBarBackground = display.newImageRect(myApp.topBarBg, display.contentWidth, display.topStatusBarContentHeight)
---    statusBarBackground.x = display.contentCenterX
---    statusBarBackground.y = display.topStatusBarContentHeight * 0.5
---    group:insert(statusBarBackground)
-
-
-
-
-
-
 
 	-- testo in alto
     local options = {
@@ -105,12 +57,7 @@ function scene:createScene(event)
 
 
 
-
-
-
-
-
-    -- creazione textArea per username
+    -- creazione textArea per Username
 
     local gruppoInserimentoUser = display.newGroup()
 
@@ -128,6 +75,10 @@ function scene:createScene(event)
     campoInserimentoUser.placeholder = 'Username'
 
   
+
+  	print("USERNAME: "..myApp.datiUtente.username)
+
+
     if myApp.datiUtente.username == '' then
     else
     	campoInserimentoUser.text = myApp.datiUtente.username
@@ -148,12 +99,7 @@ function scene:createScene(event)
 
 
 
-
-
-
-
-
-    -- creazione textArea per username
+    -- creazione textArea per Password
 
     local gruppoInserimentoPass = display.newGroup()
 
@@ -170,6 +116,9 @@ function scene:createScene(event)
     campoInserimentoPass.hasBackground = false
     campoInserimentoPass.placeholder = 'Password'
 
+
+    print("PASSWORD: "..myApp.datiUtente.username)
+
     btClearPass = display.newImage('img/delete.png', 10,10)
     btClearPass.x = _W*0.85
     btClearPass.y = _H*0.55
@@ -182,16 +131,7 @@ function scene:createScene(event)
     campoInserimentoPass:addEventListener( "userInput", textListenerPass)
 
 
-
-
-
-
-
-
-
-
-
-    -- creazione textArea per username
+    -- creazione textArea per Conferma Password
 
     local gruppoInserimentoPass2 = display.newGroup()
 
@@ -220,21 +160,9 @@ function scene:createScene(event)
     campoInserimentoPass2:addEventListener( "userInput", textListenerPass2)
 
 
-
-
     group:insert(gruppoInserimentoUser)
     group:insert(gruppoInserimentoPass)
     group:insert(gruppoInserimentoPass2)
-
-
-
-
-
-
-
-
-
-
 
     avanti = widget.newButton({
         id  = 'BtAvanti',
@@ -255,37 +183,7 @@ function scene:createScene(event)
 end
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
--- fa il trim della stringa inserita dall'utente
-function trimString( s )
-   return string.match( s,"^()%s*$") and "" or string.match(s,"^%s*(.*%S)" )
-end
-
-
-
-
-
-
-
-
-
-
-
-
-
---gestisce le fasi dell'inserimento della targa
+--gestisce le fasi dell'inserimento dell'Username
 function textListenerUser( event )
     if event.phase == "began" then
         if event.target.text == '' then
@@ -327,10 +225,7 @@ function clearListenerUser( event )
 end
 
 
-
-
-
---gestisce le fasi dell'inserimento della targa
+--gestisce le fasi dell'inserimento della Password
 function textListenerPass( event )
     if event.phase == "began" then
         if event.target.text == '' then
@@ -371,16 +266,7 @@ function clearListenerPass( event )
     end
 end
 
-
-
-
-
-
-
-
-
-
---gestisce le fasi dell'inserimento della targa
+--gestisce le fasi dell'inserimento della Conferma Password
 function textListenerPass2( event )
     if event.phase == "began" then
         if event.target.text == '' then
@@ -423,32 +309,6 @@ end
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function goBack()
-    storyboard.removeAll()
-    campoInserimentoUser:removeSelf()
-    campoInserimentoPass:removeSelf()
-    campoInserimentoPass2:removeSelf()
-    local sceneName = storyboard.getCurrentSceneName()
-    storyboard.removeScene( sceneName )
- 	storyboard.gotoScene('accedi')
-end
-
 function AvantiScene()
 	if 	campoInserimentoUser.text == '' or campoInserimentoPass.text == '' or campoInserimentoPass2.text == '' then
 
@@ -475,44 +335,28 @@ end
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 function scene:enterScene( event )
-	local group = self.view
+    print("ENTRA SCENA REGISTRAZIONE")
+    
+    -- Preparo titleBar
+
+    myApp.titleBar.titleText.text = "Registrazione"
+    myApp.titleBar.indietro.isVisible = true
+    myApp.titleBar.indietro.scene = "accedi"
+    myApp.titleBar.accedi.isVisible = false
+    myApp.tabBar.isVisible = false
 
 end
 
 function scene:exitScene( event )
-	local group = self.view
+    print("ESCI SCENA REGISTRAZIONE")
 
-	myApp.tabBar.isVisible = true
-	campoInserimentoUser:removeSelf()
-    campoInserimentoPass:removeSelf()
-    campoInserimentoPass2:removeSelf()
-	
-	--
-	-- Clean up native objects
-	--
+	myApp.tabBar.isVisible = false
 
 end
 
 function scene:destroyScene( event )
-	local group = self.view
-
+    print("DISTRUGGI SCENA REGISTRAZIONE")
 end
 
 -- "createScene" event is dispatched if scene's view does not exist

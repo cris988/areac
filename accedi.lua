@@ -36,12 +36,11 @@ local function ignoreTouch( event )
 end
 
 
-
-
-
-
 function scene:createScene(event)
+    print("CREA SCENA ACCEDI")
 	local group = self.view
+
+    -- Sfondo
 
 	local background = display.newRect(0,0,display.contentWidth, display.contentHeight)
 	background:setFillColor(0.9, 0.9, 0.9)
@@ -49,45 +48,7 @@ function scene:createScene(event)
     background.y = display.contentCenterY
 	group:insert(background)
 
-	myApp.tabBar.isVisible = false
-
-	------ instanzio nav bar e bottoni
-	titleBar = display.newImageRect(myApp.topBarBg, display.contentWidth, 50)
-    titleBar.x = display.contentCenterX
-    titleBar.y = 25 + display.topStatusBarContentHeight
-
-    titleText = display.newText( 'Accedi', 0, 0, myApp.fontBold, 20 )
-    titleText:setFillColor(0,0,0)
-    titleText.x = display.contentCenterX
-    titleText.y = titleBarHeight * 0.5 + display.topStatusBarContentHeight
-
-	indietro = widget.newButton({
-	    id  = 'BtIndietro',
-	    label = 'Indietro',
-	    x = display.contentCenterX*0.3,
-	    y = titleBarHeight * 0.5 + display.topStatusBarContentHeight,
-	    color = { 0.062745,0.50980,0.99607 },
-	    fontSize = 18,
-	    onRelease = goBack
-	})
-	group:insert(titleBar)
-    group:insert(titleText)
-    group:insert(indietro)
-
-
- --    local statusBarBackground = display.newImageRect(myApp.topBarBg, display.contentWidth, display.topStatusBarContentHeight)
- --    statusBarBackground.x = display.contentCenterX
- --    statusBarBackground.y = display.topStatusBarContentHeight * 0.5
- --    group:insert(statusBarBackground)
-
- 
- 
-
-
-
-
-
-
+    -- Contenuto
 
     local profiloImg = display.newImage('img/profilo.png', _W*0.5, _H*0.25)
 	group:insert(profiloImg)
@@ -130,16 +91,6 @@ function scene:createScene(event)
 	local myText2 = display.newText( options2 )
     myText2:setFillColor(0) 
     group:insert(myText2)
-
-
-
-
-
-
-
-
-
-
 
 
     -- creazione textArea per username
@@ -193,12 +144,7 @@ function scene:createScene(event)
 
     -- textArea:creaArea(optPassword)
 
-
-
-
-
-
-    -- creazione textArea per password
+  -- creazione textArea per password
 
     local gruppoInserimentoPass = display.newGroup()
 
@@ -230,22 +176,6 @@ function scene:createScene(event)
 
     campoInserimentoPass:addEventListener( "userInput", textListenerPass)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     accedi = widget.newButton({
         id  = 'BtAccedi',
         label = 'Accedi',
@@ -261,33 +191,10 @@ end
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 -- fa il trim della stringa inserita dall'utente
 function trimString( s )
    return string.match( s,"^()%s*$") and "" or string.match(s,"^%s*(.*%S)" )
 end
-
-
-
-
-
 
 
 --gestisce le fasi dell'inserimento della targa
@@ -317,28 +224,6 @@ function textListener( event )
     end
 end
 
--- gestisce la comparsa del pulsate clear
-function clearListener( event ) 
-    if(event.phase == "began") then
-        event.target.alpha = 0.8
-    elseif(event.phase == "cancelled") then
-        event.target.alpha = 0.2
-    elseif(event.phase == "ended") then
-        campoInserimento.text = ''
-        native.setKeyboardFocus( campoInserimento )
-        btClear.alpha = 0
-        btClear:removeEventListener( "touch", clearListener )
-    end
-end
-
-
-
-
-
-
-
-
-
 
 --gestisce le fasi dell'inserimento della targa
 function textListenerPass( event )
@@ -367,6 +252,21 @@ function textListenerPass( event )
     end
 end
 
+
+-- gestisce la comparsa del pulsate clear
+function clearListener( event ) 
+    if(event.phase == "began") then
+        event.target.alpha = 0.8
+    elseif(event.phase == "cancelled") then
+        event.target.alpha = 0.2
+    elseif(event.phase == "ended") then
+        campoInserimento.text = ''
+        native.setKeyboardFocus( campoInserimento )
+        btClear.alpha = 0
+        btClear:removeEventListener( "touch", clearListener )
+    end
+end
+
 -- gestisce la comparsa del pulsate clear
 function clearListenerPass( event ) 
     if(event.phase == "began") then
@@ -381,48 +281,6 @@ function clearListenerPass( event )
     end
 end
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function goBack()
-    storyboard.removeAll()
-
-    if storyboard.getPrevious() == 'acquista2' then
-    	storyboard.gotoScene(storyboard.getPrevious(), { params = { var = myApp.index, targa = myApp.targaAcquista } })
-    elseif storyboard.getPrevious() == 'verificatarga2' then
-    	storyboard.gotoScene(storyboard.getPrevious(), { params = { var = myApp.index, targa = myApp.targaVerifica } })
-    elseif storyboard.getPrevious() == 'registrazione' then
-        myApp.tabBar:setSelected( 1 )
-        storyboard.gotoScene('mappa')
-    else
-    	storyboard.gotoScene(storyboard.getPrevious())
-    end
-end
 
 function registrazioneScene()
     myApp.datiUtente = {
@@ -477,45 +335,54 @@ end
 
 
 
+--[[
 
+function goBack()
+    storyboard.removeAll()
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    if storyboard.getPrevious() == 'acquista2' then
+        storyboard.gotoScene(storyboard.getPrevious(), { params = { var = myApp.index, targa = myApp.targaAcquista } })
+    elseif storyboard.getPrevious() == 'verificatarga2' then
+        storyboard.gotoScene(storyboard.getPrevious(), { params = { var = myApp.index, targa = myApp.targaVerifica } })
+    elseif storyboard.getPrevious() == 'registrazione' then
+        myApp.tabBar:setSelected( 1 )
+        storyboard.gotoScene('mappa')
+    else
+        storyboard.gotoScene(storyboard.getPrevious())
+    end
+end]]--
 
 
 
 function scene:enterScene( event )
-	local group = self.view
+    print("ENTRA SCENA ACCEDI")
 
+    -- Preparo titleBar
+
+    myApp.titleBar.titleText.text = "Profilo utente"
+    myApp.titleBar.indietro.isVisible = true
+
+     myApp.titleBar.indietro.scene = storyboard.getPrevious()
+
+    if storyboard.getPrevious() == 'acquista2' then
+        myApp.titleBar.indietro.optionsBack =  { params = { var = myApp.index, targa = myApp.targaAcquista } }
+    elseif storyboard.getPrevious() == 'verificatarga2' then
+        myApp.titleBar.indietro.optionsBack = { params = { var = myApp.index, targa = myApp.targaVerifica } }
+    elseif storyboard.getPrevious() == 'registrazione' then
+        myApp.tabBar:setSelected( 1 )
+        myApp.titleBar.indietro.scene = 'mappa'
+    end
+
+    myApp.tabBar.isVisible = false
 end
 
 function scene:exitScene( event )
-	local group = self.view
-	myApp.tabBar.isVisible = true
-    campoInserimento:removeSelf()
-    campoInserimentoPass:removeSelf()
-
-    --
-	-- Clean up native objects
-	--
-
+    print("ESCI SCENA ACCEDI")
+    myApp.tabBar.isVisible = true
 end
 
 function scene:destroyScene( event )
-	local group = self.view
+    print("DISTRUGGI SCENA ACCEDI")
 end
 
 -- "createScene" event is dispatched if scene's view does not exist
