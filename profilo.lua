@@ -7,13 +7,11 @@ local myApp = require('myapp')
 
 -- funzioni
 local views = {}
-local goBack = {}
+local disconnessione = {}
 
 
 -- variabili
-local titleBar
-local titleText
-local indietro
+local disconnetti
 
 
 
@@ -28,22 +26,38 @@ local indietro
 function scene:createScene(event)
     local group = self.view
 
-	local background = display.newRect(0,0,display.contentWidth, display.contentHeight)
-	background:setFillColor(0.9, 0.9, 0.9)
+    print("CREA SCENA ACQUISTA")
+
+    local background = display.newRect(0,0,display.contentWidth, display.contentHeight)
+    background:setFillColor(0.9, 0.9, 0.9)
     background.x = display.contentCenterX
     background.y = display.contentCenterY
-	group:insert(background)
+    group:insert(background)
 
-	myApp.tabBar.isVisible = false
+    disconnetti = widget.newButton({
+        id  = 'BtAvanti',
+        label = 'Disconnetti utente',
+        x = _W*0.5,
+        y = _H*0.925,
+        labelColor = { default = { 0.8470, 0.13725, 0.13725 }, },
+        fontSize = 26,
+        onRelease = disconnessione
+    })
+    group:insert(disconnetti)
+    
 
-
---    local statusBarBackground = display.newImageRect(myApp.topBarBg, display.contentWidth, display.topStatusBarContentHeight)
---    statusBarBackground.x = display.contentCenterX
---    statusBarBackground.y = display.topStatusBarContentHeight * 0.5
---    group:insert(statusBarBackground)
-
-
-
+    -- testo in alto
+    local options = {
+        text = myApp.utenti[myApp.utenteLoggato].nome ..' '.. myApp.utenti[myApp.utenteLoggato].cognome,
+        x = _W*0.5,
+        y = _H*0.175,
+        font = myApp.font,
+        fontSize = 26,
+        align = "center"
+    }
+    local areaT = display.newText( options )
+    areaT:setFillColor( 0, 0, 0 )
+    group:insert(areaT)
 
 
 
@@ -70,27 +84,31 @@ end
 
 
 
-function goBack()
-    storyboard.removeAll()
+-- function goBack()
+--     storyboard.removeAll()
 
-    if storyboard.getPrevious() == 'accedi' or
-    	storyboard.getPrevious() == 'riepilogo' then
-    	storyboard.gotoScene('mappa')
-    else
-    	storyboard.gotoScene(storyboard.getPrevious())
-    end
+--     if storyboard.getPrevious() == 'accedi' or
+--     	storyboard.getPrevious() == 'riepilogo' then
+--     	storyboard.gotoScene('mappa')
+--     else
+--     	storyboard.gotoScene(storyboard.getPrevious())
+--     end
+-- end
+
+
+
+
+
+
+
+
+
+
+function disconnessione()
+    myApp.utenteLoggato = 0
+    myApp.tabBar:setSelected( 1 )
+    storyboard.gotoScene('mappa')
 end
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -104,22 +122,50 @@ end
 
 
 function scene:enterScene( event )
-	local group = self.view
+    print("ENTRA SCENA PROFILO")
+    
+    -- Preparo titleBar
+
+    myApp.titleBar.titleText.text = "Profilo"
+    myApp.titleBar.indietro.isVisible = true
+    
+	myApp.titleBar.indietro.scene = storyboard.getPrevious()
+
+    if storyboard.getPrevious() == 'acquista2' then
+        myApp.titleBar.indietro.optionsBack =  { params = { var = myApp.index, targa = myApp.targaAcquista } }
+    elseif storyboard.getPrevious() == 'verificatarga2' then
+        myApp.titleBar.indietro.optionsBack = { params = { var = myApp.index, targa = myApp.targaVerifica } }
+    elseif storyboard.getPrevious() == 'riepilogo' or
+    	storyboard.getPrevious() == 'accedi' then
+        myApp.tabBar:setSelected( 1 )
+        myApp.titleBar.indietro.scene = 'mappa'
+    end
+
+    myApp.tabBar.isVisible = false
+    if myApp.utenteLoggato == 0 then
+        myApp.titleBar.accedi.isVisible = false
+    else
+        myApp.titleBar.profilo.isVisible = false
+    end
 
 end
 
 function scene:exitScene( event )
-	local group = self.view
-	myApp.tabBar.isVisible = true
-	--
-	-- Clean up native objects
-	--
+    print("ESCI SCENA PROFILO")
 
+    myApp.tabBar.isVisible = true
+    if myApp.utenteLoggato == 0 then
+        myApp.titleBar.accedi.isVisible = true
+    else
+        myApp.titleBar.profilo.isVisible = true
+    end
 end
 
 function scene:destroyScene( event )
-	local group = self.view
+    print("DISTRUGGI SCENA PROFILO")
 end
+
+
 
 -- "createScene" event is dispatched if scene's view does not exist
 scene:addEventListener( "createScene", scene )

@@ -284,7 +284,11 @@ function scene:enterScene( event )
         group1 = display.newGroup()
         group:insert(step1(group1))
         myApp.titleBar.indietro.isVisible = true
-        myApp.titleBar.accedi.isVisible = true
+        if myApp.utenteLoggato == 0 then
+            myApp.titleBar.accedi.isVisible = true
+        else
+            myApp.titleBar.profilo.isVisible = true
+        end
         myApp.titleBar.indietro.scene = "verificatarga"
 
     end

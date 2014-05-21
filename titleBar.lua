@@ -8,20 +8,20 @@ local myApp = require( "myapp" )
 	function titleBar.new()
 
 		print ("NEW TITLEBAR")
-		local bgTitle = display.newImageRect(myApp.topBarBg, display.contentWidth, 50)
+		local bgTitle = display.newImageRect(myApp.topBarBg, display.contentWidth, 72)
 		bgTitle.x = display.contentCenterX
-		bgTitle.y = 25 + display.topStatusBarContentHeight
+		bgTitle.y = display.topStatusBarContentHeight + 14 
 
 		titleBar.titleText = display.newText( '', 0, 0, myApp.fontBold, 20 )
 		titleBar.titleText:setFillColor(0,0,0)
 		titleBar.titleText.x = display.contentCenterX
-		titleBar.titleText.y = bgTitle.height * 0.5 + display.topStatusBarContentHeight
+		titleBar.titleText.y = bgTitle.height * 0.5 + 7
 
 		titleBar.accedi = widget.newButton({
 		    id  = 'BtAccedi',
 		    label = 'Accedi',
 		    x = display.contentCenterX*1.75,
-		    y = bgTitle.height * 0.5 + display.topStatusBarContentHeight,
+		    y = bgTitle.height * 0.5 + 7,
 		    color = { 0.062745,0.50980,0.99607 },
 		    fontSize = 18,
 		    onRelease = titleBar.accedi
@@ -32,22 +32,24 @@ local myApp = require( "myapp" )
 		    id  = 'BtProfilo',
 		    label = 'Profilo',
 		    x = display.contentCenterX*1.75,
-		    y = bgTitle.height * 0.5 + display.topStatusBarContentHeight,
+		    y = bgTitle.height * 0.5 + 7,
 		    color = { 0.062745,0.50980,0.99607 },
-		    fontSize = 18
+		    fontSize = 18,
+		    onRelease = titleBar.profilo
 		})
 
 		titleBar.indietro = widget.newButton({
 		    id  = 'BtIndietro',
 		    label = 'Indietro',
 		    x = display.contentCenterX*0.3,
-		    y = bgTitle.height * 0.5 + display.topStatusBarContentHeight,
+		    y = bgTitle.height * 0.5 + 7,
 		    color = { 0.062745,0.50980,0.99607 },
 		    fontSize = 18,
 		    scene = '', -- Scena in cui andare
 		    optionsBack ={}, -- Parametri aggiuntivi da passare alla scena
 		   	onRelease = titleBar.goBack
 		})
+
 
 		titleBar.accedi.isVisible = true
 		titleBar.profilo.isVisible = false
@@ -70,7 +72,6 @@ local myApp = require( "myapp" )
 	function titleBar.accedi()
 	    storyboard.gotoScene("accedi")
 	end
-
 
 	return titleBar
 

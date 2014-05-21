@@ -103,7 +103,8 @@ end
 function AvantiScene()
 
     salvaUtente()
-    storyboard.gotoScene('profilo')
+
+    storyboard.gotoScene('mappa')
 end
 
 
@@ -146,6 +147,8 @@ function salvaUtente()
             tipo = myApp.datiUtente.tipo,
         }
     end
+
+    myApp.utenteLoggato = i+1
 end
 
 
@@ -177,6 +180,7 @@ end
 
 function scene:exitScene( event )
     print("ESCI SCENA RIEPILOGO")
+    myApp.tabBar:setSelected( 1 )
 end
 
 function scene:destroyScene( event )

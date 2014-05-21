@@ -2,7 +2,6 @@ local storyboard = require ('storyboard')
 local scene = storyboard.newScene()
 local widget = require('widget')
 local myApp = require('myapp')
-local textArea = require('textArea')
 
 widget.setTheme(myApp.theme)
 
@@ -302,17 +301,8 @@ function registrazioneScene()
     storyboard.gotoScene('registrazione')
 end
 
--- function accediScene()
---     if campoInserimento.text == '' or campoInserimentoPass.text == '' then
 
---     else
---         print(getSettingString(campoInserimento.text))
---         if getSettingString(campoInserimento.text) == '' then
---         else
---             storyboard.gotoScene('profilo', { params = { utente = campoInserimento.text } } )
---         end
---     end	
--- end
+
 
 function accediScene()
     if campoInserimento.text == '' or campoInserimentoPass.text == '' then
@@ -323,6 +313,7 @@ function accediScene()
             if myApp.utenti[i].username == campoInserimento.text and
                 myApp.utenti[i].password == campoInserimentoPass.text then
 
+                myApp.utenteLoggato = i
                 storyboard.gotoScene('profilo')
             end
         end
@@ -335,22 +326,11 @@ end
 
 
 
---[[
 
-function goBack()
-    storyboard.removeAll()
 
-    if storyboard.getPrevious() == 'acquista2' then
-        storyboard.gotoScene(storyboard.getPrevious(), { params = { var = myApp.index, targa = myApp.targaAcquista } })
-    elseif storyboard.getPrevious() == 'verificatarga2' then
-        storyboard.gotoScene(storyboard.getPrevious(), { params = { var = myApp.index, targa = myApp.targaVerifica } })
-    elseif storyboard.getPrevious() == 'registrazione' then
-        myApp.tabBar:setSelected( 1 )
-        storyboard.gotoScene('mappa')
-    else
-        storyboard.gotoScene(storyboard.getPrevious())
-    end
-end]]--
+
+
+
 
 
 
@@ -361,8 +341,9 @@ function scene:enterScene( event )
 
     myApp.titleBar.titleText.text = "Profilo utente"
     myApp.titleBar.indietro.isVisible = true
+    myApp.titleBar.accedi.isVisible = false
 
-     myApp.titleBar.indietro.scene = storyboard.getPrevious()
+    myApp.titleBar.indietro.scene = storyboard.getPrevious()
 
     if storyboard.getPrevious() == 'acquista2' then
         myApp.titleBar.indietro.optionsBack =  { params = { var = myApp.index, targa = myApp.targaAcquista } }

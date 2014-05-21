@@ -92,6 +92,12 @@ function scene:enterScene( event )
 
     myApp.titleBar.titleText.text = "Mappa"
     myApp.titleBar.indietro.isVisible = false
+    if myApp.utenteLoggato == 0 then
+        myApp.titleBar.accedi.isVisible = true
+    else
+        myApp.titleBar.profilo.isVisible = true
+    end
+    myApp.tabBar.isVisible = true
 end
 
 function scene:exitScene( event )

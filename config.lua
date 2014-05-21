@@ -14,8 +14,7 @@ application = {
             ["@2x"] = 1.5,
             ["@4x"] = 3.0,
 		}
-		
-	},
+    }
 
     --[[
     -- Push notifications
