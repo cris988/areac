@@ -8,15 +8,23 @@ local myApp = require('myapp')
 -- funzioni
 local views = {}
 local disconnessione = {}
+local makeList = {}
+local onRowRender = {}
+local onRowTouch = {}
+local menu = {}
 
 
 -- variabili
 local disconnetti
+local right_padding = 10
 
 
 
-
-
+-- titoli dei menu
+local strings = {}
+strings[1] = 'Dati utente'
+strings[2] = 'Gestione targhe'
+strings[3] = 'Cronologia transiti'
 
 
 
@@ -29,7 +37,8 @@ function scene:createScene(event)
     print("CREA SCENA ACQUISTA")
 
     local background = display.newRect(0,0,display.contentWidth, display.contentHeight)
-    background:setFillColor(0.9, 0.9, 0.9)
+    -- background:setFillColor(0.9, 0.9, 0.9)
+    background:setFillColor( 1 )
     background.x = display.contentCenterX
     background.y = display.contentCenterY
     group:insert(background)
@@ -46,7 +55,7 @@ function scene:createScene(event)
     group:insert(disconnetti)
     
 
-    -- testo in alto
+    -- Nome e Cognome
     local optionsNome = {
         text = myApp.utenti[myApp.utenteLoggato].nome ..' '.. myApp.utenti[myApp.utenteLoggato].cognome,
         x = _W*0.5,
@@ -60,7 +69,7 @@ function scene:createScene(event)
     group:insert(areaT)
 
 
-
+    -- targa principale
     local optionsTarga1 = {
         text = 'TARGA PRINCIPALE:',
         x = _W*0.5,
@@ -87,6 +96,7 @@ function scene:createScene(event)
 
 
 
+    -- ingressi multipli
     local optionsMulti1 = {
         text = 'INGRESSI MULTIPLI ACQUISTATI RIMANENTI:',
         x = _W*0.5,
@@ -100,7 +110,7 @@ function scene:createScene(event)
     group:insert(text3)
 
     local optionsMulti2 = {
-        text = 'NIL',
+        text = myApp.utenti[myApp.utenteLoggato].multiplo,
         x = _W*0.5,
         y = _H*0.41,
         font = myApp.font,
@@ -113,6 +123,7 @@ function scene:createScene(event)
 
 
 
+    -- ingressi gratuiti residenti
     if myApp.utenti[myApp.utenteLoggato].tipo == 'Residente' then
        local optionsGratis1 = {
         text = 'INGRESSI GRATUITI RIMANENTI:',
@@ -127,7 +138,7 @@ function scene:createScene(event)
     group:insert(text5)
 
     local optionsGratis2 = {
-        text = 'NIL',
+        text = myApp.utenti[myApp.utenteLoggato].accessi,
         x = _W*0.5,
         y = _H*0.51,
         font = myApp.font,
@@ -139,6 +150,11 @@ function scene:createScene(event)
     group:insert(text6)
  
     end
+
+
+
+    makeList()
+
 
 
 end
@@ -155,21 +171,89 @@ end
 
 
 
+-- creo spazio per la lista
+function makeList()
+    listaInfo = widget.newTableView
+    {
+        x = _W*0.5,
+        y = _H*0.725,
+        height = 150,
+        width = _W,
+        onRowRender = onRowRender,
+        onRowTouch = onRowTouch,
+        isLocked = true,
+    }
+    for i = 1, #strings do
+
+        local isCategory = false
+        local rowHeight = 50
+        local rowColor = { default={ 1, 1, 1 }, over={ 1, 0.5, 0, 0.2 } }
+        local lineColor = { 0.8, 0.8, 0.8 }
+
+        -- Insert a row into the listaInfo
+        listaInfo:insertRow(
+            {
+            isCategory = isCategory,
+            rowHeight = rowHeight,
+            rowColor = rowColor,
+            lineColor = lineColor
+            }
+        )
+    end
+end
+
+
+-- imposto e riempio le righe della lista
+function onRowRender( event )
+
+    -- Get reference to the row group
+    local row = event.row
+    local id = row.index
+
+    -- Cache the row "contentWidth" and "contentHeight" because the row bounds can change as children objects are added
+    local rowHeight = row.contentHeight
+    local rowWidth = row.contentWidth
+
+    rowTitle = display.newText( row, strings[row.index], 0, 0, myApp.font, 18 )
+    rowTitle:setFillColor( 0 )
+    rowTitle.anchorX = 0
+    rowTitle.x = 20
+    rowTitle.y = rowHeight * 0.5
+
+    rowArrow = display.newImage( row, "img/rowArrow.png", false )
+    rowArrow.x = row.contentWidth - right_padding
+    rowArrow.anchorX = 1
+    rowArrow.y = row.contentHeight * 0.5
+
+end
 
 
 
 
 
--- function goBack()
---     storyboard.removeAll()
+-- gestisce le azioni dell'utente sulle righe della lista
+function onRowTouch( event )
+    local row = event.target
+    if event.phase == "release" or event.phase == 'tap' then
+        -- è il numero della riga della lista che è stato cliccato
+        index = event.target.index
+        menu()
+    end
+end
 
---     if storyboard.getPrevious() == 'accedi' or
---     	storyboard.getPrevious() == 'riepilogo' then
---     	storyboard.gotoScene('mappa')
---     else
---     	storyboard.gotoScene(storyboard.getPrevious())
---     end
--- end
+
+
+
+
+function menu()
+
+end
+
+
+
+
+
+
 
 
 

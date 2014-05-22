@@ -7,7 +7,6 @@ local myApp = require('myapp')
 
 -- funzioni
 local AvantiScene = {}
-local salvaUtente = {}
 
 
 -- variabili
@@ -83,7 +82,7 @@ function scene:createScene(event)
 
     avanti = widget.newButton({
         id  = 'BtAvanti',
-        label = 'Avanti',
+        label = 'Conferma',
         x = _W*0.5,
         y = _H*0.925,
         color = { 0.062745,0.50980,0.99607 },
@@ -101,54 +100,7 @@ end
 
 
 function AvantiScene()
-
-    salvaUtente()
-
-    storyboard.gotoScene('mappa')
-end
-
-
-
-
-
-function salvaUtente()
-    local i = myApp:getNumUtenti()
-    if myApp.datiUtente.tipo == 'Residente' then
-        myApp.utenti[i+1] = {
-            username = myApp.datiUtente.username,
-            password = myApp.datiUtente.password,
-            nome = myApp.datiUtente.nome,
-            cognome = myApp.datiUtente.cognome,
-            tipo = myApp.datiUtente.tipo,
-            targa  = myApp.datiUtente.targa,
-            cellulare = myApp.datiUtente.cellulare,
-            email = myApp.datiUtente.email,
-            cf = myApp.datiUtente.cf,
-            patente = myApp.datiUtente.patente,
-            via = myApp.datiUtente.via,
-            civico = myApp.datiUtente.civico,
-            cap = myApp.datiUtente.cap,
-        }
-    elseif myApp.datiUtente.tipo == 'Disabile' then
-        myApp.utenti[i+1] = {
-            username = myApp.datiUtente.username,
-            password = myApp.datiUtente.password,
-            nome = myApp.datiUtente.nome,
-            cognome = myApp.datiUtente.cognome,
-            tipo = myApp.datiUtente.tipo,
-            pass = myApp.datiUtente.pass,
-        }
-    else
-        myApp.utenti[i+1] = {
-            username = myApp.datiUtente.username,
-            password = myApp.datiUtente.password,
-            nome = myApp.datiUtente.nome,
-            cognome = myApp.datiUtente.cognome,
-            tipo = myApp.datiUtente.tipo,
-        }
-    end
-
-    myApp.utenteLoggato = i+1
+    storyboard.gotoScene('registrazione_opzionale')
 end
 
 
@@ -170,7 +122,7 @@ function scene:enterScene( event )
     
     -- Preparo titleBar
 
-    myApp.titleBar.titleText.text = "Registrazione"
+    myApp.titleBar.titleText.text = "Riepilogo"
     myApp.titleBar.indietro.isVisible = true
     myApp.titleBar.indietro.scene = storyboard.getPrevious()
     myApp.tabBar.isVisible = false
@@ -180,7 +132,6 @@ end
 
 function scene:exitScene( event )
     print("ESCI SCENA RIEPILOGO")
-    myApp.tabBar:setSelected( 1 )
 end
 
 function scene:destroyScene( event )

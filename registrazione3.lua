@@ -74,7 +74,7 @@ function scene:createScene(event)
 
 	-- testo in alto
     local options = {
-        text = 'Inserisci i dati. Potranno anche essere modificati in seguito dall\'applicazione',
+        text = 'Inserisci i tuoi dati personali. Non saranno più modificabili',
         x = _W*0.5,
         y = _H*0.425,
         width = _W - 30,
@@ -565,9 +565,6 @@ function AvantiScene()
             nome = myApp.datiUtente.nome,
             cognome = myApp.datiUtente.cognome,
             tipo = myApp.datiUtente.tipo,
-            email = myApp.datiUtente.email,
-            cellulare = myApp.datiUtente.cellulare,
-            targa = myApp.datiUtente.targa,
             cf = campoInserimentoCf.text,
             patente = campoInserimentoPatente.text,
             via = campoInserimentoVia.text,

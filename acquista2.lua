@@ -236,10 +236,10 @@ function makeList()
 
         local isCategory = false
         local rowHeight = 50
-        -- local rowColor = { default={ 0.90196, 0.90196, 0.90196 }, over={ 1, 0.5, 0, 0.2 } }
-        local rowColor = { default={ 230,230,230 }, over={ 255, 127, 0 } }
-        -- local lineColor = { 0.8, 0.8, 0.8 }
-        local lineColor = { 220, 220, 220 }
+        -- local rowColor = { default={ 230,230,230 }, over={ 255, 127, 0 } }
+        -- local lineColor = { 220, 220, 220 }
+        local rowColor = { default={ 1, 1, 1 }, over={ 1, 0.5, 0, 0.2 } }
+        local lineColor = { 0.8, 0.8, 0.8 }
 
         -- Insert a row into the listaInfo
         listaInfo:insertRow(
@@ -329,7 +329,7 @@ function infoView()
     titleTextInfo = display.newText( '', 0, 0, myApp.fontBold, 20 )
     titleTextInfo:setFillColor(0,0,0)
     titleTextInfo.x = display.contentCenterX
-    titleTextInfo.y = titleBarHeight * 0.5 + display.topStatusBarContentHeight
+    titleTextInfo.y = bgTitle.height * 0.5 + 7
     if index == 1 then
         titleTextInfo.text = 'Varchi e orari'
     else
@@ -340,7 +340,7 @@ function infoView()
         id  = 'BtIndietroInfo',
         label = 'Indietro',
         x = display.contentCenterX*0.3,
-        y = titleBarHeight * 0.5 + display.topStatusBarContentHeight,
+        y = bgTitle.height * 0.5 + 7
         color = { 0.062745,0.50980,0.99607 },
         fontSize = 18,
         onRelease = goBackInfo

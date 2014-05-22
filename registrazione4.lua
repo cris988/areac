@@ -228,9 +228,6 @@ function AvantiScene()
             nome = myApp.datiUtente.nome,
             cognome = myApp.datiUtente.cognome,
             tipo = myApp.datiUtente.tipo,
-            email = myApp.datiUtente.email,
-            cellulare = myApp.datiUtente.cellulare,
-            targa = myApp.datiUtente.targa,
             pass = campoInserimentoPass.text,
         }
 
