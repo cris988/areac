@@ -340,7 +340,7 @@ function infoView()
         id  = 'BtIndietroInfo',
         label = 'Indietro',
         x = display.contentCenterX*0.3,
-        y = bgTitle.height * 0.5 + 7
+        y = bgTitle.height * 0.5 + 7,
         color = { 0.062745,0.50980,0.99607 },
         fontSize = 18,
         onRelease = goBackInfo

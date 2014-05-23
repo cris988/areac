@@ -89,7 +89,6 @@ function scene:enterScene( event )
     print("ENTRA SCENA MAPPA")
 
     -- Preparo titleBar
-
     myApp.titleBar.titleText.text = "Mappa"
     myApp.titleBar.indietro.isVisible = false
     if myApp.utenteLoggato == 0 then

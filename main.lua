@@ -103,9 +103,9 @@ storyboard.purgeOnSceneChange = true
 -- Database Utenti
 
 myApp.utenti = {}
-myApp.utenti[1] = { username = 'nonres', password = 'nonres' , nome = 'mario', cognome = 'rossi', tipo = 'Non residente', targa = 'qw123qw', cellulare = '123123', mail = 'qwe@qw.qw', multiplo = 35}
-myApp.utenti[2] = { username = 'res', password = 'res' , nome = 'mario', cognome = 'rossi', tipo = 'Residente' , targa = 'qw123qw', cellulare = '123123', mail = 'qwe@qw.qw', cf = 'ad12', patente = '123', via = 'via qwe', civico = '3', cap = '1231', accessi = 50, multiplo = 0}
-myApp.utenti[3] = { username = 'dis', password = 'dis' , nome = 'mario', cognome = 'rossi', tipo = 'Disabile' , targa = 'qw123qw', cellulare = '123123', mail = 'qwe@qw.qw', pass = '123', multiplo = 2}
+myApp.utenti[1] = { username = 'nonres', password = 'nonres' , nome = 'mario', cognome = 'rossi', tipo = 'Non residente', targa = 'qw123qw', cellulare = '123123', email = 'qwe@qw.qw', multiplo = 35}
+myApp.utenti[2] = { username = 'res', password = 'res' , nome = 'mario', cognome = 'rossi', tipo = 'Residente' , targa = 'qw123qw', cellulare = '123123', email = 'qwe@qw.qw', cf = 'ad12', patente = '123', via = 'via qwe', civico = '3', cap = '1231', accessi = 50, multiplo = 0}
+myApp.utenti[3] = { username = 'dis', password = 'dis' , nome = 'mario', cognome = 'rossi', tipo = 'Disabile' , targa = 'qw123qw', cellulare = '123123', email = 'qwe@qw.qw', pass = '123', multiplo = 2}
 
 myApp.utenteLoggato = 0
 

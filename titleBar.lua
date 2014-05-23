@@ -66,10 +66,12 @@ local myApp = require( "myapp" )
 	end
 
 	function titleBar.profilo()
+		myApp.ultimaPagina = storyboard.getCurrentSceneName()
 	    storyboard.gotoScene("profilo")
 	end
 
 	function titleBar.accedi()
+		myApp.ultimaPagina = storyboard.getCurrentSceneName()
 	    storyboard.gotoScene("accedi")
 	end
 

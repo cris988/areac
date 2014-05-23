@@ -11,7 +11,6 @@ local disconnessione = {}
 local makeList = {}
 local onRowRender = {}
 local onRowTouch = {}
-local menu = {}
 
 
 -- variabili
@@ -34,11 +33,10 @@ strings[3] = 'Cronologia transiti'
 function scene:createScene(event)
     local group = self.view
 
-    print("CREA SCENA ACQUISTA")
+    print("CREA SCENA PROFILO")
 
     local background = display.newRect(0,0,display.contentWidth, display.contentHeight)
-    -- background:setFillColor(0.9, 0.9, 0.9)
-    background:setFillColor( 1 )
+    background:setFillColor(0.9, 0.9, 0.9)
     background.x = display.contentCenterX
     background.y = display.contentCenterY
     group:insert(background)
@@ -126,35 +124,37 @@ function scene:createScene(event)
     -- ingressi gratuiti residenti
     if myApp.utenti[myApp.utenteLoggato].tipo == 'Residente' then
        local optionsGratis1 = {
-        text = 'INGRESSI GRATUITI RIMANENTI:',
-        x = _W*0.5,
-        y = _H*0.47,
-        font = myApp.font,
-        fontSize = 13,
-        align = 'center'
-    }
-    local text5 = display.newText( optionsGratis1 )
-    text5:setFillColor( 0, 0, 0 )
-    group:insert(text5)
+            text = 'INGRESSI GRATUITI RIMANENTI:',
+            x = _W*0.5,
+            y = _H*0.47,
+            font = myApp.font,
+            fontSize = 13,
+            align = 'center'
+        }
+        local text5 = display.newText( optionsGratis1 )
+        text5:setFillColor( 0, 0, 0 )
+        group:insert(text5)
 
-    local optionsGratis2 = {
-        text = myApp.utenti[myApp.utenteLoggato].accessi,
-        x = _W*0.5,
-        y = _H*0.51,
-        font = myApp.font,
-        fontSize = 20,
-        align = 'center'
-    }
-    local text6 = display.newText( optionsGratis2 )
-    text6:setFillColor( 0, 0, 0 )
-    group:insert(text6)
- 
+        local optionsGratis2 = {
+            text = myApp.utenti[myApp.utenteLoggato].accessi,
+            x = _W*0.5,
+            y = _H*0.51,
+            font = myApp.font,
+            fontSize = 20,
+            align = 'center'
+        }
+        local text6 = display.newText( optionsGratis2 )
+        text6:setFillColor( 0, 0, 0 )
+        group:insert(text6)
+    else
+       text3.y = 0.45 
+       text4.y = 0.49
     end
 
 
 
     makeList()
-
+    group:insert(listaInfo)
 
 
 end
@@ -237,16 +237,10 @@ function onRowTouch( event )
     if event.phase == "release" or event.phase == 'tap' then
         -- è il numero della riga della lista che è stato cliccato
         index = event.target.index
-        menu()
+        if index == 1 then
+            storyboard.gotoScene('dati_utente')
+        end
     end
-end
-
-
-
-
-
-function menu()
-
 end
 
 
@@ -293,15 +287,14 @@ function scene:enterScene( event )
         myApp.titleBar.profilo.isVisible = false
     end
 
-	myApp.titleBar.indietro.scene = storyboard.getPrevious()
+    myApp.titleBar.indietro.scene = myApp.ultimaPagina
 
     if storyboard.getPrevious() == 'acquista2' then
         myApp.titleBar.indietro.optionsBack =  { params = { var = myApp.index, targa = myApp.targaAcquista } }
-    elseif storyboard.getPrevious() == 'verificatarga2' then
-        myApp.titleBar.indietro.optionsBack = { params = { var = myApp.index, targa = myApp.targaVerifica } }
     elseif storyboard.getPrevious() == 'riepilogo' or storyboard.getPrevious() == 'accedi' then
-        myApp.tabBar:setSelected( 1 )
-        myApp.titleBar.indietro.scene = 'mappa'
+        -- myApp.tabBar:setSelected( 1 )
+        -- myApp.titleBar.indietro.scene = 'mappa'
+        myApp.titleBar.indietro.scene = myApp.ultimaPagina
     end
 
     myApp.tabBar.isVisible = false

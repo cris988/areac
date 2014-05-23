@@ -348,13 +348,16 @@ function scene:enterScene( event )
         myApp.titleBar.profilo.isVisible = false
     end
 
-    myApp.titleBar.indietro.scene = storyboard.getPrevious()
+    myApp.titleBar.indietro.scene = myApp.ultimaPagina
 
     if storyboard.getPrevious() == 'acquista2' then
         myApp.titleBar.indietro.optionsBack =  { params = { targa = myApp.targaAcquista } }
+    elseif storyboard.getPrevious() == 'info_details' then
+        myApp.titleBar.indietro.scene = storyboard.getPrevious()
     elseif storyboard.getPrevious() == 'registrazione' then
-        myApp.tabBar:setSelected( 1 )
-        myApp.titleBar.indietro.scene = 'mappa'
+        -- myApp.tabBar:setSelected( 1 )
+        -- myApp.titleBar.indietro.scene = 'mappa'
+        myApp.titleBar.indietro.scene = myApp.ultimaPagina
     end
 
     myApp.tabBar.isVisible = false
