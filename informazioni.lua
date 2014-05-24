@@ -112,7 +112,7 @@ function onRowTouch( event )
     if event.phase == "release" or event.phase == 'tap' then
         -- è il numero della riga della lista che è stato cliccato
         myApp.index = event.target.index
-        storyboard.gotoScene('info_details', { params = { var = event.target.index } })
+        storyboard.gotoScene('info_details', { effect = "slideLeft", time = 500, params = { var = event.target.index } })
     end
                 
 -- --[[ This part handles the swipe left and right to show and hide the delete button ]]--

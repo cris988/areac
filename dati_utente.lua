@@ -481,6 +481,7 @@ function scene:enterScene( event )
         myApp.titleBar.titleText.text = "Dati utente"
         myApp.titleBar.indietro.isVisible = true
         myApp.titleBar.indietro.scene = 'profilo'
+        myApp.titleBar.indietro.optionsBack = { effect = "slideRight", time = 500 }
 
         if myApp.utenteLoggato == 0 then
             myApp.titleBar.accedi.isVisible = false

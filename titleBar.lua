@@ -67,12 +67,12 @@ local myApp = require( "myapp" )
 
 	function titleBar.profilo()
 		myApp.ultimaPagina = storyboard.getCurrentSceneName()
-	    storyboard.gotoScene("profilo")
+	    storyboard.gotoScene("profilo", { effect = "slideUp", time = 500 } )
 	end
 
 	function titleBar.accedi()
 		myApp.ultimaPagina = storyboard.getCurrentSceneName()
-	    storyboard.gotoScene("accedi")
+	    storyboard.gotoScene("accedi", { effect = "slideUp", time = 500 } )
 	end
 
 	return titleBar

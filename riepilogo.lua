@@ -125,6 +125,7 @@ function scene:enterScene( event )
     myApp.titleBar.titleText.text = "Riepilogo"
     myApp.titleBar.indietro.isVisible = true
     myApp.titleBar.indietro.scene = storyboard.getPrevious()
+    myApp.titleBar.indietro.optionsBack = { effect = "slideRight", time = 500 }
     myApp.tabBar.isVisible = false
     myApp.titleBar.accedi.isVisible = false
 

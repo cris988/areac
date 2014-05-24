@@ -218,7 +218,7 @@ function step1(group)
 
     vaiAProfilo = widget.newButton({
         id  = 'BtVaiAProfilo',
-        label = 'Vai alla mappa',
+        label = 'Vai al tuo profilo',
         x = _W*0.5,
         y = _H*0.925,
         color = { 0.062745,0.50980,0.99607 },
@@ -234,7 +234,7 @@ end
 
 
 function completa()
-    storyboard.gotoScene('mappa')
+    storyboard.gotoScene('profilo')
 end
 
 
@@ -524,8 +524,6 @@ function scene:exitScene( event )
         step = 0
         group:remove(group1)
     end
-
-    myApp.tabBar:setSelected( 1 )
 end
 
 function scene:destroyScene( event )

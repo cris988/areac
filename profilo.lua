@@ -107,6 +107,7 @@ function scene:createScene(event)
     text3:setFillColor( 0, 0, 0 )
     group:insert(text3)
 
+    print(myApp.utenti[myApp.utenteLoggato].multiplo)
     local optionsMulti2 = {
         text = myApp.utenti[myApp.utenteLoggato].multiplo,
         x = _W*0.5,
@@ -147,8 +148,8 @@ function scene:createScene(event)
         text6:setFillColor( 0, 0, 0 )
         group:insert(text6)
     else
-       text3.y = 0.45 
-       text4.y = 0.49
+       text3.y = _H*0.45 
+       text4.y = _H*0.49
     end
 
 
@@ -238,7 +239,7 @@ function onRowTouch( event )
         -- è il numero della riga della lista che è stato cliccato
         index = event.target.index
         if index == 1 then
-            storyboard.gotoScene('dati_utente')
+            storyboard.gotoScene('dati_utente', { effect = "slideLeft", time = 500 } )
         end
     end
 end
@@ -260,8 +261,7 @@ end
 
 function disconnessione()
     myApp.utenteLoggato = 0
-    myApp.tabBar:setSelected( 1 )
-    storyboard.gotoScene('mappa')
+    storyboard.gotoScene(myApp.ultimaPagina, { effect = "slideDown", time = 500, params = { targa = myApp.targaAcquista } })
 end
 
 
@@ -289,13 +289,11 @@ function scene:enterScene( event )
 
     myApp.titleBar.indietro.scene = myApp.ultimaPagina
 
-    if storyboard.getPrevious() == 'acquista2' then
-        myApp.titleBar.indietro.optionsBack =  { params = { var = myApp.index, targa = myApp.targaAcquista } }
-    elseif storyboard.getPrevious() == 'riepilogo' or storyboard.getPrevious() == 'accedi' then
-        -- myApp.tabBar:setSelected( 1 )
-        -- myApp.titleBar.indietro.scene = 'mappa'
-        myApp.titleBar.indietro.scene = myApp.ultimaPagina
+    if storyboard.getPrevious() == 'acquista2' or storyboard.getPrevious() == 'paypal' then
+        myApp.titleBar.indietro.optionsBack =  { params = { targa = myApp.targaAcquista } }
     end
+
+    myApp.titleBar.indietro.optionsBack = { effect = "slideDown", time = 500 }
 
     myApp.tabBar.isVisible = false
 end

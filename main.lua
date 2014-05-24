@@ -111,11 +111,21 @@ myApp.utenteLoggato = 0
 
 
 function myApp:getNumUtenti()
-    print(#myApp.utenti)
     return #myApp.utenti
 end
 
 
+
+-- ricorda le targhr che possono accedere
+
+myApp.targhe = {}
+myApp.targhe[1] = { targa = 'SI111SI', accesso = true }
+myApp.targhe[2] = { targa = 'NO111NO', accesso = false }
+
+
+function myApp:getNumTarghe()
+    return #myApp.targhe
+end
 
 
 

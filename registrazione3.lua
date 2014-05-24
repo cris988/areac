@@ -572,7 +572,7 @@ function AvantiScene()
             cap = campoInserimentoCap.text,
         }
 
-        storyboard.gotoScene('riepilogo')
+        storyboard.gotoScene('riepilogo', { effect = "slideLeft", time = 500 } )
     end
 end
 
@@ -585,6 +585,7 @@ function scene:enterScene( event )
     myApp.titleBar.titleText.text = "Registrazione"
     myApp.titleBar.indietro.isVisible = true
     myApp.titleBar.indietro.scene = "registrazione2"
+    myApp.titleBar.indietro.optionsBack = { effect = "slideRight", time = 500 }
     myApp.tabBar.isVisible = false
     myApp.titleBar.accedi.isVisible = false
 

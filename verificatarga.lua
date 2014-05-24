@@ -64,10 +64,6 @@ function step0(group)
     })
     group:insert(avanti)
 
-    -- local statusBarBackground = display.newImageRect(myApp.topBarBg, display.contentWidth, display.topStatusBarContentHeight)
-    -- statusBarBackground.x = display.contentCenterX
-    -- statusBarBackground.y = display.topStatusBarContentHeight * 0.5
-    -- group:insert(statusBarBackground)
 
     -- testo in alto
     local options = {
@@ -96,7 +92,31 @@ function step1(group)
 
     accesso = math.random(4)
 
-    --myApp.targaVerifica = targa
+    local targaTrovata = false
+
+    local numTarghe = myApp:getNumTarghe()
+
+    for i = 1, numTarghe, 1 do
+        if targa == myApp.targhe[i].targa and targaTrovata == false then
+            -- targa presente nel database
+            if myApp.targhe[i].accesso then
+                accesso = 1
+            else
+                accesso = 4
+            end
+            targaTrovata = true
+        end
+    end
+
+    -- controlo se ho trovato la targa nel database
+    -- se non l'ho trovata la aggiungo con true o false
+    if targaTrovata == false then
+        if accesso < 4 then
+            myApp.targhe[numTarghe+1] = { targa = targa , accesso = true }
+        else
+            myApp.targhe[numTarghe+1] = { targa = targa , accesso = false }
+        end
+    end
 
     schermataAccesso(accesso)
 
@@ -209,9 +229,9 @@ function schermataAccesso (numero)
     if numero < 4 then
         myText1 = display.newText( 'Il veicolo con targa '..targa,  _W*0.5, 100, myApp.font, 20)
         myText1:setFillColor(0)
-        myText2 = display.newText( '\nPUO\' ACCEDERE',  _W*0.5, 125, myApp.font, 20)
+        myText2 = display.newText( 'PUO\' ACCEDERE',  _W*0.5, 125, myApp.font, 20)
         myText2:setFillColor(0.1333,0.54509,0.13334)
-        myText3 = display.newText( '\n\nall\'area C',  _W*0.5, 150, myApp.font, 20)
+        myText3 = display.newText( 'all\'area C',  _W*0.5, 150, myApp.font, 20)
         myText3:setFillColor(0)
 
         myText4 = display.newText( 'ACCESSO A PAGAMENTO', _W*0.5, _H*0.5, myApp.font, 24 )
@@ -232,9 +252,9 @@ function schermataAccesso (numero)
     else
         myText1 = display.newText( 'Il veicolo con targa '..targa,  _W*0.5, (_H*0.5)-25, myApp.font, 20)
         myText1:setFillColor(0)
-        myText2 = display.newText( '\nNON PUO\' ACCEDERE',  _W*0.5, _H*0.5, myApp.font, 20)
+        myText2 = display.newText( 'NON PUO\' ACCEDERE',  _W*0.5, _H*0.5, myApp.font, 20)
         myText2:setFillColor(1,0,0)
-        myText3 = display.newText( '\n\nall\'area C',  _W*0.5, (_H*0.5)+25, myApp.font, 20)
+        myText3 = display.newText( 'all\'area C',  _W*0.5, (_H*0.5)+25, myApp.font, 20)
         myText3:setFillColor(0)  
     end
 
@@ -269,6 +289,12 @@ function scene:enterScene( event )
 
     myApp.titleBar.titleText.text = "Verifica Targa"
 
+    if myApp.utenteLoggato == 0 then
+        myApp.titleBar.accedi.isVisible = true
+    else
+        myApp.titleBar.profilo.isVisible = true
+    end
+
 
     --[[ Se sono al 1° step creo il group0 locale
         Se sono al 2° step creo il group1 locale
@@ -284,11 +310,6 @@ function scene:enterScene( event )
         group1 = display.newGroup()
         group:insert(step1(group1))
         myApp.titleBar.indietro.isVisible = true
-        if myApp.utenteLoggato == 0 then
-            myApp.titleBar.accedi.isVisible = true
-        else
-            myApp.titleBar.profilo.isVisible = true
-        end
         myApp.titleBar.indietro.scene = "verificatarga"
 
     end
