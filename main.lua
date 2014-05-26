@@ -103,9 +103,9 @@ storyboard.purgeOnSceneChange = true
 -- Database Utenti
 
 myApp.utenti = {}
-myApp.utenti[1] = { username = 'nonres', password = 'nonres' , nome = 'mario', cognome = 'rossi', tipo = 'Non residente', targa = 'qw123qw', cellulare = '123123', email = 'qwe@qw.qw', multiplo = 35}
-myApp.utenti[2] = { username = 'res', password = 'res' , nome = 'mario', cognome = 'rossi', tipo = 'Residente' , targa = 'qw123qw', cellulare = '123123', email = 'qwe@qw.qw', cf = 'ad12', patente = '123', via = 'via qwe', civico = '3', cap = '1231', accessi = 50, multiplo = 0}
-myApp.utenti[3] = { username = 'dis', password = 'dis' , nome = 'mario', cognome = 'rossi', tipo = 'Disabile' , targa = 'qw123qw', cellulare = '123123', email = 'qwe@qw.qw', pass = '123', multiplo = 2}
+myApp.utenti[1] = { username = 'nonres', password = 'nonres' , nome = 'Mario', cognome = 'Rossi', tipo = 'Non residente', targa = ' QW123QW', cellulare = '123123456', email = 'mariorossi@gmail.com', multiplo = 35}
+myApp.utenti[2] = { username = 'res', password = 'res' , nome = 'Mario', cognome = 'Rossi', tipo = 'Residente' , targa = 'QW123QW', cellulare = '123123456', email = 'mariorossi@gmail.com', cf = 'RSSMT12Q231WE1', patente = '121233', via = 'Via Roma', civico = '3', cap = '12321', accessi = 50, multiplo = 0}
+myApp.utenti[3] = { username = 'dis', password = 'dis' , nome = 'Mario', cognome = 'Rossi', tipo = 'Disabile' , targa = 'QW123QW', cellulare = '123123456', email = 'mariorossi@gmail.com', pass = '123', multiplo = 2}
 
 myApp.utenteLoggato = 0
 
@@ -115,12 +115,26 @@ function myApp:getNumUtenti()
 end
 
 
+-- Targhe secondarie
 
--- ricorda le targhr che possono accedere
+myApp.targheUtente = {}
+myApp.targheUtente[1] = {}
+myApp.targheUtente[2] = { targa1 = 'PP999PP', targa2 = 'KK000KK' }
+myApp.targheUtente[3] = { targa1 = 'PP999PP' }
+
+function myApp:getNumTargheUtente(num)
+    print(#myApp.targheUtente[num])
+    return #myApp.targheUtente[num]
+end
+
+    print(#myApp.targheUtente[3])
+
+
+-- ricorda se una targa può o non può accedere
 
 myApp.targhe = {}
-myApp.targhe[1] = { targa = 'SI111SI', accesso = true }
-myApp.targhe[2] = { targa = 'NO111NO', accesso = false }
+myApp.targhe[1] = { accesso = true, targa = 'SI111SI' }
+myApp.targhe[2] = { accesso = false, targa = 'NO111NO' }
 
 
 function myApp:getNumTarghe()

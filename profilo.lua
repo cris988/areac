@@ -3,7 +3,7 @@ local scene = storyboard.newScene()
 local widget = require('widget')
 local myApp = require('myapp')
 
-
+widget.setTheme(myApp.theme)
 
 -- funzioni
 local views = {}
@@ -51,6 +51,10 @@ function scene:createScene(event)
         onRelease = disconnessione
     })
     group:insert(disconnetti)
+
+
+    makeList()
+    group:insert(listaInfo)
     
 
     -- Nome e Cognome
@@ -107,7 +111,6 @@ function scene:createScene(event)
     text3:setFillColor( 0, 0, 0 )
     group:insert(text3)
 
-    print(myApp.utenti[myApp.utenteLoggato].multiplo)
     local optionsMulti2 = {
         text = myApp.utenti[myApp.utenteLoggato].multiplo,
         x = _W*0.5,
@@ -148,14 +151,9 @@ function scene:createScene(event)
         text6:setFillColor( 0, 0, 0 )
         group:insert(text6)
     else
-       text3.y = _H*0.45 
-       text4.y = _H*0.49
+        text3.y = _H*0.45 
+        text4.y = _H*0.49
     end
-
-
-
-    makeList()
-    group:insert(listaInfo)
 
 
 end
@@ -178,7 +176,7 @@ function makeList()
     {
         x = _W*0.5,
         y = _H*0.725,
-        height = 150,
+        height = 149,
         width = _W,
         onRowRender = onRowRender,
         onRowTouch = onRowTouch,
