@@ -130,9 +130,9 @@ end
 
 --     print(#myApp.targheUtente[3])
 
-myApp.targheUtente_1 = { 'QW123QW' }
-myApp.targheUtente_2 = { 'QW123QW', 'PP999PP', 'KK000KK', 'JJ000JJ' }
-myApp.targheUtente_3 = { 'QW123QW', 'PP999PP' }
+myApp.targheUtente_1 = { 'QW111QW' }
+myApp.targheUtente_2 = { 'QW111QW', 'PP222PP', 'KK333KK', 'JJ444JJ' }
+myApp.targheUtente_3 = { 'QW111QW', 'PP222PP' }
 
 function myApp:getNumTargheUtente(num)
     if num == 1 then

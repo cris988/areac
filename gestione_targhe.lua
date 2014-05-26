@@ -129,6 +129,7 @@ end
 
 
 function modificaDati()
+    print('MODIFICADATI')
     local numTarghe = myApp:getNumTargheUtente(myApp.utenteLoggato)
     for i=1, numTargheIniz do
         rowStar[i].isVisible = true
@@ -146,14 +147,23 @@ end
 
 
 function fineModifica()
+    print('FINEMODIFICA')
     local numTarghe = myApp:getNumTargheUtente(myApp.utenteLoggato)
     for i=1, numTargheIniz do
-        if myApp.utenti[myApp.utenteLoggato].targaSelezionata == i then
+        print( 'targaSelezionata '..myApp.utenti[myApp.utenteLoggato].targaSelezionata )
+        print( 'i '..i )
+        if rowStar[i].isOn == false then
             rowDelete[i].isVisible = false
-        else
             rowStar[i].isVisible = false
-            rowDelete[i].isVisible = false
         end
+            -- if myApp.utenti[myApp.utenteLoggato].targaSelezionata == i then
+            --     rowDelete[i].isVisible = false
+            --     -- rowStar[i].isVisible = true
+            --     -- rowStar[i]:setState( { isOn = true } )
+            -- else
+            --     rowDelete[i].isVisible = false
+            --     rowStar[i].isVisible = false
+            -- end
     end
 
     modifica.isVisible = true
@@ -162,8 +172,8 @@ function fineModifica()
 end
 
 function eliminaRow( event )
+    print('ELIMINAROW')
     local index = event.target.id
-    print( 'index '..index )
     rowStar[index]:removeSelf( )
     rowDelete[index]:removeSelf( )
     listaInfo:deleteRow( index )
@@ -172,27 +182,24 @@ function eliminaRow( event )
     table.remove( funzioneTargheUtente, index )
 
     local numTarghe = myApp:getNumTargheUtente(myApp.utenteLoggato)
-    print( 'numTarghe '..numTarghe )
-    print( 'numTarghe+1 '..numTarghe+1 )
-    print( 'numTargheIniz '..numTargheIniz )
     
-    for i = index+1, numTargheIniz do
-        print( 'i '..i )
-        print( 'rowStar[index].id '..rowStar[index].id )
-        print( 'rowStar[i].id '..rowStar[i].id )
-        
+    for i = index+1, numTargheIniz do        
         transition.to( rowStar[i], { time = 480, delay = 430, x =(rowStar[i].x), y =(rowStar[i].y-50) } )
         transition.to( rowDelete[i], { time = 480, delay = 430, x =(rowDelete[i].x), y =(rowDelete[i].y-50) } )       
     end
 
+    print( 'targaSelezionata '..myApp.utenti[myApp.utenteLoggato].targaSelezionata )
+    print( 'index '..index )
     if index < myApp.utenti[myApp.utenteLoggato].targaSelezionata then
         myApp.utenti[myApp.utenteLoggato].targaSelezionata = myApp.utenti[myApp.utenteLoggato].targaSelezionata-1
+        print( 'targaSelezionata '..myApp.utenti[myApp.utenteLoggato].targaSelezionata )
     end
 end
 
 
 
 function selezionaStar( event )
+    print('SELEZIONASTAR')
     local index = event.target.id
     myApp.utenti[myApp.utenteLoggato].targaSelezionata = index
 
