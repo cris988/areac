@@ -432,10 +432,26 @@ function salvaUtente()
             cap = myApp.datiUtente.cap,
             email = campoInserimentoEmail.text,
             cellulare = campoInserimentoCell.text,
-            targa = campoInserimentoTarga.text,
+            targa = campoInserimentoTarga.text:upper(),
             accessi = 50,
             multiplo = 0,
+            targaSelezionata = 1,
         }
+        if i+1 == 4 then
+            myApp.targheUtente_4 = { campoInserimentoTarga.text:upper() }
+        elseif i+1 == 5 then
+            myApp.targheUtente_5 = { campoInserimentoTarga.text:upper() }
+        elseif i+1 == 6 then
+            myApp.targheUtente_6 = { campoInserimentoTarga.text:upper() }
+        elseif i+1 == 7 then
+            myApp.targheUtente_7 = { campoInserimentoTarga.text:upper() }
+        elseif i+1 == 8 then
+            myApp.targheUtente_8 = { campoInserimentoTarga.text:upper() }
+        elseif i+1 == 9 then
+            myApp.targheUtente_9 = { campoInserimentoTarga.text:upper() }
+        elseif i+1 == 10 then
+            myApp.targheUtente_10 = { campoInserimentoTarga.text:upper() }
+        end
     elseif myApp.datiUtente.tipo == 'Disabile' then
         myApp.utenti[i+1] = {
             username = myApp.datiUtente.username,
@@ -446,9 +462,25 @@ function salvaUtente()
             pass = myApp.datiUtente.pass,
             email = campoInserimentoEmail.text,
             cellulare = campoInserimentoCell.text,
-            targa = campoInserimentoTarga.text,
-            multiplo = 0
+            targa = campoInserimentoTarga.text:upper(),
+            multiplo = 0,
+            targaSelezionata = 1,
         }
+        if i+1 == 4 then
+            myApp.targheUtente_4 = { campoInserimentoTarga.text:upper() }
+        elseif i+1 == 5 then
+            myApp.targheUtente_5 = { campoInserimentoTarga.text:upper() }
+        elseif i+1 == 6 then
+            myApp.targheUtente_6 = { campoInserimentoTarga.text:upper() }
+        elseif i+1 == 7 then
+            myApp.targheUtente_7 = { campoInserimentoTarga.text:upper() }
+        elseif i+1 == 8 then
+            myApp.targheUtente_8 = { campoInserimentoTarga.text:upper() }
+        elseif i+1 == 9 then
+            myApp.targheUtente_9 = { campoInserimentoTarga.text:upper() }
+        elseif i+1 == 10 then
+            myApp.targheUtente_10 = { campoInserimentoTarga.text:upper() }
+        end
     else
         myApp.utenti[i+1] = {
             username = myApp.datiUtente.username,
@@ -458,9 +490,25 @@ function salvaUtente()
             tipo = myApp.datiUtente.tipo,
             email = campoInserimentoEmail.text,
             cellulare = campoInserimentoCell.text,
-            targa = campoInserimentoTarga.text,
-            multiplo = 0
+            targa = campoInserimentoTarga.text:upper(),
+            multiplo = 0,
+            targaSelezionata = 1,
         }
+        if i+1 == 4 then
+            myApp.targheUtente_4 = { campoInserimentoTarga.text:upper() }
+        elseif i+1 == 5 then
+            myApp.targheUtente_5 = { campoInserimentoTarga.text:upper() }
+        elseif i+1 == 6 then
+            myApp.targheUtente_6 = { campoInserimentoTarga.text:upper() }
+        elseif i+1 == 7 then
+            myApp.targheUtente_7 = { campoInserimentoTarga.text:upper() }
+        elseif i+1 == 8 then
+            myApp.targheUtente_8 = { campoInserimentoTarga.text:upper() }
+        elseif i+1 == 9 then
+            myApp.targheUtente_9 = { campoInserimentoTarga.text:upper() }
+        elseif i+1 == 10 then
+            myApp.targheUtente_10 = { campoInserimentoTarga.text:upper() }
+        end
     end
 
     myApp.utenteLoggato = i+1

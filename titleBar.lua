@@ -2,7 +2,6 @@ local storyboard = require ( "storyboard" )
 local widget = require( "widget" )
 local myApp = require( "myapp" ) 
 
-
 	titleBar = {}
 
 	function titleBar.new()
@@ -11,6 +10,7 @@ local myApp = require( "myapp" )
 		local bgTitle = display.newImageRect(myApp.topBarBg, display.contentWidth, 72)
 		bgTitle.x = display.contentCenterX
 		bgTitle.y = display.topStatusBarContentHeight + 14 
+		myApp.topBarHeight = bgTitle.y*2
 
 		titleBar.titleText = display.newText( '', 0, 0, myApp.fontBold, 20 )
 		titleBar.titleText:setFillColor(0,0,0)

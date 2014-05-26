@@ -85,7 +85,6 @@ widget.setTheme(myApp.theme)
 _H = display.contentHeight
 _W = display.contentWidth
 
-titleBarHeight = 50
 
 -- Instanzio titleBar 
 myApp.titleBar = titleBar.new()
@@ -103,9 +102,9 @@ storyboard.purgeOnSceneChange = true
 -- Database Utenti
 
 myApp.utenti = {}
-myApp.utenti[1] = { username = 'nonres', password = 'nonres' , nome = 'Mario', cognome = 'Rossi', tipo = 'Non residente', targa = ' QW123QW', cellulare = '123123456', email = 'mariorossi@gmail.com', multiplo = 35}
-myApp.utenti[2] = { username = 'res', password = 'res' , nome = 'Mario', cognome = 'Rossi', tipo = 'Residente' , targa = 'QW123QW', cellulare = '123123456', email = 'mariorossi@gmail.com', cf = 'RSSMT12Q231WE1', patente = '121233', via = 'Via Roma', civico = '3', cap = '12321', accessi = 50, multiplo = 0}
-myApp.utenti[3] = { username = 'dis', password = 'dis' , nome = 'Mario', cognome = 'Rossi', tipo = 'Disabile' , targa = 'QW123QW', cellulare = '123123456', email = 'mariorossi@gmail.com', pass = '123', multiplo = 2}
+myApp.utenti[1] = { username = 'nonres', password = 'nonres' , nome = 'Mario', cognome = 'Rossi', tipo = 'Non residente', targa = ' QW123QW', targaSelezionata = 1, cellulare = '123123456', email = 'mariorossi@gmail.com', multiplo = 35}
+myApp.utenti[2] = { username = 'res', password = 'res' , nome = 'Mario', cognome = 'Rossi', tipo = 'Residente' , targa = 'PP999PP', targaSelezionata = 2, cellulare = '123123456', email = 'mariorossi@gmail.com', cf = 'RSSMT12Q231WE1', patente = '121233', via = 'Via Roma', civico = '3', cap = '12321', accessi = 50, multiplo = 0}
+myApp.utenti[3] = { username = 'dis', password = 'dis' , nome = 'Mario', cognome = 'Rossi', tipo = 'Disabile' , targa = 'QW123QW', targaSelezionata = 1, cellulare = '123123456', email = 'mariorossi@gmail.com', pass = '123', multiplo = 2}
 
 myApp.utenteLoggato = 0
 
@@ -115,19 +114,75 @@ function myApp:getNumUtenti()
 end
 
 
--- Targhe secondarie
 
-myApp.targheUtente = {}
-myApp.targheUtente[1] = {}
-myApp.targheUtente[2] = { targa1 = 'PP999PP', targa2 = 'KK000KK' }
-myApp.targheUtente[3] = { targa1 = 'PP999PP' }
+
+-- Targhe secondarie per ogni utente
+
+-- myApp.targheUtente = {}
+-- myApp.targheUtente[1] = {}
+-- myApp.targheUtente[2] = { targa1 = 'PP999PP', targa2 = 'KK000KK' }
+-- myApp.targheUtente[3] = { targa1 = 'PP999PP' }
+
+-- function myApp:getNumTargheUtente(num)
+--     print(#myApp.targheUtente[num])
+--     return #myApp.targheUtente[num]
+-- end
+
+--     print(#myApp.targheUtente[3])
+
+myApp.targheUtente_1 = { 'QW123QW' }
+myApp.targheUtente_2 = { 'QW123QW', 'PP999PP', 'KK000KK', 'JJ000JJ' }
+myApp.targheUtente_3 = { 'QW123QW', 'PP999PP' }
 
 function myApp:getNumTargheUtente(num)
-    print(#myApp.targheUtente[num])
-    return #myApp.targheUtente[num]
+    if num == 1 then
+        return #myApp.targheUtente_1
+    elseif num == 2 then
+        return #myApp.targheUtente_2
+    elseif num == 3 then
+        return #myApp.targheUtente_3
+    elseif num == 4 then
+        return #myApp.targheUtente_4
+    elseif num == 5 then
+        return #myApp.targheUtente_5
+    elseif num == 6 then
+        return #myApp.targheUtente_6
+    elseif num == 7 then
+        return #myApp.targheUtente_7
+    elseif num == 8 then
+        return #myApp.targheUtente_8
+    elseif num == 9 then
+        return #myApp.targheUtente_9
+    elseif num == 10 then
+        return #myApp.targheUtente_10
+    end
 end
 
-    print(#myApp.targheUtente[3])
+function myApp:getTargheUtente(num)
+    if num == 1 then
+        return myApp.targheUtente_1
+    elseif num == 2 then
+        return myApp.targheUtente_2
+    elseif num == 3 then
+        return myApp.targheUtente_3
+    elseif num == 4 then
+        return myApp.targheUtente_4
+    elseif num == 5 then
+        return myApp.targheUtente_5
+    elseif num == 6 then
+        return myApp.targheUtente_6
+    elseif num == 7 then
+        return myApp.targheUtente_7
+    elseif num == 8 then
+        return myApp.targheUtente_8
+    elseif num == 9 then
+        return myApp.targheUtente_9
+    elseif num == 10 then
+        return myApp.targheUtente_10
+    end
+end
+
+
 
 
 -- ricorda se una targa può o non può accedere

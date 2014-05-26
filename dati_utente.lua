@@ -421,6 +421,7 @@ function salvaUtente()
             email = campoInserimentoEmail.text,
             cellulare = campoInserimentoCell.text,
             targa = myApp.utenti[myApp.utenteLoggato].targa,
+            targaSelezionata = myApp.utenti[myApp.utenteLoggato].targaSelezionata,
             accessi = myApp.utenti[myApp.utenteLoggato].accessi,
             multiplo = myApp.utenti[myApp.utenteLoggato].multiplo,
         }
@@ -435,6 +436,7 @@ function salvaUtente()
             email = campoInserimentoEmail.text,
             cellulare = campoInserimentoCell.text,
             targa = myApp.utenti[myApp.utenteLoggato].targa,
+            targaSelezionata = myApp.utenti[myApp.utenteLoggato].targaSelezionata,
             accessi = myApp.utenti[myApp.utenteLoggato].accessi,
             multiplo = myApp.utenti[myApp.utenteLoggato].multiplo,
         }
@@ -448,6 +450,7 @@ function salvaUtente()
             email = campoInserimentoEmail.text,
             cellulare = campoInserimentoCell.text,
             targa = myApp.utenti[myApp.utenteLoggato].targa,
+            targaSelezionata = myApp.utenti[myApp.utenteLoggato].targaSelezionata,
             accessi = myApp.utenti[myApp.utenteLoggato].accessi,
             multiplo = myApp.utenti[myApp.utenteLoggato].multiplo,
         }

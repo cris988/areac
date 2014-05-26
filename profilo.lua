@@ -14,6 +14,7 @@ local onRowTouch = {}
 
 
 -- variabili
+local listaInfo
 local disconnetti
 local right_padding = 10
 
@@ -29,10 +30,9 @@ strings[3] = 'Cronologia transiti'
 
 
 
-
 function scene:createScene(event)
     local group = self.view
-
+    
     print("CREA SCENA PROFILO")
 
     local background = display.newRect(0,0,display.contentWidth, display.contentHeight)
@@ -176,7 +176,7 @@ function makeList()
     {
         x = _W*0.5,
         y = _H*0.725,
-        height = 149,
+        height = 150,
         width = _W,
         onRowRender = onRowRender,
         onRowTouch = onRowTouch,
@@ -238,6 +238,8 @@ function onRowTouch( event )
         index = event.target.index
         if index == 1 then
             storyboard.gotoScene('dati_utente', { effect = "slideLeft", time = 500 } )
+        elseif index == 2 then
+            storyboard.gotoScene('gestione_targhe', { effect = "slideLeft", time = 500 } )
         end
     end
 end
@@ -294,6 +296,22 @@ function scene:enterScene( event )
     myApp.titleBar.indietro.optionsBack = { effect = "slideDown", time = 500 }
 
     myApp.tabBar.isVisible = false
+
+
+
+    print(
+        myApp.utenti[myApp.utenteLoggato].username ..' '..
+        myApp.utenti[myApp.utenteLoggato].password ..' '..
+        myApp.utenti[myApp.utenteLoggato].nome ..' '..
+        myApp.utenti[myApp.utenteLoggato].cognome ..' '..
+        myApp.utenti[myApp.utenteLoggato].tipo ..' '..
+        myApp.utenti[myApp.utenteLoggato].email ..' '..
+        myApp.utenti[myApp.utenteLoggato].cellulare ..' '..
+        myApp.utenti[myApp.utenteLoggato].targa ..' '..
+        myApp.utenti[myApp.utenteLoggato].targaSelezionata ..' '..
+        myApp.utenti[myApp.utenteLoggato].accessi ..' '..
+        myApp.utenti[myApp.utenteLoggato].multiplo
+    )
 end
 
 function scene:exitScene( event )
