@@ -57,7 +57,7 @@ function step0(group)
         id  = 'BtAvanti',
         label = 'Avanti',
         x = _W*0.5,
-        y = _H*0.7,
+        y = _H*0.8,
         color = { 0.062745,0.50980,0.99607 },
         fontSize = 26,
         onRelease = AvantiScene
@@ -125,6 +125,7 @@ function step1(group)
     group:insert(myText3)
     if accesso < 4 then
         group:insert(myText4)
+        group:insert(acquista)
     end
     return group
 end
@@ -137,11 +138,11 @@ function textTarga()
 
     sfondoInserimento = display.newImageRect('img/textArea.png', 564*0.45, 62*0.6)
     sfondoInserimento.x = _W*0.5
-    sfondoInserimento.y = _H*0.45
+    sfondoInserimento.y = _H*0.5
 
     campoInserimento = native.newTextField( 40, 85, 195, 28)
     campoInserimento.x = _W/2
-    campoInserimento.y = _H*0.45
+    campoInserimento.y = _H*0.5
     campoInserimento:setTextColor( 0.75,0.75,0.75 )
     campoInserimento.size = 17
     campoInserimento.font = native.newFont( myApp.font, 17 )
@@ -151,7 +152,7 @@ function textTarga()
 
     btClear = display.newImage('img/delete.png', 10,10)
     btClear.x = _W*0.85
-    btClear.y = _H*0.45
+    btClear.y = _H*0.5
     btClear.alpha = 0
 
 
@@ -240,7 +241,7 @@ function schermataAccesso (numero)
             id  = 'BtAcquista',
             label = 'Acquista ticket',
             x = _W*0.5,
-            y = _H*0.7,
+            y = _H*0.8,
             color = { 0.062745,0.50980,0.99607 },
             fontSize = 26,
             onRelease = acquistaTicket
@@ -287,7 +288,7 @@ function scene:enterScene( event )
     -- Preparo titleBar
 
     myApp.titleBar.titleText.text = "Verifica Targa"
-
+    
     if myApp.utenteLoggato == 0 then
         myApp.titleBar.accedi.isVisible = true
     else
@@ -305,9 +306,11 @@ function scene:enterScene( event )
         group0 = display.newGroup()
         group:insert(step0(group0))
         myApp.titleBar.indietro.isVisible = false
+        myApp.titleBar.logo.isVisible = true
     else
         group1 = display.newGroup()
         group:insert(step1(group1))
+        myApp.titleBar.logo.isVisible = false
         myApp.titleBar.indietro.isVisible = true
         myApp.titleBar.indietro.scene = "verificatarga"
 

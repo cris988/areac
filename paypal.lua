@@ -280,9 +280,9 @@ function AvantiScene()
         print(checkbox)
         if checkbox == 'Multiplo' then
             if myApp.utenteLoggato > 0 then
-                print(myApp.utenti[myApp.utenteLoggato].multiplo)
                 myApp.utenti[myApp.utenteLoggato].multiplo = myApp.utenti[myApp.utenteLoggato].multiplo + 50
-                print(myApp.utenti[myApp.utenteLoggato].multiplo)
+            else
+                myApp.utenti[myApp.utenteLoggato].multiplo = myApp.utenti[myApp.utenteLoggato].multiplo + 1
             end
         end
         storyboard.reloadScene( )
@@ -319,6 +319,7 @@ function scene:enterScene( event )
 
         group0 = display.newGroup()
         group:insert(step0(group0))
+        myApp.titleBar.logo.isVisible = false
         myApp.titleBar.indietro.isVisible = true
         myApp.titleBar.indietro.scene = 'acquista2'
         myApp.titleBar.indietro.optionsBack = { effect = "slideRight", time = 500, params = { targa = myApp.targaAcquista } }

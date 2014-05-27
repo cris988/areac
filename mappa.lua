@@ -91,6 +91,7 @@ function scene:enterScene( event )
     -- Preparo titleBar
     myApp.titleBar.titleText.text = "Mappa"
     myApp.titleBar.indietro.isVisible = false
+    myApp.titleBar.logo.isVisible = true
     if myApp.utenteLoggato == 0 then
         myApp.titleBar.accedi.isVisible = true
     else

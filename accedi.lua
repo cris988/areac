@@ -341,6 +341,7 @@ function scene:enterScene( event )
 
     myApp.titleBar.titleText.text = "Profilo utente"
     myApp.titleBar.indietro.isVisible = true
+    myApp.titleBar.logo.isVisible = false
     
     if myApp.utenteLoggato == 0 then
         myApp.titleBar.accedi.isVisible = false

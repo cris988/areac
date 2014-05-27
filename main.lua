@@ -116,19 +116,7 @@ end
 
 
 
--- Targhe secondarie per ogni utente
-
--- myApp.targheUtente = {}
--- myApp.targheUtente[1] = {}
--- myApp.targheUtente[2] = { targa1 = 'PP999PP', targa2 = 'KK000KK' }
--- myApp.targheUtente[3] = { targa1 = 'PP999PP' }
-
--- function myApp:getNumTargheUtente(num)
---     print(#myApp.targheUtente[num])
---     return #myApp.targheUtente[num]
--- end
-
---     print(#myApp.targheUtente[3])
+-- Tutte le targhe di ogni utente
 
 myApp.targheUtente_1 = { 'QW111QW' }
 myApp.targheUtente_2 = { 'QW111QW', 'PP222PP', 'KK333KK', 'JJ444JJ' }
@@ -190,7 +178,10 @@ end
 myApp.targhe = {}
 myApp.targhe[1] = { accesso = true, targa = 'SI111SI' }
 myApp.targhe[2] = { accesso = false, targa = 'NO111NO' }
-
+myApp.targhe[3] = { accesso = true, targa = 'QW111QW' }
+myApp.targhe[4] = { accesso = true, targa = 'PP222PP' }
+myApp.targhe[5] = { accesso = true, targa = 'KK333KK' }
+myApp.targhe[6] = { accesso = true, targa = 'JJ444JJ' }
 
 function myApp:getNumTarghe()
     return #myApp.targhe

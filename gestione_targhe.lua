@@ -39,55 +39,53 @@ function scene:createScene(event)
     background.y = display.contentCenterY
     group:insert(background)
 
-    
-    modifica = widget.newButton({
-        id  = 'BtModifica',
-        label = 'Gestisci targhe',
-        x = _W*0.5,
-        y = _H*0.925,
-        color = { 0.062745,0.50980,0.99607 },
-        fontSize = 26,
-        onRelease =  modificaDati
-    })
-    group:insert(modifica)
-
-    
-    fine = widget.newButton({
-        id  = 'BtModifica',
-        label = 'Fine modifiche',
-        x = _W*0.5,
-        y = _H*0.925,
-        color = { 0.062745,0.50980,0.99607 },
-        fontSize = 26,
-        onRelease =  fineModifica
-    })
-    group:insert(fine)
-    fine.isVisible = false
-
-
-    aggiungi = widget.newButton({
-        id  = 'BtAggiungi',
-        label = '+ Aggiungi targa',
-        x = _W*0.5,
-        width = _W-30,
-        color = { 0.062745,0.50980,0.99607 },
-        fontSize = 20,
-        align = 'center',
-        onRelease =  aggiungiTarga
-    })
-    aggiungi.anchorX = 0.5
-    aggiungi.isVisible = false
-
-
-
     numTargheIniz = myApp:getNumTargheUtente(myApp.utenteLoggato)
 
     makeList()
     group:insert(listaInfo)
-    group:insert(aggiungi)
 
-    aggiungi.y = listaInfo.height + 90
+    if storyboard.getPrevious( ) == 'profilo' or storyboard.getPrevious( ) == 'gestione_targhe_verifica' then
+    
+        modifica = widget.newButton({
+            id  = 'BtModifica',
+            label = 'Gestisci targhe',
+            x = _W*0.5,
+            y = _H*0.925,
+            color = { 0.062745,0.50980,0.99607 },
+            fontSize = 26,
+            onRelease =  modificaDati
+        })
+        group:insert(modifica)
 
+    
+        fine = widget.newButton({
+            id  = 'BtModifica',
+            label = 'Fine modifiche',
+            x = _W*0.5,
+            y = _H*0.925,
+            color = { 0.062745,0.50980,0.99607 },
+            fontSize = 26,
+            onRelease =  fineModifica
+        })
+        group:insert(fine)
+        fine.isVisible = false
+
+
+        aggiungi = widget.newButton({
+            id  = 'BtAggiungi',
+            label = '+ Aggiungi targa',
+            x = _W*0.5,
+            y = listaInfo.height + 90,
+            width = _W-30,
+            color = { 0.062745,0.50980,0.99607 },
+            fontSize = 20,
+            align = 'center',
+            onRelease =  aggiungiTarga
+        })
+        aggiungi.anchorX = 0.5
+        aggiungi.isVisible = false    
+        group:insert(aggiungi)
+    end
 
 
     local opt = {
@@ -253,6 +251,10 @@ function makeList()
         local rowColor = { default={ 1, 1, 1 }, }
         local lineColor = { 0.8, 0.8, 0.8 }
 
+        if storyboard.getPrevious( ) == 'acquista' then
+            rowColor = { default = { 1, 1, 1 }, over = { 0.3, 0.3, 0.3 } }
+        end
+
         -- Insert a row into the listaInfo
         listaInfo:insertRow(
             {
@@ -288,7 +290,14 @@ end
 
 -- gestisce le azioni dell'utente sulle righe della lista
 function onRowTouch( event )
-
+    if storyboard.getPrevious( ) == 'acquista' then
+        local row = event.target
+        if event.phase == "release" or event.phase == 'tap' then
+            local funzioneTargheUtente = myApp:getTargheUtente(myApp.utenteLoggato)
+            myApp.targaAcquista = funzioneTargheUtente[event.target.index]
+            storyboard.gotoScene('acquista2', { effect = "slideLeft", time = 500 })
+        end
+    end
 end
 
 
@@ -319,10 +328,21 @@ function scene:enterScene( event )
     end
 
     myApp.tabBar.isVisible = false
+
+
+    if storyboard.getPrevious( ) == 'acquista' then
+        myApp.titleBar.titleText.text = 'Seleziona targa'
+        myApp.titleBar.indietro.isVisible = false
+        myApp.titleBar.chiudi.isVisible = true
+        myApp.titleBar.logo.isVisible = false
+        myApp.titleBar.indietro.scene = 'acquista'
+        myApp.titleBar.indietro.optionsBack = { effect = "slideRight", time = 500 }
+    end
 end
 
 function scene:exitScene( event )
     print("ESCI SCENA GESTIONE TARGHE")
+    myApp.titleBar.chiudi.isVisible = false
 end
 
 function scene:destroyScene( event )

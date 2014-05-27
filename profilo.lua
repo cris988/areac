@@ -100,7 +100,7 @@ function scene:createScene(event)
 
     -- ingressi multipli
     local optionsMulti1 = {
-        text = 'INGRESSI MULTIPLI ACQUISTATI RIMANENTI:',
+        text = 'INGRESSI ACQUISTATI RIMANENTI:',
         x = _W*0.5,
         y = _H*0.37,
         font = myApp.font,
@@ -297,27 +297,26 @@ function scene:enterScene( event )
 
     myApp.tabBar.isVisible = false
 
-
-
-    print(
-        myApp.utenti[myApp.utenteLoggato].username ..' '..
-        myApp.utenti[myApp.utenteLoggato].password ..' '..
-        myApp.utenti[myApp.utenteLoggato].nome ..' '..
-        myApp.utenti[myApp.utenteLoggato].cognome ..' '..
-        myApp.utenti[myApp.utenteLoggato].tipo ..' '..
-        myApp.utenti[myApp.utenteLoggato].email ..' '..
-        myApp.utenti[myApp.utenteLoggato].cellulare ..' '..
-        myApp.utenti[myApp.utenteLoggato].targa ..' '..
-        myApp.utenti[myApp.utenteLoggato].targaSelezionata ..' '..
-        myApp.utenti[myApp.utenteLoggato].accessi ..' '..
-        myApp.utenti[myApp.utenteLoggato].multiplo
-    )
+    -- print(
+    --     myApp.utenti[myApp.utenteLoggato].username ..' '..
+    --     myApp.utenti[myApp.utenteLoggato].password ..' '..
+    --     myApp.utenti[myApp.utenteLoggato].nome ..' '..
+    --     myApp.utenti[myApp.utenteLoggato].cognome ..' '..
+    --     myApp.utenti[myApp.utenteLoggato].tipo ..' '..
+    --     myApp.utenti[myApp.utenteLoggato].email ..' '..
+    --     myApp.utenti[myApp.utenteLoggato].cellulare ..' '..
+    --     myApp.utenti[myApp.utenteLoggato].targa ..' '..
+    --     myApp.utenti[myApp.utenteLoggato].targaSelezionata ..' '..
+    --     myApp.utenti[myApp.utenteLoggato].accessi ..' '..
+    --     myApp.utenti[myApp.utenteLoggato].multiplo
+    -- )
 end
 
 function scene:exitScene( event )
     print("ESCI SCENA PROFILO")
 
     myApp.tabBar.isVisible = true
+    myApp.titleBar.logo.isVisible = false
     if myApp.utenteLoggato == 0 then
         myApp.titleBar.accedi.isVisible = true
     else

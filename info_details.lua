@@ -46,6 +46,7 @@ function scene:enterScene( event )
 
     myApp.titleBar.indietro.isVisible = true
     myApp.titleBar.titleText.text = 'Info'
+    myApp.titleBar.logo.isVisible = false
 
     myApp.titleBar.indietro.scene = 'informazioni'
     myApp.titleBar.indietro.optionsBack = { effect = "slideRight", time = 500 }

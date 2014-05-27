@@ -64,7 +64,9 @@ function scene:createScene(event)
 
     accesso = math.random(4)
 
-    myApp.targaAcquista = event.params.targa
+    if event.params ~= nil then
+        myApp.targaAcquista = event.params.targa
+    end
 
     local targaTrovata = false
 
@@ -332,6 +334,7 @@ function scene:enterScene( event )
 
     myApp.titleBar.titleText.text = "Acquista"
     myApp.titleBar.indietro.isVisible = true
+    myApp.titleBar.logo.isVisible = false
     myApp.titleBar.indietro.scene = 'acquista'
     myApp.titleBar.indietro.optionsBack = { effect = "slideRight", time = 500 }
     if myApp.utenteLoggato == 0 then

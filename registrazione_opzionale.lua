@@ -548,6 +548,7 @@ function scene:enterScene( event )
         group1 = display.newGroup()
         group:insert(step1(group1))
         myApp.titleBar.indietro.isVisible = false
+        myApp.titleBar.logo.isVisible = false
         if myApp.utenteLoggato == 0 then
             myApp.titleBar.accedi.isVisible = false
         else
