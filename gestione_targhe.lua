@@ -9,6 +9,7 @@ widget.setTheme(myApp.theme)
 local views = {}
 local modificaDati = {}
 local fineModifica = {}
+local aggiungiTarga = {}
 local makeList = {}
 local onRowRender = {}
 local onRowTouch = {}
@@ -20,6 +21,7 @@ local sistemaRighe = {}
 -- variabili
 local modifica
 local fine
+local aggiungi
 local rowTitle
 local rowDelete = {}
 local rowStar = {}
@@ -62,10 +64,29 @@ function scene:createScene(event)
     group:insert(fine)
     fine.isVisible = false
 
+
+    aggiungi = widget.newButton({
+        id  = 'BtAggiungi',
+        label = '+ Aggiungi targa',
+        x = _W*0.5,
+        width = _W-30,
+        color = { 0.062745,0.50980,0.99607 },
+        fontSize = 20,
+        align = 'center',
+        onRelease =  aggiungiTarga
+    })
+    aggiungi.anchorX = 0.5
+    aggiungi.isVisible = false
+
+
+
     numTargheIniz = myApp:getNumTargheUtente(myApp.utenteLoggato)
 
     makeList()
     group:insert(listaInfo)
+    group:insert(aggiungi)
+
+    aggiungi.y = listaInfo.height + 90
 
 
 
@@ -83,7 +104,7 @@ function scene:createScene(event)
         
         rowDelete[i] = widget.newButton({
             id = i,
-            top = myApp.titleBar.profilo.y + 50*(i-1) + 2,
+            top = 46 + 50*(i-1),
             left = _W - 80,
             width = 80,
             height = 49,
@@ -129,7 +150,6 @@ end
 
 
 function modificaDati()
-    print('MODIFICADATI')
     local numTarghe = myApp:getNumTargheUtente(myApp.utenteLoggato)
     for i=1, numTargheIniz do
         rowStar[i].isVisible = true
@@ -140,6 +160,7 @@ function modificaDati()
         end
     end
 
+    aggiungi.isVisible = true
     modifica.isVisible = false
     fine.isVisible = true
     myApp.titleBar.indietro.isVisible = false
@@ -147,59 +168,45 @@ end
 
 
 function fineModifica()
-    print('FINEMODIFICA')
     local numTarghe = myApp:getNumTargheUtente(myApp.utenteLoggato)
     for i=1, numTargheIniz do
-        print( 'targaSelezionata '..myApp.utenti[myApp.utenteLoggato].targaSelezionata )
-        print( 'i '..i )
         if rowStar[i].isOn == false then
             rowDelete[i].isVisible = false
             rowStar[i].isVisible = false
         end
-            -- if myApp.utenti[myApp.utenteLoggato].targaSelezionata == i then
-            --     rowDelete[i].isVisible = false
-            --     -- rowStar[i].isVisible = true
-            --     -- rowStar[i]:setState( { isOn = true } )
-            -- else
-            --     rowDelete[i].isVisible = false
-            --     rowStar[i].isVisible = false
-            -- end
     end
 
+    aggiungi.isVisible = false
     modifica.isVisible = true
     fine.isVisible = false
     myApp.titleBar.indietro.isVisible = true
 end
 
 function eliminaRow( event )
-    print('ELIMINAROW')
     local index = event.target.id
+    local numTarghe = myApp:getNumTargheUtente(myApp.utenteLoggato)
+
     rowStar[index]:removeSelf( )
     rowDelete[index]:removeSelf( )
     listaInfo:deleteRow( index )
     
     local funzioneTargheUtente = myApp:getTargheUtente(myApp.utenteLoggato)
     table.remove( funzioneTargheUtente, index )
-
-    local numTarghe = myApp:getNumTargheUtente(myApp.utenteLoggato)
     
     for i = index+1, numTargheIniz do        
         transition.to( rowStar[i], { time = 480, delay = 430, x =(rowStar[i].x), y =(rowStar[i].y-50) } )
-        transition.to( rowDelete[i], { time = 480, delay = 430, x =(rowDelete[i].x), y =(rowDelete[i].y-50) } )       
+        transition.to( rowDelete[i], { time = 480, delay = 430, x =(rowDelete[i].x), y =(rowDelete[i].y-49) } )       
     end
+    transition.to( aggiungi, { time = 480, delay = 430, x =(aggiungi.x), y =(aggiungi.y-50) } )       
 
-    print( 'targaSelezionata '..myApp.utenti[myApp.utenteLoggato].targaSelezionata )
-    print( 'index '..index )
     if index < myApp.utenti[myApp.utenteLoggato].targaSelezionata then
         myApp.utenti[myApp.utenteLoggato].targaSelezionata = myApp.utenti[myApp.utenteLoggato].targaSelezionata-1
-        print( 'targaSelezionata '..myApp.utenti[myApp.utenteLoggato].targaSelezionata )
     end
 end
 
 
 
 function selezionaStar( event )
-    print('SELEZIONASTAR')
     local index = event.target.id
     myApp.utenti[myApp.utenteLoggato].targaSelezionata = index
 
@@ -215,6 +222,12 @@ function selezionaStar( event )
         end
     end
 end
+
+function aggiungiTarga()
+        storyboard.gotoScene( 'gestione_targhe_verifica' )
+end
+
+
 
 
 
@@ -275,14 +288,7 @@ end
 
 -- gestisce le azioni dell'utente sulle righe della lista
 function onRowTouch( event )
-    -- local row = event.target
-    -- if event.phase == "release" or event.phase == 'tap' then
-    --     -- è il numero della riga della lista che è stato cliccato
-    --     index = event.target.index
-    --     if index == 1 then
-    --         storyboard.gotoScene('dati_utente', { effect = "slideLeft", time = 500 } )
-    --     end
-    -- end
+
 end
 
 
