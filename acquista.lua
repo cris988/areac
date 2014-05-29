@@ -8,12 +8,14 @@ widget.setTheme(myApp.theme)
 
 -- funzioni
 local AvantiScene = {}
+local selezionaTarga = {}
 local textListener = {}
 local clearListener = {}
 local trimString = {}
 
 -- variabili
 local avanti
+local targaReg
 local titleText
 local campoInserimento
 local sfondoInserimento
@@ -44,7 +46,7 @@ function scene:createScene(event)
         id  = 'BtAvanti',
         label = 'Avanti',
         x = _W*0.5,
-        y = _H*0.7,
+        y = _H*0.8,
         color = { 0.062745,0.50980,0.99607 },
         fontSize = 26,
         onRelease = AvantiScene
@@ -62,9 +64,10 @@ function scene:createScene(event)
         fontSize = 16,
         align = "center"
     }
-    local areaT = display.newText( options )
-    areaT:setFillColor( 0, 0, 0 )
-    group:insert(areaT)
+    local text1 = display.newText( options )
+    text1:setFillColor( 0, 0, 0 )
+    group:insert(text1)
+
 
     -- creazione textArea per targa
 
@@ -72,11 +75,11 @@ function scene:createScene(event)
 
     sfondoInserimento = display.newImageRect('img/textArea.png', 564*0.45, 62*0.6)
     sfondoInserimento.x = _W*0.5
-    sfondoInserimento.y = _H*0.45
+    sfondoInserimento.y = _H*0.5
 
     campoInserimento = native.newTextField( 40, 85, 195, 28)
     campoInserimento.x = _W/2
-    campoInserimento.y = _H*0.45
+    campoInserimento.y = _H*0.5
     campoInserimento:setTextColor( 0.75,0.75,0.75 )
     campoInserimento.font = native.newFont( myApp.font, 17 )
     campoInserimento.align = "center"
@@ -85,7 +88,7 @@ function scene:createScene(event)
 
     btClear = display.newImage('img/delete.png', 10,10)
     btClear.x = _W*0.85
-    btClear.y = _H*0.45
+    btClear.y = _H*0.5
     btClear.alpha = 0
 
 
@@ -97,16 +100,50 @@ function scene:createScene(event)
         btClear:addEventListener( "touch", clearListener )
     end
 
+    campoInserimento:addEventListener( "userInput", textListener)
 
     gruppoInserimento:insert(sfondoInserimento)
     gruppoInserimento:insert(campoInserimento)
     gruppoInserimento:insert(btClear)
 
     group:insert(gruppoInserimento)
+    
 
 
-    campoInserimento:addEventListener( "userInput", textListener)
 
+
+    if myApp.utenteLoggato > 0 then
+        
+        targaReg = widget.newButton({
+            id  = 'BtTargaReg',
+            label = 'Seleziona targa registrata',
+            x = _W*0.5,
+            y = _H*0.4,
+            color = { 0.062745,0.50980,0.99607 },
+            fontSize = 26,
+            onRelease = selezionaTarga
+        })
+        group:insert(targaReg)
+
+        -- testo in alto
+        local options2 = {
+            text = 'Oppure inserisci una nuova targa:',
+            x = _W*0.5,
+            y = _H*0.555,
+            width = _W - 30,
+            fontSize = 16,
+            align = "center"
+        }
+        local text2 = display.newText( options2 )
+        text2:setFillColor( 0, 0, 0 )
+        group:insert(text2)
+
+        sfondoInserimento.y = _H*0.65
+        campoInserimento.y = _H*0.65
+        btClear.y = _H*0.65
+    else    
+
+    end
 
 
 end
@@ -165,12 +202,16 @@ function AvantiScene ()
     -- controllo se il formato della targa è giusto
     elseif #campoInserimento.text == 7 and campoInserimento.text:match( '[A-Za-z][A-Za-z][0-9][0-9][0-9][A-Za-z][A-Za-z]' ) then
         -- passo la targa come parametro facendogli il trim e l'upperCase
-        storyboard.gotoScene('acquista2', { params = { targa = trimString( campoInserimento.text ):upper() } })
+        storyboard.gotoScene('acquista2', { effect = "slideLeft", time = 500, params = { targa = trimString( campoInserimento.text ):upper() } })
     else
        campoInserimento:setTextColor(1,0,0)
     end
 end
 
+
+function selezionaTarga()
+    storyboard.gotoScene( 'gestione_targhe' )
+end
 
 
 
@@ -181,6 +222,7 @@ function scene:enterScene( event )
 
     myApp.titleBar.titleText.text = "Acquista"
     myApp.titleBar.indietro.isVisible = false
+    myApp.titleBar.logo.isVisible = true
     if myApp.utenteLoggato == 0 then
         myApp.titleBar.accedi.isVisible = true
     else

@@ -10,10 +10,10 @@ local textListenerUser = {}
 local clearListenerUser = {}
 local textListenerPass = {}
 local clearListenerPass = {}
-local textListenerPass2 = {}
-local clearListenerPass2 = {}
 local AvantiScene = {}
-
+local fineAcquisto = {}
+local step0 = {}
+local step1 = {}
 
 
 -- variabili
@@ -24,14 +24,15 @@ local btClearUser
 local campoInserimentoPass
 local sfondoInserimentoPass
 local btClearPass
-local campoInserimentoPass2
-local sfondoInserimentoPass2
-local btClearPass2
 local avanti
+local fine
+local checkbox
 
 
 
 function scene:createScene(event)
+    print("CREA SCENA PAYPAL")
+
     local group = self.view
 
 	local background = display.newRect(0,0,display.contentWidth, display.contentHeight)
@@ -40,9 +41,35 @@ function scene:createScene(event)
     background.y = display.contentCenterY
 	group:insert(background)
 
+    checkbox = event.params.checkbox
+
+    step = 0
+
+end
+
+-- Gestisce il primo step
+
+function step0(group)
+
+    print("Verifica Targa Step 0")
+
+    avanti = widget.newButton({
+        id  = 'BtCompleta',
+        label = 'Completa acquisto',
+        x = _W*0.5,
+        y = _H*0.8,
+        color = { 0.062745,0.50980,0.99607 },
+        fontSize = 26,
+        font = myApp.font,
+        onRelease = AvantiScene
+    })
+    group:insert(avanti)
+
+
+
 	-- testo in alto
     local options = {
-        text = 'Inserisci le informazioni:',
+        text = 'Inserisci i tuoi dati PayPal per il pagamento:',
         x = _W*0.5,
         y = _H*0.425,
         width = _W - 30,
@@ -63,31 +90,20 @@ function scene:createScene(event)
 
     sfondoInserimentoUser = display.newImageRect('img/textArea.png', 564*0.45, 62*0.6)
     sfondoInserimentoUser.x = _W*0.5
-    sfondoInserimentoUser.y = _H*0.40
+    sfondoInserimentoUser.y = _H*0.35
 
     campoInserimentoUser = native.newTextField( 40, 85, 195, 28)
     campoInserimentoUser.x = _W/2
-    campoInserimentoUser.y = _H*0.40
+    campoInserimentoUser.y = _H*0.35
     campoInserimentoUser:setTextColor( 0.75,0.75,0.75 )
     campoInserimentoUser.font = native.newFont( myApp.font, 17 )
     campoInserimentoUser.align = "center"
     campoInserimentoUser.hasBackground = false
     campoInserimentoUser.placeholder = 'Username'
 
-  
-
-  	print("USERNAME: "..myApp.datiUtente.username)
-
-
-    if myApp.datiUtente.username == '' then
-    else
-    	campoInserimentoUser.text = myApp.datiUtente.username
-    	campoInserimentoUser:setTextColor( 0 )
-    end
-
     btClearUser = display.newImage('img/delete.png', 10,10)
     btClearUser.x = _W*0.85
-    btClearUser.y = _H*0.40
+    btClearUser.y = _H*0.35
     btClearUser.alpha = 0
 
     gruppoInserimentoUser:insert(sfondoInserimentoUser)
@@ -105,23 +121,20 @@ function scene:createScene(event)
 
     sfondoInserimentoPass = display.newImageRect('img/textArea.png', 564*0.45, 62*0.6)
     sfondoInserimentoPass.x = _W*0.5
-    sfondoInserimentoPass.y = _H*0.55
+    sfondoInserimentoPass.y = _H*0.5
 
     campoInserimentoPass = native.newTextField( 40, 85, 195, 28)
     campoInserimentoPass.x = _W/2
-    campoInserimentoPass.y = _H*0.55
+    campoInserimentoPass.y = _H*0.5
     campoInserimentoPass:setTextColor( 0.75,0.75,0.75 )
     campoInserimentoPass.font = native.newFont( myApp.font, 17 )
     campoInserimentoPass.align = "center"
     campoInserimentoPass.hasBackground = false
     campoInserimentoPass.placeholder = 'Password'
 
-
-    print("PASSWORD: "..myApp.datiUtente.username)
-
     btClearPass = display.newImage('img/delete.png', 10,10)
     btClearPass.x = _W*0.85
-    btClearPass.y = _H*0.55
+    btClearPass.y = _H*0.5
     btClearPass.alpha = 0
 
     gruppoInserimentoPass:insert(sfondoInserimentoPass)
@@ -131,56 +144,48 @@ function scene:createScene(event)
     campoInserimentoPass:addEventListener( "userInput", textListenerPass)
 
 
-    -- creazione textArea per Conferma Password
-
-    local gruppoInserimentoPass2 = display.newGroup()
-
-    sfondoInserimentoPass2 = display.newImageRect('img/textArea.png', 564*0.45, 62*0.6)
-    sfondoInserimentoPass2.x = _W*0.5
-    sfondoInserimentoPass2.y = _H*0.70
-
-    campoInserimentoPass2 = native.newTextField( 40, 85, 195, 28)
-    campoInserimentoPass2.x = _W/2
-    campoInserimentoPass2.y = _H*0.70
-    campoInserimentoPass2:setTextColor( 0.75,0.75,0.75 )
-    campoInserimentoPass2.font = native.newFont( myApp.font, 17 )
-    campoInserimentoPass2.align = "center"
-    campoInserimentoPass2.hasBackground = false
-    campoInserimentoPass2.placeholder = 'Ripeti Password'
-
-    btClearPass2 = display.newImage('img/delete.png', 10,10)
-    btClearPass2.x = _W*0.85
-    btClearPass2.y = _H*0.70
-    btClearPass2.alpha = 0
-
-    gruppoInserimentoPass2:insert(sfondoInserimentoPass2)
-    gruppoInserimentoPass2:insert(campoInserimentoPass2)
-    gruppoInserimentoPass2:insert(btClearPass2)
-
-    campoInserimentoPass2:addEventListener( "userInput", textListenerPass2)
-
 
     group:insert(gruppoInserimentoUser)
     group:insert(gruppoInserimentoPass)
-    group:insert(gruppoInserimentoPass2)
 
-    avanti = widget.newButton({
-        id  = 'BtAvanti',
-        label = 'Avanti',
+
+    return group
+end
+
+
+
+
+
+-- Gestisce il secondo step di Verifica Targa
+
+function step1(group)
+   
+    print("Verifica Targa Step 1")
+
+    local myText1 = display.newText( 'Il pagamento è stato',  _W*0.5, _H*0.45, myApp.font, 20)
+    myText1:setFillColor(0)
+    local myText2 = display.newText( 'COMPLETATO',  _W*0.5, _H*0.5, myApp.font, 22)
+    myText2:setFillColor(0.1333,0.54509,0.13334)
+
+    group:insert(myText1)
+    group:insert(myText2)
+
+    fine = widget.newButton({
+        id  = 'BtFine',
+        label = 'Fine',
         x = _W*0.5,
-        y = _H*0.925,
+        y = _H*0.8,
         color = { 0.062745,0.50980,0.99607 },
         fontSize = 26,
-        font = myApp.font,
-        onRelease = AvantiScene
+        onRelease = fineAcquisto
     })
-    group:insert(avanti)
+    group:insert(fine)
 
-
-
-
-
+    return group
 end
+
+
+
 
 
 --gestisce le fasi dell'inserimento dell'Username
@@ -266,69 +271,29 @@ function clearListenerPass( event )
     end
 end
 
---gestisce le fasi dell'inserimento della Conferma Password
-function textListenerPass2( event )
-    if event.phase == "began" then
-        if event.target.text == '' then
-        else
-            btClearPass2.alpha = 0.2
-            btClearPass2:addEventListener( "touch", clearListenerPass2 )
-        end
-        campoInserimentoPass2:setTextColor( 0 )
-    elseif event.phase == "editing" then
-        
-        if(#event.target.text > 0) then
-            btClearPass2.alpha = 0.2
-            btClearPass2:addEventListener( "touch", clearListenerPass2 )
-        else
-            btClearPass2.alpha = 0
-            btClearPass2:removeEventListener( "touch", clearListenerPass2 )
-        end
-    elseif event.phase == "ended" then
-        if event.target.text == '' then
-            btClearPass2.alpha = 0
-            campoInserimentoPass2:setTextColor( 0.75,0.75,0.75 )
-
-        end
-    end
-end
-
--- gestisce la comparsa del pulsate clear
-function clearListenerPass2( event ) 
-    if(event.phase == "began") then
-        event.target.alpha = 0.8
-    elseif(event.phase == "cancelled") then
-        event.target.alpha = 0.2
-    elseif(event.phase == "ended") then
-        campoInserimentoPass2.text = ''
-        native.setKeyboardFocus( campoInserimentoPass2 )
-        btClearPass2.alpha = 0
-        btClearPass2:removeEventListener( "touch", clearListenerPass2 )
-    end
-end
 
 
 
 function AvantiScene()
-	if 	campoInserimentoUser.text == '' or campoInserimentoPass.text == '' or campoInserimentoPass2.text == '' then
+    if campoInserimentoPass.text == '' or campoInserimentoUser.text == '' then
 
-	else
-		if campoInserimentoPass.text == campoInserimentoPass2.text then
+    else
+        print(checkbox)
+        if checkbox == 'Multiplo' then
+            if myApp.utenteLoggato > 0 then
+                myApp.utenti[myApp.utenteLoggato].multiplo = myApp.utenti[myApp.utenteLoggato].multiplo + 50
+            else
+                myApp.utenti[myApp.utenteLoggato].multiplo = myApp.utenti[myApp.utenteLoggato].multiplo + 1
+            end
+        end
+        storyboard.reloadScene( )
+    end
+end
 
-			myApp.datiUtente = {
-				username = campoInserimentoUser.text,
-				password = campoInserimentoPass.text,
-				-- nome = '',
-	   --  		cognome = '',
-	   --  		email = '',
-	   --  		cellulare = '',
-	   --  		targa = '',
-	   --  		tipo = '',
-			}
 
-			storyboard.gotoScene('registrazione2', { effect = "slideLeft", time = 500 })
-		end
-	end
+
+function fineAcquisto()
+    storyboard.gotoScene('mappa')
 end
 
 
@@ -336,28 +301,73 @@ end
 
 
 function scene:enterScene( event )
-    print("ENTRA SCENA REGISTRAZIONE")
-    
-    -- Preparo titleBar
+    print("ENTRA SCENA PAYPAL")
 
-    myApp.titleBar.titleText.text = "Registrazione"
-    myApp.titleBar.indietro.isVisible = true
-    myApp.titleBar.indietro.scene = "accedi"
-    myApp.titleBar.indietro.optionsBack = { effect = "slideRight", time = 500 }
-    myApp.titleBar.accedi.isVisible = false
-    myApp.tabBar.isVisible = false
+    local group = self.view
+    
+
+    myApp.titleBar.titleText.text = "PayPal"
+
+    myApp.tabBar.isVisible = true
+
+
+    --[[ Se sono al 1° step creo il group0 locale
+        Se sono al 2° step creo il group1 locale
+        Alla fine aggancio il group0 o group1 al group della scena
+    ]]--
+
+    if step == 0 then
+
+        group0 = display.newGroup()
+        group:insert(step0(group0))
+        myApp.titleBar.logo.isVisible = false
+        myApp.titleBar.indietro.isVisible = true
+        myApp.titleBar.indietro.scene = 'acquista2'
+        myApp.titleBar.indietro.optionsBack = { effect = "slideRight", time = 500, params = { targa = myApp.targaAcquista } }
+
+        if myApp.utenteLoggato == 0 then
+            myApp.titleBar.accedi.isVisible = true
+        else
+            myApp.titleBar.profilo.isVisible = true
+        end
+    else
+        group1 = display.newGroup()
+        group:insert(step1(group1))
+        myApp.titleBar.indietro.isVisible = false
+
+        if myApp.utenteLoggato == 0 then
+            myApp.titleBar.accedi.isVisible = false
+        else
+            myApp.titleBar.profilo.isVisible = false
+        end
+    end
 
 end
 
 function scene:exitScene( event )
-    print("ESCI SCENA REGISTRAZIONE")
+    print("ESCI SCENA PAYPAL")
 
-	myApp.tabBar.isVisible = false
+    local group = self.view
+
+    --[[ Se sono al 1° step distruggo il group0 e passo allo step1
+        Se sono al 2° step distruggo il group1 e passo allo step0 (con il tasto indietro)
+    ]]--
+
+    if step == 0 then
+        step = 1
+        group:remove(group0)
+    else
+        step = 0
+        group:remove(group1)
+        myApp.tabBar:setSelected(1)
+    end
 
 end
 
 function scene:destroyScene( event )
-    print("DISTRUGGI SCENA REGISTRAZIONE")
+    print("DISTRUGGI SCENA PAYPAL")
+    group0 = nil
+    group1 = nil
 end
 
 -- "createScene" event is dispatched if scene's view does not exist
