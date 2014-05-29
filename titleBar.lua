@@ -4,11 +4,14 @@ local myApp = require( "myapp" )
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 titleBar = {}
 
 titleBar.back = ''
 titleBar.height = 0
 =======
+=======
+>>>>>>> FETCH_HEAD
 =======
 >>>>>>> FETCH_HEAD
 	titleBar = {}
@@ -28,6 +31,7 @@ function titleBar.new()
 		bgTitle.x = display.contentCenterX
 		bgTitle.y = display.topStatusBarContentHeight + 14 
 		myApp.topBarHeight = bgTitle.y*2
+<<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> FETCH_HEAD
 
@@ -68,6 +72,8 @@ function titleBar.new()
 		    id  = 'BtChiudi',
 		    label = 'Chiudi',
 =======
+=======
+>>>>>>> FETCH_HEAD
 
 		titleBar.titleText = display.newText( '', 0, 0, myApp.fontBold, 20 )
 		titleBar.titleText:setFillColor(0,0,0)
@@ -122,6 +128,21 @@ function titleBar.new()
 		   	onRelease = titleBar.goBack
 		})
 
+<<<<<<< HEAD
+>>>>>>> FETCH_HEAD
+=======
+		titleBar.chiudi = widget.newButton({
+		    id  = 'BtChiudi',
+		    label = 'Chiudi',
+		    x = display.contentCenterX*0.3,
+		    y = bgTitle.height * 0.5 + 7,
+		    color = { 0.062745,0.50980,0.99607 },
+		    fontSize = 18,
+		    scene = '', -- Scena in cui andare
+		    optionsBack ={}, -- Parametri aggiuntivi da passare alla scena
+		   	onRelease = titleBar.goBack
+		})
+
 >>>>>>> FETCH_HEAD
 		titleBar.logo = display.newImage( 'img/logo.png', _W*0.1, _H*0.08 )
 		titleBar.logo.width = 45
@@ -132,6 +153,7 @@ function titleBar.new()
 		titleBar.indietro.isVisible = false
 		titleBar.chiudi.isVisible = false
 		titleBar.logo.isVisible = false
+<<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> FETCH_HEAD
 
@@ -168,6 +190,8 @@ function titleBar.new()
 	titleBar.cerca.isVisible = false
 =======
 =======
+=======
+>>>>>>> FETCH_HEAD
 
 		return titleBar
 

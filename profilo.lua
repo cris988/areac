@@ -157,6 +157,7 @@ function scene:createScene(event)
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     group:insert(makeList())
     local lineB = display.newLine( group, 0, _H*0.60, _W, _H*0.60)
@@ -164,6 +165,8 @@ function scene:createScene(event)
     local lineE = display.newLine( group, 0, _H*0.856, _W, _H*0.856)
     lineE:setStrokeColor( 0.8, 0.8, 0.8 )
 
+=======
+>>>>>>> FETCH_HEAD
 =======
 >>>>>>> FETCH_HEAD
 end
@@ -241,8 +244,11 @@ function onRowTouch( event )
         elseif index == 2 then
             storyboard.gotoScene('gestione_targhe', { effect = "slideLeft", time = 500 } )
 <<<<<<< HEAD
+<<<<<<< HEAD
         elseif index == 3 then
             storyboard.gotoScene('transiti', { effect = "slideLeft", time = 500 } )
+=======
+>>>>>>> FETCH_HEAD
 =======
 >>>>>>> FETCH_HEAD
         end
@@ -250,7 +256,10 @@ function onRowTouch( event )
 end
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> FETCH_HEAD
 
 
 
@@ -290,6 +299,7 @@ function scene:enterScene( event )
     myApp.titleBar.indietro.scene = myApp.ultimaPagina
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 -- <<<<<<< HEAD
 --     if storyboard.getPrevious() == 'acquista2' then
 --         myApp.titleBar.indietro.optionsBack =  { params = { var = myApp.index, targa = myApp.targaAcquista } }
@@ -306,6 +316,8 @@ function scene:enterScene( event )
         myApp.tabBar:setSelected( 1 )
         myApp.titleBar.indietro.scene = 'mappa'
 -->>>>>>> FETCH_HEAD
+=======
+>>>>>>> FETCH_HEAD
 =======
 >>>>>>> FETCH_HEAD
     if storyboard.getPrevious() == 'acquista2' or storyboard.getPrevious() == 'paypal' then

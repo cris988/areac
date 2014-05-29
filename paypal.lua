@@ -14,8 +14,12 @@ local AvantiScene = {}
 local fineAcquisto = {}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 local step0 = {}
 local step1 = {}
+=======
+
+>>>>>>> FETCH_HEAD
 =======
 
 >>>>>>> FETCH_HEAD
