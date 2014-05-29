@@ -2,15 +2,15 @@ local storyboard = require ( "storyboard" )
 local widget = require( "widget" )
 local myApp = require( "myapp" ) 
 
-titleBar = {}
 
+titleBar = {}
 
 function titleBar.new()
 
 	print ("NEW TITLEBAR")
 	local bgTitle = display.newImageRect(myApp.topBarBg, display.contentWidth, 72)
 	bgTitle.x = display.contentCenterX
-	bgTitle.y = display.topStatusBarContentHeight + 14 
+	bgTitle.y = display.topStatusBarContentHeight + 14
 	myApp.topBarHeight = bgTitle.y*2
 
 	titleBar.titleText = display.newText( '', 0, 0, myApp.fontBold, 20 )
@@ -48,6 +48,7 @@ function titleBar.new()
 	titleBar.createButton("cerca", "BtCerca", "Cerca", 
 		display.contentCenterX*1.75, bgTitle.height * 0.5 + 7, { 0.062745,0.50980,0.99607 }, 18, titleBar.cerca)
 
+
 	titleBar.chiudi = widget.newButton({
 	    id  = 'BtChiudi',
 	    label = 'Chiudi',
@@ -74,7 +75,6 @@ function titleBar.new()
 	titleBar.annulla.isVisible = false
 	titleBar.ricerca.isVisible = false
 	titleBar.cerca.isVisible = false
-
 
 	return titleBar
 

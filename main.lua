@@ -115,6 +115,8 @@ myApp.transiti[1] ={ { "30/04/2014", "AABBCC" , "2€"}, { "22/05/2014", "BBCCDD
 { "01/03/2014", "BBCCDD" , "5€"},{ "01/03/2014", "AABBCC" , "5€"}}
 
 
+
+
 function myApp:getNumUtenti()
     return #myApp.utenti
 end
