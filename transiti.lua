@@ -74,39 +74,6 @@ function scene:createScene(event)
                 print("p")
                 table.insert(transiti, transito)
             end
-
-
-
-
-            -- if transito[2] == myApp.ricerca["t"] then
-            --     if transito[3] == myApp.ricerca["i"] then
-            --         print(transito[3] )
-            --         if myApp.ricerca["p"]~= nil and date.parse(transito[1]) >= date.day - myApp.ricerca["p"] then
-            --             print("t+i+p")
-            --             table.insert(transiti, transito)
-            --         else
-            --             print("t+i")
-            --             table.insert(transiti, transito)
-            --         end
-            --     elseif myApp.ricerca["p"]~= nil and date.parse(transito[1]) >= date.day - myApp.ricerca["p"]then
-            --             print("t+p")
-            --             table.insert(transiti, transito)
-            --     elseif myApp.ricerca["i"] == nil and myApp.ricerca["p"] ==nil then
-            --             print("t")
-            --             table.insert(transiti, transito)    
-            --     end
-            -- elseif myApp.ricerca["t"] == nil and transito[1] == myApp.ricerca["p"] then
-            --     if myApp.ricerca["p"]~= nil and date.parse(transito[1]) >=  date.day- myApp.ricerca["p"] then
-            --         print("p+i")
-            --         table.insert(transiti, transito)
-            --     else
-            --         print("p")
-            --         table.insert(transiti, transito)
-            --     end
-            -- elseif myApp.ricerca["t"] == nil and myApp.ricerca["p"] == nil and transito[3] ==  myApp.ricerca["i"] then
-            --     print("i")
-            --     table.insert(transiti, transito)
-            -- end
         end
         makeList(group, transiti) 
     end
@@ -189,8 +156,8 @@ function scene:enterScene( event )
     myApp.titleBar.ricerca.isVisible = true
     myApp.titleBar.indietro.scene = "profilo"
     myApp.tabBar.isVisible = false
-
     myApp.titleBar.indietro.optionsBack = { effect = "slideRight", time = 500 }
+
 end
 
 function scene:exitScene( event )

@@ -2,8 +2,8 @@ local storyboard = require ( "storyboard" )
 local widget = require( "widget" )
 local myApp = require( "myapp" ) 
 
-
 titleBar = {}
+
 
 function titleBar.new()
 
@@ -48,7 +48,6 @@ function titleBar.new()
 	titleBar.createButton("cerca", "BtCerca", "Cerca", 
 		display.contentCenterX*1.75, bgTitle.height * 0.5 + 7, { 0.062745,0.50980,0.99607 }, 18, titleBar.cerca)
 
-
 	titleBar.chiudi = widget.newButton({
 	    id  = 'BtChiudi',
 	    label = 'Chiudi',
@@ -75,6 +74,7 @@ function titleBar.new()
 	titleBar.annulla.isVisible = false
 	titleBar.ricerca.isVisible = false
 	titleBar.cerca.isVisible = false
+
 
 	return titleBar
 

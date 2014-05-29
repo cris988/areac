@@ -155,8 +155,6 @@ function scene:createScene(event)
         text4.y = _H*0.49
     end
 
-
-
     group:insert(makeList())
     local lineB = display.newLine( group, 0, _H*0.60, _W, _H*0.60)
     lineB:setStrokeColor( 0.8, 0.8, 0.8 )
@@ -244,7 +242,6 @@ function onRowTouch( event )
 end
 
 
-
 function disconnessione()
     myApp.utenteLoggato = 0
     storyboard.gotoScene(myApp.ultimaPagina, { effect = "slideDown", time = 500, params = { targa = myApp.targaAcquista } })
@@ -266,6 +263,9 @@ function scene:enterScene( event )
     end
 
     myApp.titleBar.indietro.scene = myApp.ultimaPagina
+    myApp.titleBar.indietro.optionsBack = { effect = "slideDown", time = 500 }
+    myApp.tabBar.isVisible = false
+    myApp.titleBar.logo.isVisible = false
 
 -- <<<<<<< HEAD
 --     if storyboard.getPrevious() == 'acquista2' then
@@ -284,13 +284,8 @@ function scene:enterScene( event )
     elseif storyboard.getPrevious() == 'transiti' then
         myApp.tabBar:setSelected( 1 )
         myApp.titleBar.indietro.scene = 'mappa'
--->>>>>>> FETCH_HEAD
     end
 
-    myApp.titleBar.indietro.optionsBack = { effect = "slideDown", time = 500 }
-
-    myApp.tabBar.isVisible = false
-    myApp.titleBar.logo.isVisible = false
 
     -- print(
     --     myApp.utenti[myApp.utenteLoggato].username ..' '..
