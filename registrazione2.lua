@@ -3,7 +3,7 @@ local scene = storyboard.newScene()
 local widget = require('widget')
 local myApp = require('myapp')
 
-
+widget.setTheme(myApp.theme)
 
 -- funzioni
 local views = {}
@@ -379,7 +379,7 @@ function AvantiScene()
                 cognome = campoInserimentoCognome.text,
                 tipo = 'Non residente'
             }
-            storyboard.gotoScene('riepilogo')
+            storyboard.gotoScene('riepilogo', { effect = "slideLeft", time = 500 } )
         elseif checkRes.isOn then
             myApp.datiUtente = {
                 username = myApp.datiUtente.username,
@@ -388,7 +388,7 @@ function AvantiScene()
                 cognome = campoInserimentoCognome.text,
                 tipo = 'Residente'
             }
-            storyboard.gotoScene('registrazione3')
+            storyboard.gotoScene('registrazione3', { effect = "slideLeft", time = 500 } )
         elseif checkDis.isOn then
             myApp.datiUtente = {
                 username = myApp.datiUtente.username,
@@ -397,7 +397,7 @@ function AvantiScene()
                 cognome = campoInserimentoCognome.text,
                 tipo = 'Disabile'
             }
-            storyboard.gotoScene('registrazione4')
+            storyboard.gotoScene('registrazione4', { effect = "slideLeft", time = 500 } )
         end
 
 	end
@@ -418,6 +418,7 @@ function scene:enterScene( event )
     myApp.titleBar.titleText.text = "Registrazione"
     myApp.titleBar.indietro.isVisible = true
     myApp.titleBar.indietro.scene = "registrazione"
+    myApp.titleBar.indietro.optionsBack = { effect = "slideRight", time = 500 }
     myApp.tabBar.isVisible = false
     myApp.titleBar.accedi.isVisible = false
 

@@ -298,7 +298,7 @@ function registrazioneScene()
         cap = '',
         pass = '',
     }
-    storyboard.gotoScene('registrazione')
+    storyboard.gotoScene('registrazione', { effect = "slideLeft", time = 500 } )
 end
 
 
@@ -341,6 +341,7 @@ function scene:enterScene( event )
 
     myApp.titleBar.titleText.text = "Profilo utente"
     myApp.titleBar.indietro.isVisible = true
+    myApp.titleBar.logo.isVisible = false
     
     if myApp.utenteLoggato == 0 then
         myApp.titleBar.accedi.isVisible = false
@@ -348,14 +349,13 @@ function scene:enterScene( event )
         myApp.titleBar.profilo.isVisible = false
     end
 
-    myApp.titleBar.indietro.scene = storyboard.getPrevious()
+    myApp.titleBar.indietro.scene = myApp.ultimaPagina
 
-    if storyboard.getPrevious() == 'acquista2' then
+    if storyboard.getPrevious() == 'acquista2' or storyboard.getPrevious() == 'paypal' then
         myApp.titleBar.indietro.optionsBack =  { params = { targa = myApp.targaAcquista } }
-    elseif storyboard.getPrevious() == 'registrazione' then
-        myApp.tabBar:setSelected( 1 )
-        myApp.titleBar.indietro.scene = 'mappa'
     end
+
+    myApp.titleBar.indietro.optionsBack = { effect = "slideDown", time = 500 }
 
     myApp.tabBar.isVisible = false
 end

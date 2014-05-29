@@ -64,10 +64,37 @@ function scene:createScene(event)
 
     accesso = math.random(4)
 
-    myApp.targaAcquista = event.params.targa
+    if event.params ~= nil then
+        myApp.targaAcquista = event.params.targa
+    end
+
+    local targaTrovata = false
+
+    local numTarghe = myApp:getNumTarghe()
+
+    for i = 1, numTarghe, 1 do
+        if myApp.targaAcquista == myApp.targhe[i].targa and targaTrovata == false then
+            -- targa presente nel database
+            if myApp.targhe[i].accesso then
+                accesso = 1
+            else
+                accesso = 4
+            end
+            targaTrovata = true
+        end
+    end
+
+    -- controlo se ho trovato la targa nel database
+    -- se non l'ho trovata la aggiungo con true o false
+    if targaTrovata == false then
+        if accesso < 4 then
+            myApp.targhe[numTarghe+1] = { targa = myApp.targaAcquista , accesso = true }
+        else
+            myApp.targhe[numTarghe+1] = { targa = myApp.targaAcquista , accesso = false }
+        end
+    end
 
     schermataAccesso(accesso)
-
 
     if accesso < 4 then
         group:insert(myText)
@@ -177,19 +204,6 @@ end
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 -- Inibisce la doppia selezione dei checkBox
 function checkBoxListener( event )
     if event.target.isOn then
@@ -200,17 +214,6 @@ function checkBoxListener( event )
         end
     end
 end
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -288,86 +291,13 @@ function onRowTouch( event )
     if event.phase == "release" or event.phase == 'tap' then
         -- è il numero della riga della lista che è stato cliccato
         index = event.target.index
-        infoView()
+        if index == 1 then
+            storyboard.gotoScene('info_details', { effect = "slideLeft", time = 500, params = { var = 3 } })
+        else
+            storyboard.gotoScene('info_details', { effect = "slideLeft", time = 500, params = { var = 5 } })
+        end
     end
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function infoView()
-    myApp.titleBar.indietro.isVisible = false
-    if myApp.utenteLoggato == 0 then
-        myApp.titleBar.accedi.isVisible = false
-    else
-        myApp.titleBar.profilo.isVisible = false
-    end
-
-    backgroundInfo = display.newRect(0,0,display.contentWidth, display.contentHeight)
-    backgroundInfo:setFillColor(0.9, 0.9, 0.9)
-    backgroundInfo.x = display.contentCenterX
-    backgroundInfo.y = display.contentCenterY
-
-    ------ instanzio nav bar e bottoni
-    titleBarInfo = display.newImageRect(myApp.topBarBg, display.contentWidth, 50)
-    titleBarInfo.x = display.contentCenterX
-    titleBarInfo.y = 25 + display.topStatusBarContentHeight
-
-    titleTextInfo = display.newText( '', 0, 0, myApp.fontBold, 20 )
-    titleTextInfo:setFillColor(0,0,0)
-    titleTextInfo.x = display.contentCenterX
-    titleTextInfo.y = bgTitle.height * 0.5 + 7
-    if index == 1 then
-        titleTextInfo.text = 'Varchi e orari'
-    else
-        titleTextInfo.text = 'Pagamenti'
-    end
-
-    indietroInfo = widget.newButton({
-        id  = 'BtIndietroInfo',
-        label = 'Indietro',
-        x = display.contentCenterX*0.3,
-        y = bgTitle.height * 0.5 + 7
-        color = { 0.062745,0.50980,0.99607 },
-        fontSize = 18,
-        onRelease = goBackInfo
-    })
-
-    myApp.tabBar.isVisible = false
-
-    -- scrivo le stringhe riferite all'indice
-    myTextInfo = display.newText( strings[index], _W*0.5, _H*0.5, myApp.font, 20 )
-    myTextInfo:setFillColor(0)
-end
-
-function goBackInfo()
-    myTextInfo:removeSelf()
-    indietroInfo:removeSelf()
-    titleTextInfo:removeSelf()
-    titleBarInfo:removeSelf()
-    backgroundInfo:removeSelf()
-    myApp.tabBar.isVisible = true
-    myApp.titleBar.indietro.isVisible = true
-    if myApp.utenteLoggato == 0 then
-        myApp.titleBar.accedi.isVisible = true
-    else
-        myApp.titleBar.profilo.isVisible = true
-    end
-end
-
 
 
 
@@ -385,7 +315,11 @@ end
 
 
 function acquistaTicket()
-
+    if checkGiornaliero.isOn then
+        storyboard.gotoScene('paypal', { effect = "slideLeft", time = 500 , params = { checkbox = 'Giornaliero' } } )
+    else
+        storyboard.gotoScene('paypal', { effect = "slideLeft", time = 500 , params = { checkbox = 'Multiplo' } } )
+    end
 end
 
 
@@ -400,7 +334,9 @@ function scene:enterScene( event )
 
     myApp.titleBar.titleText.text = "Acquista"
     myApp.titleBar.indietro.isVisible = true
+    myApp.titleBar.logo.isVisible = false
     myApp.titleBar.indietro.scene = 'acquista'
+    myApp.titleBar.indietro.optionsBack = { effect = "slideRight", time = 500 }
     if myApp.utenteLoggato == 0 then
         myApp.titleBar.accedi.isVisible = true
     else

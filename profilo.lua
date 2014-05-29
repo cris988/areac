@@ -3,7 +3,7 @@ local scene = storyboard.newScene()
 local widget = require('widget')
 local myApp = require('myapp')
 
-
+widget.setTheme(myApp.theme)
 
 -- funzioni
 local views = {}
@@ -11,10 +11,10 @@ local disconnessione = {}
 local makeList = {}
 local onRowRender = {}
 local onRowTouch = {}
-local menu = {}
 
 
 -- variabili
+local listaInfo
 local disconnetti
 local right_padding = 10
 
@@ -30,20 +30,18 @@ strings[3] = 'Cronologia transiti'
 
 
 
-
 function scene:createScene(event)
     local group = self.view
-
-    print("CREA SCENA ACQUISTA")
+    
+    print("CREA SCENA PROFILO")
 
     local background = display.newRect(0,0,display.contentWidth, display.contentHeight)
-    -- background:setFillColor(0.9, 0.9, 0.9)
-    background:setFillColor( 1 )
+    background:setFillColor(0.9, 0.9, 0.9)
     background.x = display.contentCenterX
     background.y = display.contentCenterY
     group:insert(background)
 
-    disconnetti = widget.newButton({
+    local disconnetti = widget.newButton({
         id  = 'BtAvanti',
         label = 'Disconnetti utente',
         x = _W*0.5,
@@ -53,6 +51,10 @@ function scene:createScene(event)
         onRelease = disconnessione
     })
     group:insert(disconnetti)
+
+
+    makeList()
+    group:insert(listaInfo)
     
 
     -- Nome e Cognome
@@ -83,7 +85,7 @@ function scene:createScene(event)
     group:insert(text1)
 
     local optionsTarga2 = {
-        text = myApp.utenti[myApp.utenteLoggato].targa:upper(),
+        text = myApp.utenti[myApp.utenteLoggato].targa,
         x = _W*0.5,
         y = _H*0.31,
         font = myApp.font,
@@ -98,7 +100,7 @@ function scene:createScene(event)
 
     -- ingressi multipli
     local optionsMulti1 = {
-        text = 'INGRESSI MULTIPLI ACQUISTATI RIMANENTI:',
+        text = 'INGRESSI ACQUISTATI RIMANENTI:',
         x = _W*0.5,
         y = _H*0.37,
         font = myApp.font,
@@ -126,49 +128,45 @@ function scene:createScene(event)
     -- ingressi gratuiti residenti
     if myApp.utenti[myApp.utenteLoggato].tipo == 'Residente' then
        local optionsGratis1 = {
-        text = 'INGRESSI GRATUITI RIMANENTI:',
-        x = _W*0.5,
-        y = _H*0.47,
-        font = myApp.font,
-        fontSize = 13,
-        align = 'center'
-    }
-    local text5 = display.newText( optionsGratis1 )
-    text5:setFillColor( 0, 0, 0 )
-    group:insert(text5)
+            text = 'INGRESSI GRATUITI RIMANENTI:',
+            x = _W*0.5,
+            y = _H*0.47,
+            font = myApp.font,
+            fontSize = 13,
+            align = 'center'
+        }
+        local text5 = display.newText( optionsGratis1 )
+        text5:setFillColor( 0, 0, 0 )
+        group:insert(text5)
 
-    local optionsGratis2 = {
-        text = myApp.utenti[myApp.utenteLoggato].accessi,
-        x = _W*0.5,
-        y = _H*0.51,
-        font = myApp.font,
-        fontSize = 20,
-        align = 'center'
-    }
-    local text6 = display.newText( optionsGratis2 )
-    text6:setFillColor( 0, 0, 0 )
-    group:insert(text6)
- 
+        local optionsGratis2 = {
+            text = myApp.utenti[myApp.utenteLoggato].accessi,
+            x = _W*0.5,
+            y = _H*0.51,
+            font = myApp.font,
+            fontSize = 20,
+            align = 'center'
+        }
+        local text6 = display.newText( optionsGratis2 )
+        text6:setFillColor( 0, 0, 0 )
+        group:insert(text6)
+    else
+        text3.y = _H*0.45 
+        text4.y = _H*0.49
     end
 
 
+<<<<<<< HEAD
 
-    makeList()
+    group:insert(makeList())
+    local lineB = display.newLine( group, 0, _H*0.60, _W, _H*0.60)
+    lineB:setStrokeColor( 0.8, 0.8, 0.8 )
+    local lineE = display.newLine( group, 0, _H*0.856, _W, _H*0.856)
+    lineE:setStrokeColor( 0.8, 0.8, 0.8 )
 
-
-
+=======
+>>>>>>> FETCH_HEAD
 end
-
-
-
-
-
-
-
-
-
-
-
 
 
 -- creo spazio per la lista
@@ -181,7 +179,7 @@ function makeList()
         width = _W,
         onRowRender = onRowRender,
         onRowTouch = onRowTouch,
-        isLocked = true,
+        isLocked = true
     }
     for i = 1, #strings do
 
@@ -200,6 +198,7 @@ function makeList()
             }
         )
     end
+    return listaInfo
 end
 
 
@@ -237,17 +236,21 @@ function onRowTouch( event )
     if event.phase == "release" or event.phase == 'tap' then
         -- è il numero della riga della lista che è stato cliccato
         index = event.target.index
-        menu()
+        if index == 1 then
+            storyboard.gotoScene('dati_utente', { effect = "slideLeft", time = 500 } )
+        elseif index == 2 then
+            storyboard.gotoScene('gestione_targhe', { effect = "slideLeft", time = 500 } )
+<<<<<<< HEAD
+        elseif index == 3 then
+            storyboard.gotoScene('transiti', { effect = "slideLeft", time = 500 } )
+=======
+>>>>>>> FETCH_HEAD
+        end
     end
 end
 
-
-
-
-
-function menu()
-
-end
+<<<<<<< HEAD
+=======
 
 
 
@@ -263,20 +266,11 @@ end
 
 
 
-
+>>>>>>> FETCH_HEAD
 function disconnessione()
     myApp.utenteLoggato = 0
-    myApp.tabBar:setSelected( 1 )
-    storyboard.gotoScene('mappa')
+    storyboard.gotoScene(myApp.ultimaPagina, { effect = "slideDown", time = 500, params = { targa = myApp.targaAcquista } })
 end
-
-
-
-
-
-
-
-
 
 
 function scene:enterScene( event )
@@ -293,24 +287,55 @@ function scene:enterScene( event )
         myApp.titleBar.profilo.isVisible = false
     end
 
-	myApp.titleBar.indietro.scene = storyboard.getPrevious()
+    myApp.titleBar.indietro.scene = myApp.ultimaPagina
 
-    if storyboard.getPrevious() == 'acquista2' then
-        myApp.titleBar.indietro.optionsBack =  { params = { var = myApp.index, targa = myApp.targaAcquista } }
-    elseif storyboard.getPrevious() == 'verificatarga2' then
-        myApp.titleBar.indietro.optionsBack = { params = { var = myApp.index, targa = myApp.targaVerifica } }
-    elseif storyboard.getPrevious() == 'riepilogo' or storyboard.getPrevious() == 'accedi' then
+<<<<<<< HEAD
+-- <<<<<<< HEAD
+--     if storyboard.getPrevious() == 'acquista2' then
+--         myApp.titleBar.indietro.optionsBack =  { params = { var = myApp.index, targa = myApp.targaAcquista } }
+--     elseif storyboard.getPrevious() == 'verificatarga2' then
+--         myApp.titleBar.indietro.optionsBack = { params = { var = myApp.index, targa = myApp.targaVerifica } }
+--     elseif storyboard.getPrevious() == 'riepilogo' or storyboard.getPrevious() == 'accedi' then
+--         myApp.tabBar:setSelected( 1 )
+--         myApp.titleBar.indietro.scene = 'mappa'
+--     elseif storyboard.getPrevious() == 'transiti' then
+--         myApp.tabBar:setSelected( 1 )
+--         myApp.titleBar.indietro.scene = 'mappa'
+-- -- =======
+    if storyboard.getPrevious() == 'transiti' then
         myApp.tabBar:setSelected( 1 )
         myApp.titleBar.indietro.scene = 'mappa'
+-->>>>>>> FETCH_HEAD
+=======
+>>>>>>> FETCH_HEAD
+    if storyboard.getPrevious() == 'acquista2' or storyboard.getPrevious() == 'paypal' then
+        myApp.titleBar.indietro.optionsBack =  { params = { targa = myApp.targaAcquista } }
     end
 
+    myApp.titleBar.indietro.optionsBack = { effect = "slideDown", time = 500 }
+
     myApp.tabBar.isVisible = false
+
+    -- print(
+    --     myApp.utenti[myApp.utenteLoggato].username ..' '..
+    --     myApp.utenti[myApp.utenteLoggato].password ..' '..
+    --     myApp.utenti[myApp.utenteLoggato].nome ..' '..
+    --     myApp.utenti[myApp.utenteLoggato].cognome ..' '..
+    --     myApp.utenti[myApp.utenteLoggato].tipo ..' '..
+    --     myApp.utenti[myApp.utenteLoggato].email ..' '..
+    --     myApp.utenti[myApp.utenteLoggato].cellulare ..' '..
+    --     myApp.utenti[myApp.utenteLoggato].targa ..' '..
+    --     myApp.utenti[myApp.utenteLoggato].targaSelezionata ..' '..
+    --     myApp.utenti[myApp.utenteLoggato].accessi ..' '..
+    --     myApp.utenti[myApp.utenteLoggato].multiplo
+    -- )
 end
 
 function scene:exitScene( event )
     print("ESCI SCENA PROFILO")
 
     myApp.tabBar.isVisible = true
+    myApp.titleBar.logo.isVisible = false
     if myApp.utenteLoggato == 0 then
         myApp.titleBar.accedi.isVisible = true
     else

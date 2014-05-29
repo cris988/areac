@@ -46,7 +46,17 @@ function scene:enterScene( event )
 
     myApp.titleBar.indietro.isVisible = true
     myApp.titleBar.titleText.text = 'Info'
+    myApp.titleBar.logo.isVisible = false
+
     myApp.titleBar.indietro.scene = 'informazioni'
+    myApp.titleBar.indietro.optionsBack = { effect = "slideRight", time = 500 }
+
+    if storyboard.getPrevious() == 'acquista2' then
+        myApp.titleBar.indietro.scene = 'acquista2'
+        myApp.titleBar.indietro.optionsBack = { effect = "slideRight", time = 500, params = { targa = myApp.targaAcquista } }
+    end
+
+    
     if myApp.utenteLoggato == 0 then
         myApp.titleBar.accedi.isVisible = true
     else
