@@ -279,8 +279,8 @@ function AvantiScene()
 
     else
         print(checkbox)
-        if checkbox == 'Multiplo' then
-            if myApp.utenteLoggato > 0 then
+        if myApp.utenteLoggato > 0 then
+            if checkbox == 'Multiplo' then
                 myApp.utenti[myApp.utenteLoggato].multiplo = myApp.utenti[myApp.utenteLoggato].multiplo + 50
             else
                 myApp.utenti[myApp.utenteLoggato].multiplo = myApp.utenti[myApp.utenteLoggato].multiplo + 1
