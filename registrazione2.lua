@@ -49,7 +49,8 @@ function scene:createScene(event)
     local group = self.view
 
 	local background = display.newRect(0,0,display.contentWidth, display.contentHeight)
-	background:setFillColor(0.9, 0.9, 0.9)
+	-- background:setFillColor(0.9, 0.9, 0.9)
+    background:setFillColor( 1 )
     background.x = display.contentCenterX
     background.y = display.contentCenterY
 	group:insert(background)
@@ -245,7 +246,10 @@ end
 
 
 
-
+-- fa il trim della stringa inserita dall'utente
+function trimString( s )
+   return string.match( s,"^()%s*$") and "" or string.match(s,"^%s*(.*%S)" )
+end
 
 
 
@@ -375,8 +379,8 @@ function AvantiScene()
             myApp.datiUtente = {
                 username = myApp.datiUtente.username,
                 password = myApp.datiUtente.password,
-                nome = campoInserimentoNome.text,
-                cognome = campoInserimentoCognome.text,
+                nome = trimString( campoInserimentoNome.text ),
+                cognome = trimString( campoInserimentoCognome.text ),
                 tipo = 'Non residente'
             }
             storyboard.gotoScene('riepilogo', { effect = "slideLeft", time = 500 } )
@@ -384,8 +388,8 @@ function AvantiScene()
             myApp.datiUtente = {
                 username = myApp.datiUtente.username,
                 password = myApp.datiUtente.password,
-                nome = campoInserimentoNome.text,
-                cognome = campoInserimentoCognome.text,
+                nome = trimString( campoInserimentoNome.text ),
+                cognome = trimString( campoInserimentoCognome.text ),
                 tipo = 'Residente'
             }
             storyboard.gotoScene('registrazione3', { effect = "slideLeft", time = 500 } )
@@ -393,8 +397,8 @@ function AvantiScene()
             myApp.datiUtente = {
                 username = myApp.datiUtente.username,
                 password = myApp.datiUtente.password,
-                nome = campoInserimentoNome.text,
-                cognome = campoInserimentoCognome.text,
+                nome = trimString( campoInserimentoNome.text ),
+                cognome = trimString( campoInserimentoCognome.text ),
                 tipo = 'Disabile'
             }
             storyboard.gotoScene('registrazione4', { effect = "slideLeft", time = 500 } )

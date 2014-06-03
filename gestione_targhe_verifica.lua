@@ -39,7 +39,8 @@ function scene:createScene(event)
     print("CREA SCENA GESTIONE TARGHE VERIFICA")
 
     local background = display.newRect(0,0,display.contentWidth, display.contentHeight)
-    background:setFillColor(0.9, 0.9, 0.9)
+    -- background:setFillColor(0.9, 0.9, 0.9)
+    background:setFillColor( 1 )
     background.x = display.contentCenterX
     background.y = display.contentCenterY
     group:insert(background)
@@ -343,7 +344,6 @@ function scene:enterScene( event )
         group:insert(step0(group0))
         myApp.titleBar.indietro.isVisible = true
         myApp.titleBar.indietro.scene = 'gestione_targhe'
-        myApp.titleBar.indietro.optionsBack = { effect = "slideRight", time = 500 }
     else
         group1 = display.newGroup()
         group:insert(step1(group1))

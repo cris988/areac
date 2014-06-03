@@ -12,6 +12,7 @@ local textListenerPass = {}
 local clearListenerPass = {}
 local textListenerPass2 = {}
 local clearListenerPass2 = {}
+local trimString = {}
 local AvantiScene = {}
 
 
@@ -28,6 +29,7 @@ local campoInserimentoPass2
 local sfondoInserimentoPass2
 local btClearPass2
 local avanti
+local textError
 
 
 
@@ -35,10 +37,14 @@ function scene:createScene(event)
     local group = self.view
 
 	local background = display.newRect(0,0,display.contentWidth, display.contentHeight)
-	background:setFillColor(0.9, 0.9, 0.9)
+	-- background:setFillColor(0.9, 0.9, 0.9)
+    background:setFillColor( 1 )
     background.x = display.contentCenterX
     background.y = display.contentCenterY
 	group:insert(background)
+
+    textError = display.newText('',0,0)
+    group:insert(textError)
 
 	-- testo in alto
     local options = {
@@ -114,6 +120,7 @@ function scene:createScene(event)
     campoInserimentoPass.font = native.newFont( myApp.font, 17 )
     campoInserimentoPass.align = "center"
     campoInserimentoPass.hasBackground = false
+    campoInserimentoPass.isSecure = true
     campoInserimentoPass.placeholder = 'Password'
 
 
@@ -146,6 +153,7 @@ function scene:createScene(event)
     campoInserimentoPass2.font = native.newFont( myApp.font, 17 )
     campoInserimentoPass2.align = "center"
     campoInserimentoPass2.hasBackground = false
+    campoInserimentoPass2.isSecure = true
     campoInserimentoPass2.placeholder = 'Ripeti Password'
 
     btClearPass2 = display.newImage('img/delete.png', 10,10)
@@ -180,6 +188,12 @@ function scene:createScene(event)
 
 
 
+end
+
+
+-- fa il trim della stringa inserita dall'utente
+function trimString( s )
+   return string.match( s,"^()%s*$") and "" or string.match(s,"^%s*(.*%S)" )
 end
 
 
@@ -316,8 +330,8 @@ function AvantiScene()
 		if campoInserimentoPass.text == campoInserimentoPass2.text then
 
 			myApp.datiUtente = {
-				username = campoInserimentoUser.text,
-				password = campoInserimentoPass.text,
+				username = trimString( campoInserimentoUser.text ),
+				password = trimString( campoInserimentoPass.text ),
 				-- nome = '',
 	   --  		cognome = '',
 	   --  		email = '',
@@ -327,6 +341,15 @@ function AvantiScene()
 			}
 
 			storyboard.gotoScene('registrazione2', { effect = "slideLeft", time = 500 })
+        else
+            campoInserimentoPass2:setTextColor( 1, 0, 0 )
+            campoInserimentoPass:setTextColor( 1, 0, 0 )
+
+            textError.x = _W*0.5
+            textError.y = _H*0.8
+            textError.fontSize = 12
+            textError.text = 'LE PASSWORD NON CORRISPONDONO'
+            textError:setFillColor( 1, 0, 0 )
 		end
 	end
 end

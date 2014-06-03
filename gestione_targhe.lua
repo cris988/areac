@@ -83,7 +83,7 @@ function scene:createScene(event)
             onRelease =  aggiungiTarga
         })
         aggiungi.anchorX = 0.5
-        aggiungi.isVisible = false    
+        -- aggiungi.isVisible = false    
         group:insert(aggiungi)
     end
 
@@ -158,7 +158,7 @@ function modificaDati()
         end
     end
 
-    aggiungi.isVisible = true
+    -- aggiungi.isVisible = true
     modifica.isVisible = false
     fine.isVisible = true
     myApp.titleBar.indietro.isVisible = false
@@ -174,7 +174,7 @@ function fineModifica()
         end
     end
 
-    aggiungi.isVisible = false
+    -- aggiungi.isVisible = false
     modifica.isVisible = true
     fine.isVisible = false
     myApp.titleBar.indietro.isVisible = true

@@ -36,7 +36,8 @@ function scene:createScene(event)
     print("CREA SCENA PROFILO")
 
     local background = display.newRect(0,0,display.contentWidth, display.contentHeight)
-    background:setFillColor(0.9, 0.9, 0.9)
+    -- background:setFillColor(0.9, 0.9, 0.9)
+    background:setFillColor( 1 )
     background.x = display.contentCenterX
     background.y = display.contentCenterY
     group:insert(background)

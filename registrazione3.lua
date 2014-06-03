@@ -51,7 +51,8 @@ function scene:createScene(event)
     local group = self.view
 
 	local background = display.newRect(0,0,display.contentWidth, display.contentHeight)
-	background:setFillColor(0.9, 0.9, 0.9)
+	-- background:setFillColor(0.9, 0.9, 0.9)
+    background:setFillColor( 1 )
     background.x = display.contentCenterX
     background.y = display.contentCenterY
 	group:insert(background)
@@ -565,11 +566,11 @@ function AvantiScene()
             nome = myApp.datiUtente.nome,
             cognome = myApp.datiUtente.cognome,
             tipo = myApp.datiUtente.tipo,
-            cf = campoInserimentoCf.text,
-            patente = campoInserimentoPatente.text,
-            via = campoInserimentoVia.text,
-            civico = campoInserimentoNum.text,
-            cap = campoInserimentoCap.text,
+            cf = trimString( campoInserimentoCf.text ),
+            patente = trimString( campoInserimentoPatente.text ),
+            via = trimString( campoInserimentoVia.text ),
+            civico = trimString( campoInserimentoNum.text ),
+            cap = trimString( campoInserimentoCap.text ),
         }
 
         storyboard.gotoScene('riepilogo', { effect = "slideLeft", time = 500 } )

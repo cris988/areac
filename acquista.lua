@@ -20,6 +20,7 @@ local titleText
 local campoInserimento
 local sfondoInserimento
 local btClear
+local textError
 
 
 local string = "Da qui puoi acquistare un ticket giornaliero o multiplo per il tuo veicolo"
@@ -37,7 +38,8 @@ function scene:createScene(event)
 	local group = self.view
 
     local background = display.newRect(0,0,display.contentWidth, display.contentHeight)
-    background:setFillColor(0.9, 0.9, 0.9)
+    -- background:setFillColor(0.9, 0.9, 0.9)
+    background:setFillColor( 1 )
     background.x = display.contentCenterX
     background.y = display.contentCenterY
     group:insert(background)
@@ -52,6 +54,9 @@ function scene:createScene(event)
         onRelease = AvantiScene
     })
     group:insert(avanti)
+
+    textError = display.newText('',0,0)
+    group:insert(textError)
     
 
     -- testo in alto
@@ -96,7 +101,7 @@ function scene:createScene(event)
     else 
         campoInserimento.text = myApp.targaAcquista
         campoInserimento:setTextColor( 0 )
-        btClear.alpha = 0.2
+        btClear.alpha = 0.5
         btClear:addEventListener( "touch", clearListener )
     end
 
@@ -158,14 +163,14 @@ function textListener( event )
     if event.phase == "began" then
         if event.target.text == '' then
         else
-            btClear.alpha = 0.2
+            btClear.alpha = 0.5
             btClear:addEventListener( "touch", clearListener )
         end
         campoInserimento:setTextColor( 0 )
     elseif event.phase == "editing" then
         
         if(#event.target.text > 0) then
-            btClear.alpha = 0.2
+            btClear.alpha = 0.5
             btClear:addEventListener( "touch", clearListener )
         else
             btClear.alpha = 0
@@ -185,7 +190,7 @@ function clearListener( event )
     if(event.phase == "began") then
         event.target.alpha = 0.8
     elseif(event.phase == "cancelled") then
-        event.target.alpha = 0.2
+        event.target.alpha = 0.5
     elseif(event.phase == "ended") then
         campoInserimento.text = ''
         native.setKeyboardFocus( campoInserimento )
@@ -205,6 +210,17 @@ function AvantiScene ()
         storyboard.gotoScene('acquista2', { effect = "slideLeft", time = 500, params = { targa = trimString( campoInserimento.text ):upper() } })
     else
        campoInserimento:setTextColor(1,0,0)
+
+        -- testo di errore
+        textError.x = _W*0.5
+        textError.y = _H*0.555
+        textError.fontSize = 12
+        textError.text = 'FORMATO NON CORRETTO'
+        textError:setFillColor( 1, 0, 0 )
+
+        if myApp.utenteLoggato > 0 then
+            textError.y = _H*0.725
+        end
     end
 end
 
@@ -223,6 +239,7 @@ function scene:enterScene( event )
     myApp.titleBar.titleText.text = "Acquista"
     myApp.titleBar.indietro.isVisible = false
     myApp.titleBar.logo.isVisible = true
+    myApp.tabBar.isVisible = true
     if myApp.utenteLoggato == 0 then
         myApp.titleBar.accedi.isVisible = true
     else

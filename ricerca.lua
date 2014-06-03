@@ -34,7 +34,7 @@ function scene:createScene(event)
   -- Sfondo
 
   local background = display.newRect(0,0,display.contentWidth, display.contentHeight)
-  background:setFillColor(1, 1, 1)
+  background:setFillColor( 1 )
   background.x = display.contentCenterX
   background.y = display.contentCenterY
   group:insert(background)

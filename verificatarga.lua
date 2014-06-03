@@ -23,6 +23,7 @@ local step
 local targa
 local group0 
 local group1
+local textError
 
 local string = "Inserisci la targa per controllare se il tuo veicolo è adibito ad accedere all\'area C e con che modalità"
 
@@ -40,7 +41,8 @@ function scene:createScene(event)
 	local group = self.view
 
     local background = display.newRect(0,0,display.contentWidth, display.contentHeight)
-    background:setFillColor(0.9, 0.9, 0.9)
+    -- background:setFillColor(0.9, 0.9, 0.9)
+    background:setFillColor( 1 )
     background.x = display.contentCenterX
     background.y = display.contentCenterY
     group:insert(background)
@@ -82,6 +84,9 @@ function step0(group)
     group:insert(areaT)
 
     group:insert(textTarga())
+
+    textError = display.newText('',0,0)
+    group:insert(textError)
 
     return group
 end
@@ -162,7 +167,7 @@ function textTarga()
     else 
         campoInserimento.text = targa
         campoInserimento:setTextColor( 0 )
-        btClear.alpha = 0.2
+        btClear.alpha = 0.5
         btClear:addEventListener( "touch", clearListener )
     end
 
@@ -189,14 +194,14 @@ function textListener( event )
     if event.phase == "began" then
         if event.target.text == '' then
         else
-            btClear.alpha = 0.2
+            btClear.alpha = 0.5
             btClear:addEventListener( "touch", clearListener )
         end
         campoInserimento:setTextColor( 0 )
     elseif event.phase == "editing" then
         
         if(#event.target.text > 0) then
-            btClear.alpha = 0.2
+            btClear.alpha = 0.5
             btClear:addEventListener( "touch", clearListener )
         else
             btClear.alpha = 0
@@ -216,7 +221,7 @@ function clearListener( event )
     if(event.phase == "began") then
         event.target.alpha = 0.8
     elseif(event.phase == "cancelled") then
-        event.target.alpha = 0.2
+        event.target.alpha = 0.5
     elseif(event.phase == "ended") then
         campoInserimento.text = ''
         native.setKeyboardFocus( campoInserimento )
@@ -270,7 +275,7 @@ end
 
 -- funzioni per pulsanti
 
-function AvantiScene ()
+function AvantiScene (group)
     if campoInserimento.text == '' then
     
     -- controllo se il formato della targa è giusto
@@ -281,7 +286,14 @@ function AvantiScene ()
         targa = trimString( campoInserimento.text ):upper()
         storyboard.reloadScene( )
     else
-       campoInserimento:setTextColor(1,0,0)
+        campoInserimento:setTextColor(1,0,0)
+        
+        -- testo di errore
+        textError.x = _W*0.5
+        textError.y = _H*0.555
+        textError.fontSize = 12
+        textError.text = 'FORMATO NON CORRETTO'
+        textError:setFillColor( 1, 0, 0 )
     end
 end
 

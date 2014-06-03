@@ -34,6 +34,7 @@ local btClearEmail
 local avanti
 local vaiAProfilo
 local myTextInfo
+local textError
 
 
 
@@ -47,7 +48,8 @@ function scene:createScene(event)
     local group = self.view
 
     local background = display.newRect(0,0,display.contentWidth, display.contentHeight)
-    background:setFillColor(0.9, 0.9, 0.9)
+    -- background:setFillColor(0.9, 0.9, 0.9)
+    background:setFillColor( 1 )
     background.x = display.contentCenterX
     background.y = display.contentCenterY
     group:insert(background)
@@ -61,6 +63,9 @@ end
 function step0(group)
 
     print("Verifica Targa Step 0")
+
+    textError = display.newText('',0,0)
+    group:insert(textError)
 
     avanti = widget.newButton({
         id  = 'BtAvanti',
@@ -408,8 +413,20 @@ function AvantiScene()
         campoInserimentoCell.text == '' then
 
     else
-        salvaUtente()
-        storyboard.reloadScene( )
+        if #trimString( campoInserimentoTarga.text ) == 7 and trimString( campoInserimentoTarga.text ):match( '[A-Za-z][A-Za-z][0-9][0-9][0-9][A-Za-z][A-Za-z]' ) then
+            salvaUtente()
+            storyboard.reloadScene( )
+        else
+
+           campoInserimentoTarga:setTextColor(1,0,0)
+
+            -- testo di errore
+            textError.x = _W*0.5
+            textError.y = _H*0.465
+            textError.fontSize = 12
+            textError.text = 'FORMATO NON CORRETTO'
+            textError:setFillColor( 1, 0, 0 )
+        end    
     end
 end
 
@@ -430,27 +447,27 @@ function salvaUtente()
             via = myApp.datiUtente.via,
             civico = myApp.datiUtente.civico,
             cap = myApp.datiUtente.cap,
-            email = campoInserimentoEmail.text,
-            cellulare = campoInserimentoCell.text,
-            targa = campoInserimentoTarga.text:upper(),
+            email = trimString( campoInserimentoEmail.text ),
+            cellulare = trimString( campoInserimentoCell.text ),
+            targa = trimString( campoInserimentoTarga.text ):upper(),
             accessi = 50,
             multiplo = 0,
             targaSelezionata = 1,
         }
         if i+1 == 4 then
-            myApp.targheUtente_4 = { campoInserimentoTarga.text:upper() }
+            myApp.targheUtente_4 = { trimString( campoInserimentoTarga.text ):upper() }
         elseif i+1 == 5 then
-            myApp.targheUtente_5 = { campoInserimentoTarga.text:upper() }
+            myApp.targheUtente_5 = { trimString( campoInserimentoTarga.text ):upper() }
         elseif i+1 == 6 then
-            myApp.targheUtente_6 = { campoInserimentoTarga.text:upper() }
+            myApp.targheUtente_6 = { trimString( campoInserimentoTarga.text ):upper() }
         elseif i+1 == 7 then
-            myApp.targheUtente_7 = { campoInserimentoTarga.text:upper() }
+            myApp.targheUtente_7 = { trimString( campoInserimentoTarga.text ):upper() }
         elseif i+1 == 8 then
-            myApp.targheUtente_8 = { campoInserimentoTarga.text:upper() }
+            myApp.targheUtente_8 = { trimString( campoInserimentoTarga.text ):upper() }
         elseif i+1 == 9 then
-            myApp.targheUtente_9 = { campoInserimentoTarga.text:upper() }
+            myApp.targheUtente_9 = { trimString( campoInserimentoTarga.text ):upper() }
         elseif i+1 == 10 then
-            myApp.targheUtente_10 = { campoInserimentoTarga.text:upper() }
+            myApp.targheUtente_10 = { trimString( campoInserimentoTarga.text ):upper() }
         end
     elseif myApp.datiUtente.tipo == 'Disabile' then
         myApp.utenti[i+1] = {
@@ -460,26 +477,26 @@ function salvaUtente()
             cognome = myApp.datiUtente.cognome,
             tipo = myApp.datiUtente.tipo,
             pass = myApp.datiUtente.pass,
-            email = campoInserimentoEmail.text,
-            cellulare = campoInserimentoCell.text,
-            targa = campoInserimentoTarga.text:upper(),
+            email = trimString( campoInserimentoEmail.text ),
+            cellulare = trimString( campoInserimentoCell.text ),
+            targa = trimString( campoInserimentoTarga.text ):upper(),
             multiplo = 0,
             targaSelezionata = 1,
         }
         if i+1 == 4 then
-            myApp.targheUtente_4 = { campoInserimentoTarga.text:upper() }
+            myApp.targheUtente_4 = { trimString( campoInserimentoTarga.text ):upper() }
         elseif i+1 == 5 then
-            myApp.targheUtente_5 = { campoInserimentoTarga.text:upper() }
+            myApp.targheUtente_5 = { trimString( campoInserimentoTarga.text ):upper() }
         elseif i+1 == 6 then
-            myApp.targheUtente_6 = { campoInserimentoTarga.text:upper() }
+            myApp.targheUtente_6 = { trimString( campoInserimentoTarga.text ):upper() }
         elseif i+1 == 7 then
-            myApp.targheUtente_7 = { campoInserimentoTarga.text:upper() }
+            myApp.targheUtente_7 = { trimString( campoInserimentoTarga.text ):upper() }
         elseif i+1 == 8 then
-            myApp.targheUtente_8 = { campoInserimentoTarga.text:upper() }
+            myApp.targheUtente_8 = { trimString( campoInserimentoTarga.text ):upper() }
         elseif i+1 == 9 then
-            myApp.targheUtente_9 = { campoInserimentoTarga.text:upper() }
+            myApp.targheUtente_9 = { trimString( campoInserimentoTarga.text ):upper() }
         elseif i+1 == 10 then
-            myApp.targheUtente_10 = { campoInserimentoTarga.text:upper() }
+            myApp.targheUtente_10 = { trimString( campoInserimentoTarga.text ):upper() }
         end
     else
         myApp.utenti[i+1] = {
@@ -488,26 +505,26 @@ function salvaUtente()
             nome = myApp.datiUtente.nome,
             cognome = myApp.datiUtente.cognome,
             tipo = myApp.datiUtente.tipo,
-            email = campoInserimentoEmail.text,
-            cellulare = campoInserimentoCell.text,
-            targa = campoInserimentoTarga.text:upper(),
+            email = trimString( campoInserimentoEmail.text ),
+            cellulare = trimString( campoInserimentoCell.text ),
+            targa = trimString( campoInserimentoTarga.text ):upper(),
             multiplo = 0,
             targaSelezionata = 1,
         }
         if i+1 == 4 then
-            myApp.targheUtente_4 = { campoInserimentoTarga.text:upper() }
+            myApp.targheUtente_4 = { trimString( campoInserimentoTarga.text ):upper() }
         elseif i+1 == 5 then
-            myApp.targheUtente_5 = { campoInserimentoTarga.text:upper() }
+            myApp.targheUtente_5 = { trimString( campoInserimentoTarga.text ):upper() }
         elseif i+1 == 6 then
-            myApp.targheUtente_6 = { campoInserimentoTarga.text:upper() }
+            myApp.targheUtente_6 = { trimString( campoInserimentoTarga.text ):upper() }
         elseif i+1 == 7 then
-            myApp.targheUtente_7 = { campoInserimentoTarga.text:upper() }
+            myApp.targheUtente_7 = { trimString( campoInserimentoTarga.text ):upper() }
         elseif i+1 == 8 then
-            myApp.targheUtente_8 = { campoInserimentoTarga.text:upper() }
+            myApp.targheUtente_8 = { trimString( campoInserimentoTarga.text ):upper() }
         elseif i+1 == 9 then
-            myApp.targheUtente_9 = { campoInserimentoTarga.text:upper() }
+            myApp.targheUtente_9 = { trimString( campoInserimentoTarga.text ):upper() }
         elseif i+1 == 10 then
-            myApp.targheUtente_10 = { campoInserimentoTarga.text:upper() }
+            myApp.targheUtente_10 = { trimString( campoInserimentoTarga.text ):upper() }
         end
     end
 

@@ -40,6 +40,8 @@ local textGiornaliero
 local textMultiplo
 local gruppoInfoView
 local index
+local lineA
+local lineB
 
 
 
@@ -57,7 +59,8 @@ function scene:createScene(event)
     myApp.tabBar.isVisible = true
 
     local background = display.newRect(0,0,display.contentWidth, display.contentHeight)
-	background:setFillColor(0.9, 0.9, 0.9)
+	-- background:setFillColor(0.9, 0.9, 0.9)
+    background:setFillColor( 1 )
     background.x = display.contentCenterX
     background.y = display.contentCenterY
 	group:insert(background)
@@ -104,6 +107,8 @@ function scene:createScene(event)
         group:insert(textMultiplo)
         group:insert(listaInfo)
         group:insert(acquista)
+        group:insert(lineA)
+        group:insert(lineB)
     else
         group:insert(myText1)
         group:insert(myText2)
@@ -165,7 +170,11 @@ function schermataAccesso(numero)
 
 
         makeList()
-        
+        lineA = display.newLine( 0, listaInfo.y-listaInfo.height/2, _W, listaInfo.y-listaInfo.height/2 )
+        lineA:setStrokeColor( 0.8, 0.8, 0.8 )
+        lineB = display.newLine( 0, listaInfo.y+listaInfo.height/2, _W, listaInfo.y+listaInfo.height/2 )
+        lineB:setStrokeColor( 0.8, 0.8, 0.8 )
+
 
         acquista = widget.newButton({
             id  = 'BtAcquista',
@@ -229,7 +238,7 @@ function makeList()
     {
         x = _W*0.5,
         y = _H*0.6,
-        height = 100,
+        height = 99,
         width = _W,
         onRowRender = onRowRender,
         onRowTouch = onRowTouch,

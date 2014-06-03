@@ -29,6 +29,7 @@ local makeList = {}
 local right_padding = 10
 local listaInfo
 local locationtxt
+local lineA
 
 local function ignoreTouch( event )
 	return true
@@ -40,10 +41,21 @@ function scene:createScene(event)
     
 	local group = self.view
 
+    -- Sfondo
+    local background = display.newRect(0,0,display.contentWidth, display.contentHeight)
+    -- background:setFillColor(0.9, 0.9, 0.9)
+    background:setFillColor( 1 )
+    background.x = display.contentCenterX
+    background.y = display.contentCenterY
+    group:insert(background)
+
     makeList()
+    lineA = display.newLine( 0, listaInfo.y+listaInfo.height/2, _W, listaInfo.y+listaInfo.height/2 )
+    lineA:setStrokeColor( 0.8, 0.8, 0.8 )
+
 
     group:insert(listaInfo)
-
+    group:insert(lineA)
 end
 
 
@@ -53,7 +65,7 @@ function makeList()
     {
         left = 0,
         top = 70,
-        height = _H-70,
+        height = 350,
         width = _W,
         onRowRender = onRowRender,
         onRowTouch = onRowTouch,
