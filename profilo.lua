@@ -158,7 +158,7 @@ function scene:createScene(event)
 
 
     group:insert(makeList())
-    local lineB = display.newLine( group, 0, _H*0.60, _W, _H*0.60)
+    local lineB = display.newLine( group, 0, _H*0.59505, _W, _H*0.59505)
     lineB:setStrokeColor( 0.8, 0.8, 0.8 )
     local lineE = display.newLine( group, 0, _H*0.856, _W, _H*0.856)
     lineE:setStrokeColor( 0.8, 0.8, 0.8 )
@@ -267,24 +267,9 @@ function scene:enterScene( event )
 
     myApp.titleBar.indietro.scene = myApp.ultimaPagina
 
--- <<<<<<< HEAD
---     if storyboard.getPrevious() == 'acquista2' then
---         myApp.titleBar.indietro.optionsBack =  { params = { var = myApp.index, targa = myApp.targaAcquista } }
---     elseif storyboard.getPrevious() == 'verificatarga2' then
---         myApp.titleBar.indietro.optionsBack = { params = { var = myApp.index, targa = myApp.targaVerifica } }
---     elseif storyboard.getPrevious() == 'riepilogo' or storyboard.getPrevious() == 'accedi' then
---         myApp.tabBar:setSelected( 1 )
---         myApp.titleBar.indietro.scene = 'mappa'
---     elseif storyboard.getPrevious() == 'transiti' then
---         myApp.tabBar:setSelected( 1 )
---         myApp.titleBar.indietro.scene = 'mappa'
--- =======
+
     if storyboard.getPrevious() == 'acquista2' or storyboard.getPrevious() == 'paypal' then
         myApp.titleBar.indietro.optionsBack =  { params = { targa = myApp.targaAcquista } }
-    elseif storyboard.getPrevious() == 'transiti' then
-        myApp.tabBar:setSelected( 1 )
-        myApp.titleBar.indietro.scene = 'mappa'
--->>>>>>> FETCH_HEAD
     end
 
     myApp.titleBar.indietro.optionsBack = { effect = "slideDown", time = 500 }

@@ -52,7 +52,7 @@ function titleBar.new()
 	titleBar.chiudi = widget.newButton({
 	    id  = 'BtChiudi',
 	    label = 'Chiudi',
-	    x = display.contentCenterX*0.3,
+	    x = display.contentCenterX*1.75,
 	    y = bgTitle.height * 0.5 + 7,
 	    color = { 0.062745,0.50980,0.99607 },
 	    fontSize = 18,

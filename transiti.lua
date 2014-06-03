@@ -9,6 +9,7 @@ local myApp = require('myapp')
 local makeList ={}
 
 -- variabili
+local scrollView
 local titles = {"DATA", "TARGA", "IMPORTO"}
 
 
@@ -108,7 +109,10 @@ function scene:createScene(event)
             --     table.insert(transiti, transito)
             -- end
         end
-        makeList(group, transiti) 
+
+        makeList(group, transiti)
+
+
     end
  end
 
@@ -122,7 +126,7 @@ end
 
  function makeList(group, transiti)
 
-    local textX = { 0.15, 0.5, 0.8}
+    local textX = { 0.17, 0.5, 0.85}
     local textY = 0.17 * _H
 	local lineV1X = _W * 0.33
 	local lineV2X = _W * 0.66
@@ -150,7 +154,7 @@ end
 
 	for i = 1, #transiti do
 
-		textY = textY + padding + 5
+		textY = textY + padding + 15
 
 		for j = 1, #transiti[i] do
 	   		transito = display.newText(group, transiti[i][j], 0, 10, myApp.font, 18 )
