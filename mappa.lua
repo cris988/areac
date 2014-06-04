@@ -7,15 +7,9 @@ widget.setTheme(myApp.theme)
 
 
 -- funzioni
-local views = {}
-local accediProfilo = {}
-
 
 -- variabili
-local accedi
-local titleBar
-local titleText
-local locationtxt
+local background = {1,1,1}
 
 local function ignoreTouch( event )
 	return true
@@ -26,23 +20,29 @@ function scene:createScene(event)
 
     print("CREA SCENA MAPPA")
 
-	local group = self.view
+    local group = self.view
 
-    -- if ( system.getInfo( "environment" ) == "simulator" ) then
-    --     local simulatorMessage = "Maps not supported in Corona Simulator.\nYou must build for iOS or Android to test native.newMapView() support."
-    --     local allertMap = display.newText( simulatorMessage, _W*0.1, _H*0.40, _W*0.85, _H*0.4, native.systemFont, 16 )
-    --     allertMap:setFillColor( 1, 0, 0 )
-    --     allertMap.anchorX = 0
-    --     allertMap.anchorY = 0
-    -- end
-    -- group:insert(allertMap)
+    -- Preparo titleBar
+    myApp.titleBar.titleText.text = "Mappa"
+    myApp.titleBar.indietro.isVisible = false
+    myApp.titleBar.logo.isVisible = true
+    
+    myApp.tabBar.isVisible = true
 
+    myApp.tabBar:setSelected(1)
 
+    library.checkLogIn()
 
-    local contornoMappa = display.newRect( group, 0, myApp.titleBar.height -1, _W, _H - myApp.titleBar.height - myApp.tabBar.height)
-    contornoMappa:setFillColor( 0.5, 0.5, 0.5 )
-    contornoMappa.anchorX=0
-    contornoMappa.anchorY=0
+    -- Background
+
+    library.setBackground(group, background )
+
+    -- Finta mappa per corona simulator
+    local mappa = display.newRect( group, 0, myApp.titleBar.height -1, _W, _H - myApp.titleBar.height - myApp.tabBar.height)
+    mappa:setFillColor( 0.5, 0.5, 0.5 )
+    mappa.anchorX=0
+    mappa.anchorY=0
+
 
     if ( system.getInfo( "environment" ) == "simulator" ) then
 
@@ -51,7 +51,7 @@ function scene:createScene(event)
         group:insert(myText)
     end
 
-    myMap = native.newMapView( display.contentCenterX, (_H - myApp.titleBar.height - myApp.tabBar.height) /2 + myApp.titleBar.height -1, _W, _H - myApp.titleBar.height - myApp.tabBar.height)
+    myMap = native.newMapView(display.contentCenterX, (_H - myApp.titleBar.height - myApp.tabBar.height) /2 + myApp.titleBar.height -1, _W, _H - myApp.titleBar.height - myApp.tabBar.height)
 
     if ( myMap ) then
         -- Display a normal map with vector drawings of the streets.
@@ -62,7 +62,7 @@ function scene:createScene(event)
         myMap:setCenter( 45.4640135,9.190618 )
 
 
-        -- -- Fetch the user's current location
+        --Fetch the user's current location
         local currentLocation = myMap:getUserLocation()
         if currentLocation.errorCode then
             -- Current location is unknown if the "errorCode" property is not nil.
@@ -75,6 +75,9 @@ function scene:createScene(event)
             -- Move map so that current location is at the center.
             currentLatitude = currentLocation.latitude
             currentLongitude = currentLocation.longitude
+
+            print("map position latitude: ", currentLatitude)
+            print("map position longitude: ", currentLongitude)
             --myMap:setRegion( currentLatitude, currentLongitude, 0.01, 0.01, true )
         end
 
@@ -172,41 +175,15 @@ function scene:createScene(event)
 end
 
 
-function scene:enterScene( event )
-    print("ENTRA SCENA MAPPA")
+function scene:enterScene( event ) print("ENTRA SCENA MAPPA") end
 
-    -- Preparo titleBar
-    myApp.titleBar.titleText.text = "Mappa"
-    myApp.titleBar.indietro.isVisible = false
-    myApp.titleBar.logo.isVisible = true
-    if myApp.utenteLoggato == 0 then
-        myApp.titleBar.accedi.isVisible = true
-    else
-        myApp.titleBar.profilo.isVisible = true
-    end
-    myApp.tabBar.isVisible = true
-end
+function scene:exitScene( event ) print("ESCI SCENA MAPPA") end
 
-function scene:exitScene( event )
-    print("ESCI SCENA MAPPA")
-end
+function scene:destroyScene( event ) print("DISTRUGGI SCENA MAPPA") end
 
-function scene:destroyScene( event )
-    print("DISTRUGGI SCENA MAPPA")
-end
-
--- "createScene" event is dispatched if scene's view does not exist
 scene:addEventListener( "createScene", scene )
-
--- "enterScene" event is dispatched whenever scene transition has finished
 scene:addEventListener( "enterScene", scene )
-
--- "exitScene" event is dispatched before next scene's transition begins
 scene:addEventListener( "exitScene", scene )
-
--- "destroyScene" event is dispatched before view is unloaded, which can be
--- automatically unloaded in low memory situations, or explicitly via a call to
--- storyboard.purgeScene() or storyboard.removeScene().
 scene:addEventListener( "destroyScene", scene )
 
 return scene

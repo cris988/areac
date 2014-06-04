@@ -1,6 +1,7 @@
 local storyboard = require ('storyboard')
 local widget = require('widget')
 local myApp = require('myapp')
+local library = require('library')
 
 widget.setTheme(myApp.theme)
 
@@ -10,24 +11,18 @@ local scene = storyboard.newScene()
 -- titolo dei menù delle informazioni
 local strings = {}
 strings[1] = 'Cos\'è l\'area C'
-strings[2] = 'informazioni varie'
-strings[3] = 'Varchi e orari'
-strings[4] = 'Veicoli autorizzatti all\'acceso'
-strings[5] = 'Tariffe e metodi di pagamento'
-strings[6] = 'Come cambiare targa'
-strings[7] = 'Come modificare i dati personali'
+strings[2] = 'Varchi e orari'
+strings[3] = 'Veicoli autorizzati all\'acceso'
+strings[4] = 'Titoli di ingresso'
+strings[5] = 'Modalità di pagamento'
+-- strings[6] = 'Come cambiare targa'
+-- strings[7] = 'Come modificare i dati personali'
 
 
 -- funzioni
-local views = {}
-local onRowRender = {}
 local onRowTouch = {}
-local makeList = {}
-
 
 -- variabili
-local right_padding = 10
-local listaInfo
 local locationtxt
 local lineA
 
@@ -41,119 +36,37 @@ function scene:createScene(event)
     
 	local group = self.view
 
-    -- Sfondo
-    local background = display.newRect(0,0,display.contentWidth, display.contentHeight)
-    -- background:setFillColor(0.9, 0.9, 0.9)
-    background:setFillColor( 1 )
-    background.x = display.contentCenterX
-    background.y = display.contentCenterY
-    group:insert(background)
+    -- Preparo titleBar
 
-    makeList()
-    lineA = display.newLine( 0, listaInfo.y+listaInfo.height/2, _W, listaInfo.y+listaInfo.height/2 )
-    lineA:setStrokeColor( 0.8, 0.8, 0.8 )
+    myApp.titleBar.titleText.text = "Informazioni"
+    myApp.titleBar.indietro.isVisible = false
+    myApp.titleBar.logo.isVisible = true
+    
+    library.checkLogIn()
+    
+    myApp.tabBar.isVisible = true
 
+    -- Background
 
-    group:insert(listaInfo)
-    group:insert(lineA)
+    library.setBackground(group, {1, 1, 1})
+
+    group:insert(library.makeList("info", strings, 0, 70, _W, 50 * #strings, 50, true,nil, onRowTouch))
+
 end
-
-
--- creo spazio per la lista
-function makeList()
-    listaInfo = widget.newTableView
-    {
-        left = 0,
-        top = 70,
-        height = 350,
-        width = _W,
-        onRowRender = onRowRender,
-        onRowTouch = onRowTouch,
-        -- listener = scrollListener,
-        isLocked = true
-    }
-    for i = 1, #strings do
-
-        local isCategory = false
-        local rowHeight = 50
-        local rowColor = { default={ 1, 1, 1 }, over={ 1, 0.5, 0, 0.2 } }
-        local lineColor = { 0.8, 0.8, 0.8 }
-
-        -- Insert a row into the listaInfo
-        listaInfo:insertRow(
-            {
-            isCategory = isCategory,
-            rowHeight = rowHeight,
-            rowColor = rowColor,
-            lineColor = lineColor
-            }
-        )
-    end
-end
-
-
--- imposto e riempio le righe della lista
-function onRowRender( event )
-
-    -- Get reference to the row group
-    local row = event.row
-
-    -- Cache the row "contentWidth" and "contentHeight" because the row bounds can change as children objects are added
-    local rowHeight = row.contentHeight
-    local rowWidth = row.contentWidth
-
-    local rowTitle = display.newText( row, strings[row.index], 0, 0, myApp.font, 18 )
-    rowTitle:setFillColor( 0 )
-
-    -- Align the label left and vertically centered
-    rowTitle.anchorX = 0
-    rowTitle.x = 20
-    rowTitle.y = rowHeight * 0.5
-
-    local rowArrow = display.newImage( row, "img/rowArrow.png", false )
-    rowArrow.x = row.contentWidth - right_padding
-    rowArrow.anchorX = 1
-    rowArrow.y = row.contentHeight * 0.5
-end
-
 
 
 -- gestisce le azioni dell'utente sulle righe della lista
 function onRowTouch( event )
     local row = event.target
     if event.phase == "release" or event.phase == 'tap' then
-        -- è il numero della riga della lista che è stato cliccato
-        myApp.index = event.target.index
         storyboard.gotoScene('info_details', { effect = "slideLeft", time = 500, params = { var = event.target.index } })
     end
                 
--- --[[ This part handles the swipe left and right to show and hide the delete button ]]--
---     if (event.phase == "swipeLeft") then
---             transition.to( rowGroup.del, {time=rowGroup.del.transtime,maskX=-rowGroup.del.width/2,onComplete=rowGroup.del.setActive} )
---     elseif (event.phase == "swipeRight") then
---             transition.to( rowGroup.del, {time=rowGroup.del.transtime,maskX=rowGroup.del.width/2,onComplete=rowGroup.del.setInactive} )
---     end
--- --[[ End of delete handling ]]--
- 
---     return true
 end
 
 
------- EVENTI SCENA -------
-
 function scene:enterScene( event )
     print("ENTRA SCENA INFORMAZIONI")
-    
-    -- Preparo titleBar
-
-    myApp.titleBar.titleText.text = "Informazioni"
-    myApp.titleBar.indietro.isVisible = false
-    myApp.titleBar.logo.isVisible = true
-    if myApp.utenteLoggato == 0 then
-        myApp.titleBar.accedi.isVisible = true
-    else
-        myApp.titleBar.profilo.isVisible = true
-    end
 end
 
 function scene:exitScene( event )

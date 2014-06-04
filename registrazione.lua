@@ -30,18 +30,16 @@ local sfondoInserimentoPass2
 local btClearPass2
 local avanti
 local textError
+local background = {1,1,1}
 
 
 
 function scene:createScene(event)
     local group = self.view
 
-	local background = display.newRect(0,0,display.contentWidth, display.contentHeight)
-	-- background:setFillColor(0.9, 0.9, 0.9)
-    background:setFillColor( 1 )
-    background.x = display.contentCenterX
-    background.y = display.contentCenterY
-	group:insert(background)
+    -- Background
+
+    library.setBackground(group, background )
 
     textError = display.newText('',0,0)
     group:insert(textError)

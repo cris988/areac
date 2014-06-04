@@ -2,6 +2,7 @@ local storyboard = require ('storyboard')
 local scene = storyboard.newScene()
 local widget = require('widget')
 local myApp = require('myapp')
+local paypal =require('paypal')
 
 widget.setTheme(myApp.theme)
 
@@ -9,39 +10,22 @@ widget.setTheme(myApp.theme)
 -- funzioni
 local acquistaTicket = {}
 local checkBoxListener = {}
-local makeList = {}
-local onRowRender = {}
 local onRowTouch = {}
-local infoView = {}
-local goBackInfo = {}
-local schermataAccesso = {}
 
 
 -- variabili
 local accedi
 local targa
-local accesso
 local acquista
 local checkGiornaliero
-local checkMultiplo
+local checkMultiplo30
+local checkMultiplo60
 local checkboxSelected = true
 local listaInfo
 local right_padding = 10
-local myTextInfo
-local indietroInfo
-local titleTextInfo
-local titleBarInfo
-local backgroundInfo
-local myText
-local myText1
-local myText2
-local myText3
 local textGiornaliero
-local textMultiplo
-local gruppoInfoView
-local index
-local lineA
-local lineB
+local textMultiplo30
+local textMultiplo60
 
 
 
@@ -50,101 +34,62 @@ local strings = {}
 strings[1] = 'Varchi e orari'
 strings[2] = 'Tariffe e metodi di pagamento'
 
+local importi ={ 5, 30, 60 }
+local ingressi ={ 1, 10, 20 }
+local ingressiR ={ 1, 20, 30 }
+
 
 
 function scene:createScene(event)
+
+
+    print("CREA SCENA ACQUISTA")
+
     local group = self.view
-    print('crea')
+ 
+    -- Preparo titleBar
 
-    myApp.tabBar.isVisible = true
+    myApp.titleBar.titleText.text = "Acquista"
+    myApp.titleBar.logo.isVisible = false
+    myApp.titleBar.indietro.isVisible = true
+    myApp.titleBar.indietro.scene = 'acquista'
+    myApp.titleBar.indietro.optionsBack = { effect = "slideRight", time = 500 }
 
-    local background = display.newRect(0,0,display.contentWidth, display.contentHeight)
-	-- background:setFillColor(0.9, 0.9, 0.9)
-    background:setFillColor( 1 )
-    background.x = display.contentCenterX
-    background.y = display.contentCenterY
-	group:insert(background)
+    myApp.tabBar.isVisible = true  
 
-    accesso = math.random(4)
+    library.checkLogIn()
 
-    if event.params ~= nil then
-        myApp.targaAcquista = event.params.targa
+    -- Background
+
+    library.setBackground(group, {1,1,1})
+
+
+    -- Recupera parametro da verificatarga
+    if myApp.acquisto == nil then
+        myApp.acquisto = {}
+        myApp.acquisto.targa = event.params.targa
     end
 
-    local targaTrovata = false
+    local accesso = library.verificaTarga(myApp.acquisto.targa)
 
-    local numTarghe = myApp:getNumTarghe()
+    if accesso then
 
-    for i = 1, numTarghe, 1 do
-        if myApp.targaAcquista == myApp.targhe[i].targa and targaTrovata == false then
-            -- targa presente nel database
-            if myApp.targhe[i].accesso then
-                accesso = 1
-            else
-                accesso = 4
-            end
-            targaTrovata = true
-        end
-    end
-
-    -- controlo se ho trovato la targa nel database
-    -- se non l'ho trovata la aggiungo con true o false
-    if targaTrovata == false then
-        if accesso < 4 then
-            myApp.targhe[numTarghe+1] = { targa = myApp.targaAcquista , accesso = true }
-        else
-            myApp.targhe[numTarghe+1] = { targa = myApp.targaAcquista , accesso = false }
-        end
-    end
-
-    schermataAccesso(accesso)
-
-    if accesso < 4 then
-        group:insert(myText)
-        group:insert(checkGiornaliero)
-        group:insert(checkMultiplo)
-        group:insert(textGiornaliero)
-        group:insert(textMultiplo)
-        group:insert(listaInfo)
-        group:insert(acquista)
-        group:insert(lineA)
-        group:insert(lineB)
-    else
-        group:insert(myText1)
-        group:insert(myText2)
-        group:insert(myText3)
-    end
-
-
-end
-
-
-function schermataAccesso(numero)
-    -- l'auto può transitare
-    if numero < 4 then
         local options = {
-            text = 'Seleziona il ticket da acquistare per questa targa: '..myApp.targaAcquista,
+            text = 'Seleziona il ticket da acquistare per questa targa: '..myApp.acquisto.targa,
             x = _W*0.5,
             y = 100,
             width = _W - 30,
-            -- height = 300,
             fontSize = 16,
             align = "center"
         }
         myText = display.newText( options )
         myText:setFillColor( 0 )
 
-
-
-
-
-
-
         -- creazione dei checkBox
 
         checkGiornaliero = widget.newSwitch
         {
-           x = _W*0.10,
+           x = _W*0.08,
            y = 190,
            style = "checkbox",
            id = "Giornaliero",
@@ -152,215 +97,144 @@ function schermataAccesso(numero)
            onPress = checkBoxListener
         }
          
-        checkMultiplo = widget.newSwitch
+        checkMultiplo30 = widget.newSwitch
         {
-           x = _W*0.10,
+           x = _W*0.08,
            y = 240,
            style = "checkbox",
-           id = "Multiplo",
+           id = "Multiplo30",
+           initialSwitchState = false,
+           onPress = checkBoxListener
+        }
+
+        checkMultiplo60 = widget.newSwitch
+        {
+           x = _W*0.08,
+           y = 290,
+           style = "checkbox",
+           id = "Multiplo60",
            initialSwitchState = false,
            onPress = checkBoxListener
         }
 
         
-        textGiornaliero = display.newText('Giornaliero                      5 €', _W*0.57, 190, myApp.font, 20)
+        textGiornaliero = display.newText('Giornaliero                       '..importi[1]..' €', _W*0.57, 190, myApp.font, 20)
         textGiornaliero:setFillColor( 0 )
-        textMultiplo = display.newText('Multiplo                         30 €', _W*0.57, 240, myApp.font, 20)
-        textMultiplo:setFillColor( 0 )
+        textMultiplo30 = display.newText('Multiplo da '..ingressi[2]..' ingressi    '..importi[2]..' €', _W*0.57, 240, myApp.font, 20)
+        textMultiplo30:setFillColor( 0 )
+        textMultiplo60 = display.newText('Multiplo da '..ingressi[3]..' ingressi    '..importi[3]..' €', _W*0.57, 290, myApp.font, 20)
+        textMultiplo60:setFillColor( 0 )
 
-
-        makeList()
-        lineA = display.newLine( 0, listaInfo.y-listaInfo.height/2, _W, listaInfo.y-listaInfo.height/2 )
-        lineA:setStrokeColor( 0.8, 0.8, 0.8 )
-        lineB = display.newLine( 0, listaInfo.y+listaInfo.height/2, _W, listaInfo.y+listaInfo.height/2 )
-        lineB:setStrokeColor( 0.8, 0.8, 0.8 )
-
+        info = library.makeList("info", strings, 0, _H * 0.5 +50, _W, 100, 50, true, nil,  onRowTouch)
 
         acquista = widget.newButton({
             id  = 'BtAcquista',
             label = 'Acquista ticket',
             x = _W*0.5,
-            y = _H*0.80,
+            y = _H*0.85,
             color = { 0.062745,0.50980,0.99607 },
             fontSize = 26,
             onRelease = acquistaTicket
         })
         
 
+        group:insert(myText)
+        group:insert(checkGiornaliero)
+        group:insert(checkMultiplo30)
+        group:insert(checkMultiplo60)
+        group:insert(textGiornaliero)
+        group:insert(textMultiplo30)
+        group:insert(textMultiplo60)
+        group:insert(info)
+        group:insert(acquista)
 
-    -- l'auto può transitare
     else
-        myText1 = display.newText( 'Il veicolo con targa '..myApp.targaAcquista,  _W*0.5, (_H*0.5)-25, myApp.font, 20)
-        myText1:setFillColor(0)
-        myText2 = display.newText( '\nNON PUO\' ACCEDERE',  _W*0.5, _H*0.5, myApp.font, 20)
-        myText2:setFillColor(1,0,0)
-        myText3 = display.newText( '\n\nall\'area C',  _W*0.5, (_H*0.5)+25, myApp.font, 20)
-        myText3:setFillColor(0)  
+        line1 = display.newText( 'Il veicolo con targa '..myApp.acquisto.targa,  _W*0.5, (_H*0.5)-25, myApp.font, 20)
+        line1:setFillColor(0)
+        line2 = display.newText( '\nNON PUO\' ACCEDERE',  _W*0.5, _H*0.5, myApp.font, 20)
+        line2:setFillColor(1,0,0)
+        line3 = display.newText( '\n\nall\'area C',  _W*0.5, (_H*0.5)+25, myApp.font, 20)
+        line3:setFillColor(0)  
+
+        group:insert(line1)
+        group:insert(line2)
+        group:insert(line3)
     end
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 -- Inibisce la doppia selezione dei checkBox
 function checkBoxListener( event )
+
     if event.target.isOn then
-        if event.target.id == 'Multiplo' then
+        if event.target.id == 'Multiplo30' then
             checkGiornaliero:setState( { isOn = false } )
-        else
-            checkMultiplo:setState( { isOn = false } )
+            checkMultiplo60:setState( { isOn = false } )
+        elseif event.target.id == 'Multiplo60' then
+                checkGiornaliero:setState( { isOn = false } )
+                checkMultiplo30:setState( { isOn = false } )
+            else 
+                checkMultiplo30:setState( { isOn = false } )
+                checkMultiplo60:setState( { isOn = false } )
+        end
+    else
+        if event.target.id == 'Multiplo30' then
+            checkMultiplo30:setState( { isOn = true } )
+        elseif event.target.id == 'Multiplo60' then
+                checkMultiplo60:setState( { isOn = true } )
+            else 
+                checkGiornaliero:setState( { isOn = true } )
         end
     end
 end
-
-
-
-
-
-
-
-
-
--- creo spazio per la lista
-function makeList()
-    listaInfo = widget.newTableView
-    {
-        x = _W*0.5,
-        y = _H*0.6,
-        height = 99,
-        width = _W,
-        onRowRender = onRowRender,
-        onRowTouch = onRowTouch,
-        isLocked = true,
-    }
-    for i = 1, #strings do
-
-        local isCategory = false
-        local rowHeight = 50
-        -- local rowColor = { default={ 230,230,230 }, over={ 255, 127, 0 } }
-        -- local lineColor = { 220, 220, 220 }
-        local rowColor = { default={ 1, 1, 1 }, over={ 1, 0.5, 0, 0.2 } }
-        local lineColor = { 0.8, 0.8, 0.8 }
-
-        -- Insert a row into the listaInfo
-        listaInfo:insertRow(
-            {
-            isCategory = isCategory,
-            rowHeight = rowHeight,
-            rowColor = rowColor,
-            lineColor = lineColor
-            }
-        )
-    end
-end
-
-
--- imposto e riempio le righe della lista
-function onRowRender( event )
-
-    -- Get reference to the row group
-    local row = event.row
-    local id = row.index
-
-    -- Cache the row "contentWidth" and "contentHeight" because the row bounds can change as children objects are added
-    local rowHeight = row.contentHeight
-    local rowWidth = row.contentWidth
-
-    rowTitle = display.newText( row, strings[row.index], 0, 0, myApp.font, 18 )
-    rowTitle:setFillColor( 0 )
-    rowTitle.anchorX = 0
-    rowTitle.x = 20
-    rowTitle.y = rowHeight * 0.5
-
-    rowArrow = display.newImage( row, "img/rowArrow.png", false )
-    rowArrow.x = row.contentWidth - right_padding
-    rowArrow.anchorX = 1
-    rowArrow.y = row.contentHeight * 0.5
-
-end
-
-
-
-
 
 -- gestisce le azioni dell'utente sulle righe della lista
 function onRowTouch( event )
     local row = event.target
     if event.phase == "release" or event.phase == 'tap' then
-        -- è il numero della riga della lista che è stato cliccato
-        index = event.target.index
-        if index == 1 then
+        if event.target.index == 1 then
             storyboard.gotoScene('info_details', { effect = "slideLeft", time = 500, params = { var = 3 } })
         else
             storyboard.gotoScene('info_details', { effect = "slideLeft", time = 500, params = { var = 5 } })
         end
+        myApp.titleBar.indietro.scene = 'acquista2'
     end
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 function acquistaTicket()
     if checkGiornaliero.isOn then
-        storyboard.gotoScene('paypal', { effect = "slideLeft", time = 500 , params = { checkbox = 'Giornaliero' } } )
+        myApp.acquisto.ticket = 'Giornaliero'
+        myApp.acquisto.ingressi = ingressi[1]
+        myApp.acquisto.importo= importi[1]
+        storyboard.gotoScene('paypal0', { effect = "slideLeft", time = 500 } )
+    elseif checkMultiplo30.isOn then
+        myApp.acquisto.ticket = 'Multiplo'
+        myApp.acquisto.ingressi = ingressi[2]
+        myApp.acquisto.importo= importi[2]
+        storyboard.gotoScene('paypal0', { effect = "slideLeft", time = 500 } )
     else
-        storyboard.gotoScene('paypal', { effect = "slideLeft", time = 500 , params = { checkbox = 'Multiplo' } } )
+        myApp.acquisto.ticket = 'Multiplo'
+        myApp.acquisto.ingressi = ingressi[3]
+        myApp.acquisto.importo= importi[3]
+        storyboard.gotoScene('paypal0', { effect = "slideLeft", time = 500 } )
     end
 end
-
-
-
 
 
 
 function scene:enterScene( event )
-    print("ENTRA SCENA RIEPILOGO")
-    
-    -- Preparo titleBar
-
-    myApp.titleBar.titleText.text = "Acquista"
-    myApp.titleBar.indietro.isVisible = true
-    myApp.titleBar.logo.isVisible = false
-    myApp.titleBar.indietro.scene = 'acquista'
-    myApp.titleBar.indietro.optionsBack = { effect = "slideRight", time = 500 }
-    if myApp.utenteLoggato == 0 then
-        myApp.titleBar.accedi.isVisible = true
-    else
-        myApp.titleBar.profilo.isVisible = true
-    end
-
+    print("ENTRA SCENA ACQUISTA")
+ 
 end
 
 function scene:exitScene( event )
-    print("ESCI SCENA RIEPILOGO")
+    print("ESCI SCENA ACQUISTA")
     
 end
 
 function scene:destroyScene( event )
-    print("DISTRUGGI SCENA RIEPILOGO")
+    print("DISTRUGGI SCENA ACQUISTA")
 end
 
 -- "createScene" event is dispatched if scene's view does not exist

@@ -7,21 +7,12 @@ widget.setTheme(myApp.theme)
 
 
 -- funzioni
-local AvantiScene = {}
 local selezionaTarga = {}
-local textListener = {}
-local clearListener = {}
-local trimString = {}
 
 -- variabili
-local avanti
-local targaReg
-local titleText
-local campoInserimento
-local sfondoInserimento
-local btClear
-local textError
+local txtTarga
 
+myApp.acquisto = {}
 
 local string = "Da qui puoi acquistare un ticket giornaliero o multiplo per il tuo veicolo"
 
@@ -37,12 +28,19 @@ function scene:createScene(event)
 
 	local group = self.view
 
-    local background = display.newRect(0,0,display.contentWidth, display.contentHeight)
-    -- background:setFillColor(0.9, 0.9, 0.9)
-    background:setFillColor( 1 )
-    background.x = display.contentCenterX
-    background.y = display.contentCenterY
-    group:insert(background)
+    -- Preparo titleBar
+
+    myApp.titleBar.titleText.text = "Acquista"
+    myApp.titleBar.indietro.isVisible = false
+    myApp.titleBar.logo.isVisible = true
+    
+    myApp.tabBar.isVisible = true
+
+    library.checkLogIn()
+
+    -- Background
+
+    library.setBackground(group, {1,1,1})
 
     avanti = widget.newButton({
         id  = 'BtAvanti',
@@ -51,7 +49,7 @@ function scene:createScene(event)
         y = _H*0.8,
         color = { 0.062745,0.50980,0.99607 },
         fontSize = 26,
-        onRelease = AvantiScene
+        onRelease = avantiButton
     })
     group:insert(avanti)
 
@@ -73,49 +71,7 @@ function scene:createScene(event)
     text1:setFillColor( 0, 0, 0 )
     group:insert(text1)
 
-
-    -- creazione textArea per targa
-
-    local gruppoInserimento = display.newGroup()
-
-    sfondoInserimento = display.newImageRect('img/textArea.png', 564*0.45, 62*0.6)
-    sfondoInserimento.x = _W*0.5
-    sfondoInserimento.y = _H*0.5
-
-    campoInserimento = native.newTextField( 40, 85, 195, 28)
-    campoInserimento.x = _W/2
-    campoInserimento.y = _H*0.5
-    campoInserimento:setTextColor( 0.75,0.75,0.75 )
-    campoInserimento.font = native.newFont( myApp.font, 17 )
-    campoInserimento.align = "center"
-    campoInserimento.hasBackground = false
-    campoInserimento.placeholder = 'Targa'
-
-    btClear = display.newImage('img/delete.png', 10,10)
-    btClear.x = _W*0.85
-    btClear.y = _H*0.5
-    btClear.alpha = 0
-
-
-    if myApp.targaAcquista == nil then
-    else 
-        campoInserimento.text = myApp.targaAcquista
-        campoInserimento:setTextColor( 0 )
-        btClear.alpha = 0.5
-        btClear:addEventListener( "touch", clearListener )
-    end
-
-    campoInserimento:addEventListener( "userInput", textListener)
-
-    gruppoInserimento:insert(sfondoInserimento)
-    gruppoInserimento:insert(campoInserimento)
-    gruppoInserimento:insert(btClear)
-
-    group:insert(gruppoInserimento)
-    
-
-
-
+    y = 0.5
 
     if myApp.utenteLoggato > 0 then
         
@@ -143,74 +99,27 @@ function scene:createScene(event)
         text2:setFillColor( 0, 0, 0 )
         group:insert(text2)
 
-        sfondoInserimento.y = _H*0.65
-        campoInserimento.y = _H*0.65
-        btClear.y = _H*0.65
-    else    
+        y = 0.65
+    
+    end 
 
-    end
+    txtTarga =library.textArea(_W*0.5, _H*y, 160, 28, {0.75,0.75,0.75}, native.newFont( myApp.font, 17 ), "center", "Targa")
+    group:insert(txtTarga)
 
-
-end
-
--- fa il trim della stringa inserita dall'utente
-function trimString( s )
-   return string.match( s,"^()%s*$") and "" or string.match(s,"^%s*(.*%S)" )
-end
-
---gestisce le fasi dell'inserimento della targa
-function textListener( event )
-    if event.phase == "began" then
-        if event.target.text == '' then
-        else
-            btClear.alpha = 0.5
-            btClear:addEventListener( "touch", clearListener )
-        end
-        campoInserimento:setTextColor( 0 )
-    elseif event.phase == "editing" then
-        
-        if(#event.target.text > 0) then
-            btClear.alpha = 0.5
-            btClear:addEventListener( "touch", clearListener )
-        else
-            btClear.alpha = 0
-            btClear:removeEventListener( "touch", clearListener )
-        end
-    elseif event.phase == "ended" then
-        if event.target.text == '' then
-            btClear.alpha = 0
-            campoInserimento:setTextColor( 0.75,0.75,0.75 )
-
-        end
-    end
-end
-
--- gestisce la comparsa del pulsate clear
-function clearListener( event ) 
-    if(event.phase == "began") then
-        event.target.alpha = 0.8
-    elseif(event.phase == "cancelled") then
-        event.target.alpha = 0.5
-    elseif(event.phase == "ended") then
-        campoInserimento.text = ''
-        native.setKeyboardFocus( campoInserimento )
-        btClear.alpha = 0
-        btClear:removeEventListener( "touch", clearListener )
-    end
 end
 
 -- funzioni per pulsanti
 
-function AvantiScene ()
-    if campoInserimento.text == '' then
+function avantiButton ()
+    if txtTarga.campo.text == '' then
     
     -- controllo se il formato della targa è giusto
-    elseif #campoInserimento.text == 7 and campoInserimento.text:match( '[A-Za-z][A-Za-z][0-9][0-9][0-9][A-Za-z][A-Za-z]' ) then
+    elseif #txtTarga.campo.text == 7 and txtTarga.campo.text:match( '[A-Za-z][A-Za-z][0-9][0-9][0-9][A-Za-z][A-Za-z]' ) then
         -- passo la targa come parametro facendogli il trim e l'upperCase
-        storyboard.gotoScene('acquista2', { effect = "slideLeft", time = 500, params = { targa = trimString( campoInserimento.text ):upper() } })
+        myApp.acquisto.targa = library.trimString( txtTarga.campo.text ):upper()
+        storyboard.gotoScene('acquista2', { effect = "slideLeft", time = 500 })
     else
-       campoInserimento:setTextColor(1,0,0)
-
+       txtTarga.campo:setTextColor(1,0,0)
         -- testo di errore
         textError.x = _W*0.5
         textError.y = _H*0.555
@@ -230,21 +139,8 @@ function selezionaTarga()
 end
 
 
-
 function scene:enterScene( event )
     print("ENTRA SCENA ACQUISTA")
-    
-    -- Preparo titleBar
-
-    myApp.titleBar.titleText.text = "Acquista"
-    myApp.titleBar.indietro.isVisible = false
-    myApp.titleBar.logo.isVisible = true
-    myApp.tabBar.isVisible = true
-    if myApp.utenteLoggato == 0 then
-        myApp.titleBar.accedi.isVisible = true
-    else
-        myApp.titleBar.profilo.isVisible = true
-    end
 end
 
 function scene:exitScene( event )

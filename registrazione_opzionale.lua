@@ -35,6 +35,8 @@ local avanti
 local vaiAProfilo
 local myTextInfo
 local textError
+local background = {1,1,1}
+
 
 
 
@@ -47,12 +49,10 @@ function scene:createScene(event)
     print("CREA SCENA VERIFICA")
     local group = self.view
 
-    local background = display.newRect(0,0,display.contentWidth, display.contentHeight)
-    -- background:setFillColor(0.9, 0.9, 0.9)
-    background:setFillColor( 1 )
-    background.x = display.contentCenterX
-    background.y = display.contentCenterY
-    group:insert(background)
+
+    -- Background
+
+    library.setBackground(group, background )
 
     step = 0
 end

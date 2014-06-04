@@ -2,12 +2,12 @@ local storyboard = require( "storyboard" )
 local scene = storyboard.newScene()
 local widget = require('widget')
 local myApp = require('myapp')
+local library = require('library')
 
 
 
 -- funzioni
 local newTitle = {}
-local makeList = {}
 local retrieveData = {}
 
 -- variabili
@@ -18,12 +18,7 @@ local periodoTable
 local title
 local scrollView 
 myApp.ricerca = {}
--- local xRadio = 0.1
--- local yRadio = 0.25
-
-
-
-
+local background = {1,1,1}
 
 function scene:createScene(event)
 
@@ -31,21 +26,23 @@ function scene:createScene(event)
 
   local group = self.view
 
-  -- Sfondo
 
-  local background = display.newRect(0,0,display.contentWidth, display.contentHeight)
-  background:setFillColor( 1 )
-  background.x = display.contentCenterX
-  background.y = display.contentCenterY
-  group:insert(background)
+  -- Background
+
+  library.setBackground(group, background )
+  
+  -- Preparo titleBar
+
+  myApp.titleBar.titleText.text = "Ricerca"
+  myApp.titleBar.indietro.isVisible = true
+  myApp.titleBar.profilo.isVisible = false
+  myApp.titleBar.ricerca.isVisible = false
+  myApp.titleBar.cerca.isVisible = true
+  myApp.titleBar.indietro.scene = storyboard.getPrevious()
+
+  myApp.tabBar.isVisible = false
 
   -- Contenuto
-
-  -- Soluzione con Switch Radio
-  -- for i = 1, #targhe do
-  -- 	optionsRadio(targhe[i], "prova", group)
-  	-- end
-
 
   myApp.ricerca = {}
 
@@ -59,38 +56,53 @@ function scene:createScene(event)
       scrollHeight = _H,
       bottomPadding = 100,
       horizontalScrollDisabled = true,
-
+      hideBackground = true
   }
 
+  local options = {
+        text = "Seleziona i criteri per la ricerca",
+        x = _W*0.5,
+        y = _H*0.175,
+        font = myApp.font,
+        fontSize = 20,
+        align = "center",
+        width = _W
+    }
+  local areaT = display.newText( options )
+  areaT:setFillColor( 0, 0, 0 )
+  group:insert(areaT)
 
-  local y = 0
+
+  local y = 0.13 * _H
+  local x = 0.05 * _W
   local padding = 20
 
   -- Primo blocco Targhe
 
-  y = y + padding
 
+  title = newTitle("Targa", x, y, _W, 40)
 
-  title = newTitle("Targa", 0.1 * _W, y)
 
   local targhe = retrieveData(2)
-  local height = 50 * #targhe
-  y = y + padding + 22
-  targheTable = makeList("t", targhe, 1, 0, y, _W, height, 50)
+  order(targhe)
+  local height = 40 * #targhe
+  y = y + 40
+  targheTable = library.makeList("t", targhe, 0, y, _W, height, 40, false, onRowRender, onRowTouch)
   y = y + height
 
   scrollView:insert(title)
   scrollView:insert(targheTable)
-  -- Secondo blocco Periodo
+  
+  --Secondo blocco Periodo
 
   y = y + padding
 
-  title = newTitle("Periodo", 0.1 * _W, y)
+  title = newTitle("Periodo", x, y, _W, 40)
 
-  local periodo = { 10, 20, 30} 
-  local height = 50 * #periodo
-  y = y + padding  +22
-  periodoTable = makeList("p", periodo, 2, 0, y, _W, height, 50)
+  local periodo = { "Ultimi 10 giorni", "Ultimi 20 giorni", "Ultimi 30 giorni"} 
+  local height = 40 * #periodo
+  y = y + 40
+  periodoTable = library.makeList("p", periodo, 0, y, _W, height, 40, false, onRowRender, onRowTouch)
   y = y + height
 
   scrollView:insert(title)
@@ -100,12 +112,13 @@ function scene:createScene(event)
 
   y = y + padding
 
-  title = newTitle("Importo", 0.1 * _W, y)
+  title = newTitle("Importo", x, y, _W, 40)
 
   local importo = retrieveData(3)
-  local height = 50 * #importo
-  y = y + padding+22
-  importoTable = makeList("i", importo, 3, 0, y, _W, height, 50)
+  order(importo)
+  local height = 40 * #importo
+  y = y + 40
+  importoTable = library.makeList("i", importo, 0, y, _W, height, 40, false, onRowRender, onRowTouch)
 
   scrollView:insert(title)
   scrollView:insert(importoTable)
@@ -115,69 +128,10 @@ function scene:createScene(event)
 
 end
 
-function makeList(name, values, id, x, y, width, height, rowHeight) 
-
-	local group = display.newGroup( )
-
-	local tableView = widget.newTableView
-	{
-	    x = x,
-	    y = y,
-	    id = id,
-	    height = height,
-	    width = width,
-	    isLocked = true,
-	    onRowRender = onRowRender,
-	    onRowTouch = onRowTouch,
-	    id = name
-	}
-
-	for i = 1, #values do
-	    -- Insert a row into the listaInfo
-	    tableView:insertRow(
-	    {
-	        isCategory = false,
-	        rowHeight = rowHeight,
-	        params = {
-	        	value = values[i],
-	   		}
-	    })
-
-	end
-
-	tableView.anchorX = 0
-	tableView.anchorY = 0
-
-	group:insert(tableView)
-
-  local lineA = display.newLine( group, x, y, width, y)
-  lineA:setStrokeColor( 0.8, 0.8, 0.8 )
-  local lineB = display.newLine( group, x, y + tableView.height - 1, width, y + tableView.height - 1)
-  lineB:setStrokeColor( 0.8, 0.8, 0.8 )
-
-    return group
-end
-
-function onRowRender( event )
-
-    -- Get reference to the row group
-    local row = event.row
-
-    -- Cache the row "contentWidth" and "contentHeight" because the row bounds can change as children objects are added
-    local rowHeight = row.contentHeight
-    local rowWidth = row.contentWidth
-
-    local rowTitle = display.newText(row, row.params.value,  0, 0, myApp.font, 18 )
-    rowTitle:setFillColor( 0 )
-
-    -- Align the label left and vertically centered
-    rowTitle.anchorX = 0
-    rowTitle.x = 20
-    rowTitle.y = rowHeight * 0.5
-end
-
 function onRowTouch( event )    
     local row = event.target
+
+    -- Disabilita le altre righe
 
     if event.phase == "release" or event.phase == 'tap' then
   		row._cell:setFillColor( 0.062745,0.50980,0.99607 )
@@ -190,65 +144,68 @@ function onRowTouch( event )
     end
  end
 
-function newTitle(text, x, y)
+function onRowRender( event )
+
+    -- Get reference to the row group
+    local row = event.row
+
+    -- Cache the row "contentWidth" and "contentHeight" because the row bounds can change as children objects are added
+    local rowHeight = row.contentHeight
+    local rowWidth = row.contentWidth
+
+    local rowTitle = display.newText( row, row.params.value, 0, 0, myApp.font, 18 )
+    rowTitle:setFillColor( 0 )
+
+    rowTitle.anchorX = 0
+    rowTitle.x = 20
+    rowTitle.y = rowHeight * 0.5
+
+    if row.params.arrow == true then
+
+      local rowArrow = display.newImage( row, "img/rowArrow.png", false )
+      rowArrow.x = row.contentWidth - 20
+      rowArrow.anchorX = 1
+      rowArrow.y = row.contentHeight * 0.5
+
+    end
+end
+
+function newTitle(text, x, y, width, height)
+
+  local group = display.newGroup( )
+
+  bg = display.newRect( 0, y, width, height)
+  bg.anchorX =0
+  bg.anchorY = 0
+  bg:setFillColor( 0.95,0.95,0.95 )
+
 	-- Stampo titoli sezioni
 	local title = display.newText
 	{
         text = text,
-        x = x,
-        y = y,
+        x = 20,
+        y = y + 5,
         font = myApp.font,
         fontSize = 22,
         align = "left",
-        width= 80
+        width = 80,
+        height = 0
     }
     title:setFillColor( 0, 0, 0 )
     title.anchorX = 0
     title.anchorY = 0
-    return title
 
+    group:insert(bg)
+    group:insert(title)
+
+    return group
 end
-
--- function optionsRadio(text, id, group)
--- 	local diametro = 20
--- 	radio = widget.newSwitch
---     {
---        width = diametro,
---        height = diametro,
---        x = _W * xRadio,
---        y = _H * yRadio,
---        style = "radio",
---        id = id,
---        initialSwitchState = false,
---     }
---     radio.anchorX = 0
---     radio.anchorY = 0
---     group:insert(radio)
-
---     local text = display.newText
--- 	{
---         text = text,
---         x = _W * xRadio + diametro,
---         y = _H * yRadio,
---         font = myApp.font,
---         fontSize = 18,
---         align = "left",
---         width= 80,
---         id = id
---     }
---     text:setFillColor( 0, 0, 0 )
---     text.anchorX = 0
---     text.anchorY = 0
---     group:insert(text)
-
---     xRadio = xRadio + 0.3
--- end
 
 function retrieveData(index)
 	-- Recupero valori unici
 	local uniqueValues = {}
 	local valori = {}
-	local utente = myApp.transiti[1]
+	local utente = myApp.transiti[myApp.utenteLoggato]
 
 	--Manca l'utente
 	for i = 1, #utente do
@@ -263,20 +220,13 @@ function retrieveData(index)
 	return valori
 end
 
+function order(values)
+    table.sort(values)
+end
+
 
 function scene:enterScene( event )
     print("ENTRA SCENA RICERCA")
-
-    -- Preparo titleBar
-
-    myApp.titleBar.titleText.text = "Ricerca"
-    myApp.titleBar.indietro.isVisible = true
-    myApp.titleBar.profilo.isVisible = false
-    myApp.titleBar.ricerca.isVisible = false
-    myApp.titleBar.cerca.isVisible = true
-    myApp.titleBar.indietro.scene = storyboard.getPrevious()
-
-    myApp.tabBar.isVisible = false
 end
 
 function scene:exitScene( event )

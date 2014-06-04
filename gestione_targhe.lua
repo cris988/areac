@@ -32,12 +32,9 @@ function scene:createScene(event)
 
     print("CREA SCENA GESTIONE TARGHE")
 
-    local background = display.newRect(0,0,display.contentWidth, display.contentHeight)
-    -- background:setFillColor(0.9, 0.9, 0.9)
-    background:setFillColor( 1 )
-    background.x = display.contentCenterX
-    background.y = display.contentCenterY
-    group:insert(background)
+    -- Background
+
+    library.setBackground(group, {1,1,1})
 
     numTargheIniz = myApp:getNumTargheUtente(myApp.utenteLoggato)
 
@@ -294,7 +291,7 @@ function onRowTouch( event )
         local row = event.target
         if event.phase == "release" or event.phase == 'tap' then
             local funzioneTargheUtente = myApp:getTargheUtente(myApp.utenteLoggato)
-            myApp.targaAcquista = funzioneTargheUtente[event.target.index]
+            myApp.acquisto.targa = funzioneTargheUtente[event.target.index]
             storyboard.gotoScene('acquista2', { effect = "slideLeft", time = 500 })
         end
     end

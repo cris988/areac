@@ -25,7 +25,8 @@ local btClearCell
 local campoInserimentoEmail
 local sfondoInserimentoEmail
 local btClearEmail
-
+local group0
+local group1
 
 
 
@@ -36,12 +37,9 @@ function scene:createScene(event)
 
     print("CREA SCENA DATI UTENTE")
 
-    local background = display.newRect(0,0,display.contentWidth, display.contentHeight)
-    -- background:setFillColor(0.9, 0.9, 0.9)
-    background:setFillColor( 1 )
-    background.x = display.contentCenterX
-    background.y = display.contentCenterY
-    group:insert(background)
+    -- Background
+
+    library.setBackground(group, {1,1,1})
 
     step = 0
 end

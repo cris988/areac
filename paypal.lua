@@ -1,71 +1,58 @@
 local storyboard = require( "storyboard" )
-local scene = storyboard.newScene()
 local widget = require('widget')
 local myApp = require('myapp')
 
 widget.setTheme(myApp.theme)
 
--- funzioni
-local textListenerUser = {}
-local clearListenerUser = {}
-local textListenerPass = {}
-local clearListenerPass = {}
-local AvantiScene = {}
+-- Scene 
+local paypal0 = storyboard.newScene("paypal0")
+local paypal1 = storyboard.newScene("paypal1")
+local paypal2 = storyboard.newScene("paypal2")
+
+-- Funzioni
+local avantiButton = {}
 local fineAcquisto = {}
-local step0 = {}
-local step1 = {}
 
-
--- variabili
-local titleText
-local campoInserimentoUser
-local sfondoInserimentoUser
-local btClearUser
-local campoInserimentoPass
-local sfondoInserimentoPass
-local btClearPass
-local avanti
-local fine
-local checkbox
+-- Variabili
+local background = {1,1,1}
 
 
 
-function scene:createScene(event)
+function paypal0:createScene(event)
+
+    -- Scena di inserimento dati PayPal
+
     print("CREA SCENA PAYPAL")
 
     local group = self.view
+    
+    myApp.titleBar.titleText.text = "PayPal"
+    myApp.titleBar.logo.isVisible = false
+    myApp.titleBar.indietro.isVisible = true
+    myApp.titleBar.indietro.scene = 'acquista2'
+    myApp.titleBar.indietro.optionsBack = { effect = "slideRight", time = 500 }
 
-	local background = display.newRect(0,0,display.contentWidth, display.contentHeight)
-	-- background:setFillColor(0.9, 0.9, 0.9)
-    background:setFillColor( 1 )
-    background.x = display.contentCenterX
-    background.y = display.contentCenterY
-	group:insert(background)
+    myApp.tabBar.isVisible = true
 
-    checkbox = event.params.checkbox
+    library.checkLogIn()
 
-    step = 0
+    -- Background
 
-end
+    library.setBackground(group, background )
 
--- Gestisce il primo step
+    print("Paypal Step 0")
 
-function step0(group)
-
-    print("Verifica Targa Step 0")
-
-    avanti = widget.newButton({
-        id  = 'BtCompleta',
-        label = 'Completa acquisto',
+    riepilogo = widget.newButton({
+        id  = 'BtRiepilogo',
+        label = 'Prosegui',
         x = _W*0.5,
         y = _H*0.8,
         color = { 0.062745,0.50980,0.99607 },
         fontSize = 26,
         font = myApp.font,
-        onRelease = AvantiScene
+        onRelease = riepilogoButton
     })
-    group:insert(avanti)
-
+    group:insert(riepilogo)
 
 
 	-- testo in alto
@@ -83,93 +70,115 @@ function step0(group)
     group:insert(areaT)
 
 
+    txtUser = library.textArea(_W*0.5, _H*0.35, 195, 28, {0.75,0.75,0.75}, native.newFont( myApp.font, 17 ), "center", "Username")
+    txtPass = library.textArea(_W*0.5, _H*0.5, 195, 28, {0.75,0.75,0.75}, native.newFont( myApp.font, 17 ), "center", "Password")
+
+    group:insert(txtUser)
+    group:insert(txtPass)
 
 
-    -- creazione textArea per Username
+end
 
-    local gruppoInserimentoUser = display.newGroup()
+function paypal1:createScene(event)
 
-    sfondoInserimentoUser = display.newImageRect('img/textArea.png', 564*0.45, 62*0.6)
-    sfondoInserimentoUser.x = _W*0.5
-    sfondoInserimentoUser.y = _H*0.35
+    -- Scena di riepilogo acquisto Paypal
+    
+    local group = self.view
 
-    campoInserimentoUser = native.newTextField( 40, 85, 195, 28)
-    campoInserimentoUser.x = _W/2
-    campoInserimentoUser.y = _H*0.35
-    campoInserimentoUser:setTextColor( 0.75,0.75,0.75 )
-    campoInserimentoUser.font = native.newFont( myApp.font, 17 )
-    campoInserimentoUser.align = "center"
-    campoInserimentoUser.hasBackground = false
-    campoInserimentoUser.placeholder = 'Username'
+    myApp.titleBar.titleText.text = "PayPal"
+    myApp.titleBar.logo.isVisible = false
+    myApp.titleBar.indietro.isVisible = true
+    myApp.titleBar.indietro.scene = 'paypal0'
+    myApp.titleBar.indietro.optionsBack = { effect = "slideRight", time = 500 }
 
-    btClearUser = display.newImage('img/delete.png', 10,10)
-    btClearUser.x = _W*0.85
-    btClearUser.y = _H*0.35
-    btClearUser.alpha = 0
+    myApp.tabBar.isVisible = true
+    
+    library.checkLogIn()
 
-    gruppoInserimentoUser:insert(sfondoInserimentoUser)
-    gruppoInserimentoUser:insert(campoInserimentoUser)
-    gruppoInserimentoUser:insert(btClearUser)
+    -- Background
 
-    campoInserimentoUser:addEventListener( "userInput", textListenerUser)
+    library.setBackground(group, background)
 
+    print("Paypal Step 1")
+    print( myApp.acquisto.user)
 
+    local options ={
+        parent = group,
+        text = 'Stai effettuando il pagamento con l\'account\n\n'..
+                        myApp.acquisto.user:upper()..
+                        '\n\nper l\'acquisto di un ticket '..myApp.acquisto.ticket..' da '..myApp.acquisto.ingressi..' ingressi '..
+                        ' di '..myApp.acquisto.importo..'€'..
+                        '\n\nsull\'autovettura targata\n'..myApp.acquisto.targa:upper(),
+        x = _W * 0.5,
+        y = _H * 0.5,
+        width = _W * 0.8,
+        height = 400,
+        font = myApp.font,
+        fontSize = 20,
+        align = 'center'
+    }
 
+    local areaT = display.newText(options)
+    areaT:setFillColor(0)
 
-    -- creazione textArea per Password
+    completa = widget.newButton({
+        id  = 'BtCompleta',
+        label = 'Completa acquisto',
+        x = _W*0.5,
+        y = _H*0.8,
+        color = { 0.062745,0.50980,0.99607 },
+        fontSize = 26,
+        onRelease = completaButton
+    })
+    group:insert(completa)
 
-    local gruppoInserimentoPass = display.newGroup()
-
-    sfondoInserimentoPass = display.newImageRect('img/textArea.png', 564*0.45, 62*0.6)
-    sfondoInserimentoPass.x = _W*0.5
-    sfondoInserimentoPass.y = _H*0.5
-
-    campoInserimentoPass = native.newTextField( 40, 85, 195, 28)
-    campoInserimentoPass.x = _W/2
-    campoInserimentoPass.y = _H*0.5
-    campoInserimentoPass:setTextColor( 0.75,0.75,0.75 )
-    campoInserimentoPass.font = native.newFont( myApp.font, 17 )
-    campoInserimentoPass.align = "center"
-    campoInserimentoPass.hasBackground = false
-    campoInserimentoPass.placeholder = 'Password'
-
-    btClearPass = display.newImage('img/delete.png', 10,10)
-    btClearPass.x = _W*0.85
-    btClearPass.y = _H*0.5
-    btClearPass.alpha = 0
-
-    gruppoInserimentoPass:insert(sfondoInserimentoPass)
-    gruppoInserimentoPass:insert(campoInserimentoPass)
-    gruppoInserimentoPass:insert(btClearPass)
-
-    campoInserimentoPass:addEventListener( "userInput", textListenerPass)
-
-
-
-    group:insert(gruppoInserimentoUser)
-    group:insert(gruppoInserimentoPass)
-
-
-    return group
 end
 
 
+function paypal2:createScene(event)
 
+    -- Scena conferma acquisto
 
+    local group = self.view
 
--- Gestisce il secondo step di Verifica Targa
+    myApp.titleBar.titleText.text = "PayPal"
+    myApp.titleBar.logo.isVisible = false
+    myApp.titleBar.indietro.isVisible = false
+    myApp.titleBar.indietro.scene = 'paypal1'
 
-function step1(group)
+    myApp.tabBar.isVisible = true
+    
+    library.checkLogIn()
+
+    -- Background
+
+    library.setBackground(group, background)
+
    
-    print("Verifica Targa Step 1")
+    print("Paypal Step 2")
 
-    local myText1 = display.newText( 'Il pagamento è stato',  _W*0.5, _H*0.45, myApp.font, 20)
+    local myText1 = display.newText( 'Il pagamento è stato',  _W*0.5, _H*0.35, myApp.font, 20)
     myText1:setFillColor(0)
-    local myText2 = display.newText( 'COMPLETATO',  _W*0.5, _H*0.5, myApp.font, 22)
+    local myText2 = display.newText( 'COMPLETATO',  _W*0.5, _H*0.4, myApp.font, 22)
     myText2:setFillColor(0.1333,0.54509,0.13334)
+
+    local options = {
+        text = 'Riceverai un email di conferma dell\'ordine',
+        x = _W*0.5,
+        y = _H*0.7,
+        width = _W * 0.9,
+        height = 70,
+        font = myApp.font,
+        fontSize = 20,
+        align = 'center'
+    }
+
+    local myText3 = display.newText( options)
+    myText3:setFillColor(0)
 
     group:insert(myText1)
     group:insert(myText2)
+    group:insert(myText3)
 
     fine = widget.newButton({
         id  = 'BtFine',
@@ -178,211 +187,56 @@ function step1(group)
         y = _H*0.8,
         color = { 0.062745,0.50980,0.99607 },
         fontSize = 26,
-        onRelease = fineAcquisto
+        onRelease = function () storyboard.gotoScene( 'mappa' ) end
     })
     group:insert(fine)
 
-    return group
 end
 
 
-
-
-
---gestisce le fasi dell'inserimento dell'Username
-function textListenerUser( event )
-    if event.phase == "began" then
-        if event.target.text == '' then
-        else
-            btClearUser.alpha = 0.2
-            btClearUser:addEventListener( "touch", clearListenerUser )
-        end
-        campoInserimentoUser:setTextColor( 0 )
-    elseif event.phase == "editing" then
-        
-        if(#event.target.text > 0) then
-            btClearUser.alpha = 0.2
-            btClearUser:addEventListener( "touch", clearListenerUser )
-        else
-            btClearUser.alpha = 0
-            btClearUser:removeEventListener( "touch", clearListenerUser )
-        end
-    elseif event.phase == "ended" then
-        if event.target.text == '' then
-            btClearUser.alpha = 0
-            campoInserimentoUser:setTextColor( 0.75,0.75,0.75 )
-
-        end
+function riepilogoButton()
+    if txtUser.campo.text ~= '' or txtPass.campo.text ~= '' then
+        myApp.acquisto.user = txtUser.campo.text
+        storyboard.gotoScene('paypal1', { effect = "slideLeft", time = 500 } )
     end
 end
 
--- gestisce la comparsa del pulsate clear
-function clearListenerUser( event ) 
-    if(event.phase == "began") then
-        event.target.alpha = 0.8
-    elseif(event.phase == "cancelled") then
-        event.target.alpha = 0.2
-    elseif(event.phase == "ended") then
-        campoInserimentoUser.text = ''
-        native.setKeyboardFocus( campoInserimentoUser )
-        btClearUser.alpha = 0
-        btClearUser:removeEventListener( "touch", clearListenerUser )
+function completaButton()
+    if myApp.acquisto.ticket == 'Multiplo' and myApp.utenteLoggato > 0 then
+        myApp.utenti[myApp.utenteLoggato].multiplo = myApp.utenti[myApp.utenteLoggato].multiplo + myApp.acquisto.ingressi
     end
+    storyboard.gotoScene( 'paypal2', { effect = "slideLeft", time = 500 })
 end
 
+function paypal0:enterScene( event ) print("ENTRA SCENA PAYPAL0") end
 
---gestisce le fasi dell'inserimento della Password
-function textListenerPass( event )
-    if event.phase == "began" then
-        if event.target.text == '' then
-        else
-            btClearPass.alpha = 0.2
-            btClearPass:addEventListener( "touch", clearListenerPass )
-        end
-        campoInserimentoPass:setTextColor( 0 )
-    elseif event.phase == "editing" then
-        
-        if(#event.target.text > 0) then
-            btClearPass.alpha = 0.2
-            btClearPass:addEventListener( "touch", clearListenerPass )
-        else
-            btClearPass.alpha = 0
-            btClearPass:removeEventListener( "touch", clearListenerPass )
-        end
-    elseif event.phase == "ended" then
-        if event.target.text == '' then
-            btClearPass.alpha = 0
-            campoInserimentoPass:setTextColor( 0.75,0.75,0.75 )
+function paypal0:exitScene( event ) print("ESCI SCENA PAYPAL0") end
 
-        end
-    end
-end
+function paypal0:destroyScene( event ) print("DISTRUGGI SCENA PAYPAL0") end
 
--- gestisce la comparsa del pulsate clear
-function clearListenerPass( event ) 
-    if(event.phase == "began") then
-        event.target.alpha = 0.8
-    elseif(event.phase == "cancelled") then
-        event.target.alpha = 0.2
-    elseif(event.phase == "ended") then
-        campoInserimentoPass.text = ''
-        native.setKeyboardFocus( campoInserimentoPass )
-        btClearPass.alpha = 0
-        btClearPass:removeEventListener( "touch", clearListenerPass )
-    end
-end
+function paypal1:enterScene( event ) print("ENTRA SCENA PAYPAL1") end
 
+function paypal1:exitScene( event ) print("ESCI SCENA PAYPAL1") end
 
+function paypal1:destroyScene( event ) print("DISTRUGGI SCENA PAYPAL1") end
 
+function paypal2:enterScene( event ) print("ENTRA SCENA PAYPAL2") end
 
-function AvantiScene()
-    if campoInserimentoPass.text == '' or campoInserimentoUser.text == '' then
+function paypal2:exitScene( event ) print("ESCI SCENA PAYPAL2") end
 
-    else
-        print(checkbox)
-        if myApp.utenteLoggato > 0 then
-            if checkbox == 'Multiplo' then
-                myApp.utenti[myApp.utenteLoggato].multiplo = myApp.utenti[myApp.utenteLoggato].multiplo + 50
-            else
-                myApp.utenti[myApp.utenteLoggato].multiplo = myApp.utenti[myApp.utenteLoggato].multiplo + 1
-            end
-        end
-        storyboard.reloadScene( )
-    end
-end
+function paypal2:destroyScene( event ) print("DISTRUGGI SCENA PAYPAL2") end
 
+paypal0:addEventListener( "createScene" )
+paypal0:addEventListener( "enterScene" )
+paypal0:addEventListener( "exitScene" )
+paypal0:addEventListener( "destroyScene" )
 
+paypal1:addEventListener( "createScene" )
+paypal1:addEventListener( "enterScene" )
+paypal1:addEventListener( "exitScene" )
+paypal1:addEventListener( "destroyScene" )
 
-function fineAcquisto()
-    storyboard.gotoScene('mappa')
-end
-
-
-
-
-
-function scene:enterScene( event )
-    print("ENTRA SCENA PAYPAL")
-
-    local group = self.view
-    
-
-    myApp.titleBar.titleText.text = "PayPal"
-
-    myApp.tabBar.isVisible = true
-
-
-    --[[ Se sono al 1° step creo il group0 locale
-        Se sono al 2° step creo il group1 locale
-        Alla fine aggancio il group0 o group1 al group della scena
-    ]]--
-
-    if step == 0 then
-
-        group0 = display.newGroup()
-        group:insert(step0(group0))
-        myApp.titleBar.logo.isVisible = false
-        myApp.titleBar.indietro.isVisible = true
-        myApp.titleBar.indietro.scene = 'acquista2'
-        myApp.titleBar.indietro.optionsBack = { effect = "slideRight", time = 500, params = { targa = myApp.targaAcquista } }
-
-        if myApp.utenteLoggato == 0 then
-            myApp.titleBar.accedi.isVisible = true
-        else
-            myApp.titleBar.profilo.isVisible = true
-        end
-    else
-        group1 = display.newGroup()
-        group:insert(step1(group1))
-        myApp.titleBar.indietro.isVisible = false
-
-        if myApp.utenteLoggato == 0 then
-            myApp.titleBar.accedi.isVisible = false
-        else
-            myApp.titleBar.profilo.isVisible = false
-        end
-    end
-
-end
-
-function scene:exitScene( event )
-    print("ESCI SCENA PAYPAL")
-
-    local group = self.view
-
-    --[[ Se sono al 1° step distruggo il group0 e passo allo step1
-        Se sono al 2° step distruggo il group1 e passo allo step0 (con il tasto indietro)
-    ]]--
-
-    if step == 0 then
-        step = 1
-        group:remove(group0)
-    else
-        step = 0
-        group:remove(group1)
-        myApp.tabBar:setSelected(1)
-    end
-
-end
-
-function scene:destroyScene( event )
-    print("DISTRUGGI SCENA PAYPAL")
-    group0 = nil
-    group1 = nil
-end
-
--- "createScene" event is dispatched if scene's view does not exist
-scene:addEventListener( "createScene", scene )
-
--- "enterScene" event is dispatched whenever scene transition has finished
-scene:addEventListener( "enterScene", scene )
-
--- "exitScene" event is dispatched before next scene's transition begins
-scene:addEventListener( "exitScene", scene )
-
--- "destroyScene" event is dispatched before view is unloaded, which can be
--- automatically unloaded in low memory situations, or explicitly via a call to
--- storyboard.purgeScene() or storyboard.removeScene().
-scene:addEventListener( "destroyScene", scene )
-
-return scene
+paypal2:addEventListener( "createScene" )
+paypal2:addEventListener( "enterScene" )
+paypal2:addEventListener( "exitScene" )
+paypal2:addEventListener( "destroyScene" )

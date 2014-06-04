@@ -15,12 +15,8 @@ local textListener = {}
 local clearListener = {}
 local textListenerPass = {}
 local clearListenerPass = {}
-local trimString = {}
 
 -- variabili
-local indietro
-local titleBar
-local titleText
 local registrati
 local accedi
 local campoInserimento
@@ -37,17 +33,25 @@ end
 
 
 function scene:createScene(event)
+
     print("CREA SCENA ACCEDI")
+
+    -- Preparo titleBar
+
+    myApp.titleBar.titleText.text = "Profilo utente"
+    myApp.titleBar.indietro.isVisible = true
+    myApp.titleBar.logo.isVisible = false
+    myApp.titleBar.accedi.isVisible = false
+    myApp.titleBar.profilo.isVisible = false
+    myApp.titleBar.indietro.scene = myApp.ultimaPagina
+
+    myApp.tabBar.isVisible = false
+
 	local group = self.view
 
-    -- Sfondo
+    -- Background
 
-	local background = display.newRect(0,0,display.contentWidth, display.contentHeight)
-	-- background:setFillColor(0.9, 0.9, 0.9)
-    background:setFillColor( 1 )
-    background.x = display.contentCenterX
-    background.y = display.contentCenterY
-	group:insert(background)
+    library.setBackground(group, {1,1,1})
 
     textError = display.newText('',0,0)
     group:insert(textError)
@@ -193,14 +197,6 @@ function scene:createScene(event)
     
 end
 
-
-
--- fa il trim della stringa inserita dall'utente
-function trimString( s )
-   return string.match( s,"^()%s*$") and "" or string.match(s,"^%s*(.*%S)" )
-end
-
-
 --gestisce le fasi dell'inserimento della targa
 function textListener( event )
     if event.phase == "began" then
@@ -317,8 +313,8 @@ function accediScene()
         local loggato = false
 
         for i = 1, indice, 1 do
-            if myApp.utenti[i].username == trimString( campoInserimento.text ) and
-                myApp.utenti[i].password == trimString( campoInserimentoPass.text ) then
+            if myApp.utenti[i].username == library.trimString( campoInserimento.text ) and
+                myApp.utenti[i].password == library.trimString( campoInserimentoPass.text ) then
 
                 myApp.utenteLoggato = i
                 loggato = true
@@ -355,32 +351,15 @@ end
 function scene:enterScene( event )
     print("ENTRA SCENA ACCEDI")
 
-    -- Preparo titleBar
-
-    myApp.titleBar.titleText.text = "Profilo utente"
-    myApp.titleBar.indietro.isVisible = true
-    myApp.titleBar.logo.isVisible = false
-    
-    if myApp.utenteLoggato == 0 then
-        myApp.titleBar.accedi.isVisible = false
-    else
-        myApp.titleBar.profilo.isVisible = false
-    end
-
-    myApp.titleBar.indietro.scene = myApp.ultimaPagina
-
     if storyboard.getPrevious() == 'acquista2' or storyboard.getPrevious() == 'paypal' then
         myApp.titleBar.indietro.optionsBack =  { params = { targa = myApp.targaAcquista } }
     end
 
     myApp.titleBar.indietro.optionsBack = { effect = "slideDown", time = 500 }
-
-    myApp.tabBar.isVisible = false
 end
 
 function scene:exitScene( event )
     print("ESCI SCENA ACCEDI")
-    myApp.tabBar.isVisible = true
 end
 
 function scene:destroyScene( event )

@@ -7,26 +7,19 @@ widget.setTheme(myApp.theme)
 
 
 -- funzioni
-local inputTarga = {}
-local AvantiScene = {}
-local textListener = {}
-local clearListener = {}
-local trimString = {}
 local step0 = {}
 local step1 ={}
 
 -- variabili
-local campoInserimento
-local sfondoInserimento
-local btClear
+local txtTarga
 local step
 local targa
 local group0 
 local group1
 local textError
+local background = {1,1,1}
 
 local string = "Inserisci la targa per controllare se il tuo veicolo è adibito ad accedere all\'area C e con che modalità"
-
 
 
 local function ignoreTouch( event )
@@ -34,18 +27,22 @@ local function ignoreTouch( event )
 end
 
 
-
 function scene:createScene(event)
 
     print("CREA SCENA VERIFICA")
 	local group = self.view
+    
+    -- Preparo titleBar
 
-    local background = display.newRect(0,0,display.contentWidth, display.contentHeight)
-    -- background:setFillColor(0.9, 0.9, 0.9)
-    background:setFillColor( 1 )
-    background.x = display.contentCenterX
-    background.y = display.contentCenterY
-    group:insert(background)
+    myApp.titleBar.titleText.text = "Verifica Targa"
+    
+    myApp.tabBar.isVisible = true
+    
+    library.checkLogIn()
+
+    -- Background
+
+    library.setBackground(group, background )
 
     step = 0
 
@@ -57,16 +54,16 @@ function step0(group)
 
     print("Verifica Targa Step 0")
 
-    avanti = widget.newButton({
-        id  = 'BtAvanti',
-        label = 'Avanti',
+    local verifica = widget.newButton({
+        id  = 'BtVerifica',
+        label = 'Verifica',
         x = _W*0.5,
         y = _H*0.8,
         color = { 0.062745,0.50980,0.99607 },
         fontSize = 26,
-        onRelease = AvantiScene
+        onRelease = verificaButton
     })
-    group:insert(avanti)
+    group:insert(verifica)
 
 
     -- testo in alto
@@ -79,11 +76,15 @@ function step0(group)
         fontSize = 16,
         align = "center"
     }
+
     local areaT = display.newText( options )
     areaT:setFillColor( 0, 0, 0 )
     group:insert(areaT)
 
-    group:insert(textTarga())
+
+    txtTarga =library.textArea(_W*0.5, _H*0.5, 160, 28, {1,0,0}, native.newFont( myApp.font, 17 ), "center", "Targa")
+
+    group:insert(txtTarga)
 
     textError = display.newText('',0,0)
     group:insert(textError)
@@ -97,152 +98,17 @@ function step1(group)
    
     print("Verifica Targa Step 1")
 
-    accesso = math.random(4)
+    local accesso = library.verificaTarga(targa)
 
-    local targaTrovata = false
-
-    local numTarghe = myApp:getNumTarghe()
-
-    for i = 1, numTarghe, 1 do
-        if targa == myApp.targhe[i].targa and targaTrovata == false then
-            -- targa presente nel database
-            if myApp.targhe[i].accesso then
-                accesso = 1
-            else
-                accesso = 4
-            end
-            targaTrovata = true
-        end
-    end
-
-    -- controlo se ho trovato la targa nel database
-    -- se non l'ho trovata la aggiungo con true o false
-    if targaTrovata == false then
-        if accesso < 4 then
-            myApp.targhe[numTarghe+1] = { targa = targa , accesso = true }
-        else
-            myApp.targhe[numTarghe+1] = { targa = targa , accesso = false }
-        end
-    end
-
-    schermataAccesso(accesso)
-
-    group:insert(myText1)
-    group:insert(myText2)
-    group:insert(myText3)
-    if accesso < 4 then
-        group:insert(myText4)
-        group:insert(acquista)
-    end
-    return group
-end
-
-
-function textTarga()
-    -- creazione textArea per targa
-
-    local gruppoInserimento = display.newGroup()
-
-    sfondoInserimento = display.newImageRect('img/textArea.png', 564*0.45, 62*0.6)
-    sfondoInserimento.x = _W*0.5
-    sfondoInserimento.y = _H*0.5
-
-    campoInserimento = native.newTextField( 40, 85, 195, 28)
-    campoInserimento.x = _W/2
-    campoInserimento.y = _H*0.5
-    campoInserimento:setTextColor( 0.75,0.75,0.75 )
-    campoInserimento.size = 17
-    campoInserimento.font = native.newFont( myApp.font, 17 )
-    campoInserimento.align = "center"
-    campoInserimento.hasBackground = false
-    campoInserimento.placeholder = 'Targa'
-
-    btClear = display.newImage('img/delete.png', 10,10)
-    btClear.x = _W*0.85
-    btClear.y = _H*0.5
-    btClear.alpha = 0
-
-
-    if targa == nil then
-    else 
-        campoInserimento.text = targa
-        campoInserimento:setTextColor( 0 )
-        btClear.alpha = 0.5
-        btClear:addEventListener( "touch", clearListener )
-    end
-
-
-    gruppoInserimento:insert(sfondoInserimento)
-    gruppoInserimento:insert(campoInserimento)
-    gruppoInserimento:insert(btClear)
-
-
-    campoInserimento:addEventListener( "userInput", textListener)
-
-    return gruppoInserimento
-
-end
-
-
--- fa il trim della stringa inserita dall'utente
-function trimString( s )
-   return string.match( s,"^()%s*$") and "" or string.match(s,"^%s*(.*%S)" )
-end
-
---gestisce le fasi dell'inserimento della targa
-function textListener( event )
-    if event.phase == "began" then
-        if event.target.text == '' then
-        else
-            btClear.alpha = 0.5
-            btClear:addEventListener( "touch", clearListener )
-        end
-        campoInserimento:setTextColor( 0 )
-    elseif event.phase == "editing" then
-        
-        if(#event.target.text > 0) then
-            btClear.alpha = 0.5
-            btClear:addEventListener( "touch", clearListener )
-        else
-            btClear.alpha = 0
-            btClear:removeEventListener( "touch", clearListener )
-        end
-    elseif event.phase == "ended" then
-        if event.target.text == '' then
-            btClear.alpha = 0
-            campoInserimento:setTextColor( 0.75,0.75,0.75 )
-
-        end
-    end
-end
-
--- gestisce la comparsa del pulsate clear
-function clearListener( event ) 
-    if(event.phase == "began") then
-        event.target.alpha = 0.8
-    elseif(event.phase == "cancelled") then
-        event.target.alpha = 0.5
-    elseif(event.phase == "ended") then
-        campoInserimento.text = ''
-        native.setKeyboardFocus( campoInserimento )
-        btClear.alpha = 0
-        btClear:removeEventListener( "touch", clearListener )
-    end
-end
-
--- Verifica dell'accesso dell'auto tramite funziona random
-
-function schermataAccesso (numero)
-    if numero < 4 then
-        myText1 = display.newText( 'Il veicolo con targa '..targa,  _W*0.5, 100, myApp.font, 20)
-        myText1:setFillColor(0)
-        myText2 = display.newText( 'PUO\' ACCEDERE',  _W*0.5, 125, myApp.font, 20)
-        myText2:setFillColor(0.1333,0.54509,0.13334)
-        myText3 = display.newText( 'all\'area C',  _W*0.5, 150, myApp.font, 20)
-        myText3:setFillColor(0)
-
-        myText4 = display.newText( 'ACCESSO A PAGAMENTO', _W*0.5, _H*0.5, myApp.font, 24 )
-        myText4:setFillColor(0.1333,0.54509,0.13334)
+    if accesso then
+        line1 = display.newText( 'Il veicolo con targa '..targa,  _W*0.5, 100, myApp.font, 20)
+        line1:setFillColor(0)
+        line2 = display.newText( 'PUO\' ACCEDERE',  _W*0.5, 125, myApp.font, 20)
+        line2:setFillColor(0.1333,0.54509,0.13334)
+        line3 = display.newText( 'all\'area C',  _W*0.5, 150, myApp.font, 20)
+        line3:setFillColor(0)
+        line4 = display.newText( 'ACCESSO A PAGAMENTO', _W*0.5, _H*0.5, myApp.font, 24 )
+        line4:setFillColor(0.1333,0.54509,0.13334)
 
         acquista = widget.newButton({
             id  = 'BtAcquista',
@@ -251,42 +117,54 @@ function schermataAccesso (numero)
             y = _H*0.8,
             color = { 0.062745,0.50980,0.99607 },
             fontSize = 26,
-            onRelease = acquistaTicket
+            onRelease = acquistaButton
         })
 
+        group:insert(line1)
+        group:insert(line2)
+        group:insert(line3)
+        group:insert(line4)
+        group:insert(acquista)
 
-    -- L'auto non può accedere
     else
-        myText1 = display.newText( 'Il veicolo con targa '..targa,  _W*0.5, (_H*0.5)-25, myApp.font, 20)
-        myText1:setFillColor(0)
-        myText2 = display.newText( 'NON PUO\' ACCEDERE',  _W*0.5, _H*0.5, myApp.font, 20)
-        myText2:setFillColor(1,0,0)
-        myText3 = display.newText( 'all\'area C',  _W*0.5, (_H*0.5)+25, myApp.font, 20)
-        myText3:setFillColor(0)  
-    end
 
+        line1 = display.newText( 'Il veicolo con targa '..targa,  _W*0.5, (_H*0.5)-25, myApp.font, 20)
+        line1:setFillColor(0)
+        line2 = display.newText( 'NON PUO\' ACCEDERE',  _W*0.5, _H*0.5, myApp.font, 20)
+        line2:setFillColor(1,0,0)
+        line3 = display.newText( 'all\'area C',  _W*0.5, (_H*0.5)+25, myApp.font, 20)
+        line3:setFillColor(0)  
+
+        group:insert(line1)
+        group:insert(line2)
+        group:insert(line3)
+    end
+    return group
 end
 
-function acquistaTicket()
+
+
+-- Funzioni per pulsanti
+
+function acquistaButton()
     myApp.tabBar:setSelected( 3 )
     storyboard.gotoScene('acquista2', { params = { targa = targa } })
 end
 
 
--- funzioni per pulsanti
+function verificaButton()
 
-function AvantiScene (group)
-    if campoInserimento.text == '' then
+    if txtTarga.campo.text == '' then
     
     -- controllo se il formato della targa è giusto
 
     --ESPLODE IN CASO DI VERIFICA TARGA REGISTRATA
-    elseif #campoInserimento.text == 7 and campoInserimento.text:match( '[A-Za-z][A-Za-z][0-9][0-9][0-9][A-Za-z][A-Za-z]' ) then
+    elseif #txtTarga.campo.text == 7 and txtTarga.campo.text:match( '[A-Za-z][A-Za-z][0-9][0-9][0-9][A-Za-z][A-Za-z]' ) then
         -- passo la targa come parametro facendogli il trim e l'upperCase
-        targa = trimString( campoInserimento.text ):upper()
+        targa = library.trimString( txtTarga.campo.text ):upper()
         storyboard.reloadScene( )
     else
-        campoInserimento:setTextColor(1,0,0)
+       txtTarga.campo:setTextColor(1,0,0)
         
         -- testo di errore
         textError.x = _W*0.5
@@ -297,19 +175,13 @@ function AvantiScene (group)
     end
 end
 
+
+
+
 function scene:enterScene( event )
     print("ENTRA SCENA VERIFICA")
-    local group = self.view
-    
-    -- Preparo titleBar
 
-    myApp.titleBar.titleText.text = "Verifica Targa"
-    
-    if myApp.utenteLoggato == 0 then
-        myApp.titleBar.accedi.isVisible = true
-    else
-        myApp.titleBar.profilo.isVisible = true
-    end
+    local group = self.view
 
 
     --[[ Se sono al 1° step creo il group0 locale

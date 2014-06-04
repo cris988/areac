@@ -19,100 +19,78 @@ function scene:createScene(event)
 
     local group = self.view
 
-    local background = display.newRect(0,0,display.contentWidth, display.contentHeight)
-    background:setFillColor( 1 )
-    background.x = display.contentCenterX
-    background.y = display.contentCenterY
-    group:insert(background)
+    -- Preparo titleBar
+
+    myApp.titleBar.titleText.text = "Transiti"
+    myApp.titleBar.indietro.isVisible = true
+    myApp.titleBar.profilo.isVisible = false
+    myApp.titleBar.ricerca.isVisible = true
+    myApp.titleBar.indietro.scene = "profilo"
+    myApp.tabBar.isVisible = false
+
+    myApp.titleBar.indietro.optionsBack = { effect = "slideRight", time = 500 }
+  
+    -- Background
+
+    library.setBackground(group, {0.9,0.9,0.9})
 
 
-    local utente = myApp.transiti[1]
-
+    local utente = myApp.transiti[myApp.utenteLoggato]
 
     if myApp.ricerca == nil then
         makeList(group, utente)	
     else
         local transiti = {}
+        local periodo = nil
+
+        if myApp.ricerca["p"] ~= nil then
+            periodo = tonumber(string.sub(myApp.ricerca["p"], 8,9))
+        end
 
         for i = 1, #utente do
             local transito = utente[i]
-            local periodo
 
-            if myApp.ricerca["p"] ~= nil then
-                periodo = myApp.ricerca["p"] >= math.ceil(os.difftime(os.time(),parseDate(transito[1])) / 60 / 60 / 24)
+            if periodo ~= nil then
+                -- Verifica se è nell'intervallo
+                inDate = periodo >= math.ceil(os.difftime(os.time(),parseDate(transito[1])) / 60 / 60 / 24)
             end
 
 
-            if transito[2] == myApp.ricerca["t"] and transito[3] == myApp.ricerca["i"] and periodo then
+            if transito[2] == myApp.ricerca["t"] and transito[3] == myApp.ricerca["i"] and inDate then
                 print("t+i+p")
                 table.insert(transiti, transito)
 
-            elseif transito[2] == myApp.ricerca["t"] and transito[3] == myApp.ricerca["i"] and myApp.ricerca["p"] == nil  then
+            elseif transito[2] == myApp.ricerca["t"] and transito[3] == myApp.ricerca["i"] and periodo == nil  then
                 print("t+i")
                 table.insert(transiti, transito)
 
-            elseif transito[3] == myApp.ricerca["i"] and periodo and myApp.ricerca["t"] == nil then
+            elseif transito[3] == myApp.ricerca["i"] and inDate and myApp.ricerca["t"] == nil then
                 print("i+p")
                 table.insert(transiti, transito)
 
-            elseif transito[2] == myApp.ricerca["t"] and periodo and myApp.ricerca["i"] == nil then
+            elseif transito[2] == myApp.ricerca["t"] and inDate and myApp.ricerca["i"] == nil then
                 print("t+p")
                 table.insert(transiti, transito)
 
-            elseif transito[3] == myApp.ricerca["i"] and myApp.ricerca["p"] == nil and myApp.ricerca["t"] == nil  then
+            elseif transito[3] == myApp.ricerca["i"] and periodo == nil and myApp.ricerca["t"] == nil  then
                 print("i+p")
                 table.insert(transiti, transito)
 
-            elseif transito[2] == myApp.ricerca["t"] and myApp.ricerca["i"] == nil and myApp.ricerca["p"] == nil then
+            elseif transito[2] == myApp.ricerca["t"] and myApp.ricerca["i"] == nil and periodo == nil then
                 print("t")
                 table.insert(transiti, transito)
 
-            elseif transito[3] == myApp.ricerca["i"] and myApp.ricerca["t"] == nil and myApp.ricerca["p"] == nil then 
+            elseif transito[3] == myApp.ricerca["i"] and myApp.ricerca["t"] == nil and periodo == nil then 
                 print("i")
                 table.insert(transiti, transito)
 
-            elseif  periodo  and myApp.ricerca["t"] == nil and myApp.ricerca["i"] == nil  then
+            elseif inDate and myApp.ricerca["t"] == nil and myApp.ricerca["i"] == nil  then
                 print("p")
                 table.insert(transiti, transito)
             end
-
-
-
-
-            -- if transito[2] == myApp.ricerca["t"] then
-            --     if transito[3] == myApp.ricerca["i"] then
-            --         print(transito[3] )
-            --         if myApp.ricerca["p"]~= nil and date.parse(transito[1]) >= date.day - myApp.ricerca["p"] then
-            --             print("t+i+p")
-            --             table.insert(transiti, transito)
-            --         else
-            --             print("t+i")
-            --             table.insert(transiti, transito)
-            --         end
-            --     elseif myApp.ricerca["p"]~= nil and date.parse(transito[1]) >= date.day - myApp.ricerca["p"]then
-            --             print("t+p")
-            --             table.insert(transiti, transito)
-            --     elseif myApp.ricerca["i"] == nil and myApp.ricerca["p"] ==nil then
-            --             print("t")
-            --             table.insert(transiti, transito)    
-            --     end
-            -- elseif myApp.ricerca["t"] == nil and transito[1] == myApp.ricerca["p"] then
-            --     if myApp.ricerca["p"]~= nil and date.parse(transito[1]) >=  date.day- myApp.ricerca["p"] then
-            --         print("p+i")
-            --         table.insert(transiti, transito)
-            --     else
-            --         print("p")
-            --         table.insert(transiti, transito)
-            --     end
-            -- elseif myApp.ricerca["t"] == nil and myApp.ricerca["p"] == nil and transito[3] ==  myApp.ricerca["i"] then
-            --     print("i")
-            --     table.insert(transiti, transito)
-            -- end
         end
 
         makeList(group, transiti)
-
-
     end
  end
 
@@ -126,11 +104,11 @@ end
 
  function makeList(group, transiti)
 
-    local textX = { 0.17, 0.5, 0.85}
+    local textX = { 0.17, 0.5, 0.83}
     local textY = 0.17 * _H
 	local lineV1X = _W * 0.33
 	local lineV2X = _W * 0.66
-    local padding = 10
+    local padding = 5
 
 
     -- Stampa titoli
@@ -184,22 +162,10 @@ end
 
 function scene:enterScene( event )
     print("ENTRA SCENA TRANSITI")
-
-    -- Preparo titleBar
-
-    myApp.titleBar.titleText.text = "Transiti"
-    myApp.titleBar.indietro.isVisible = true
-    myApp.titleBar.profilo.isVisible = false
-    myApp.titleBar.ricerca.isVisible = true
-    myApp.titleBar.indietro.scene = "profilo"
-    myApp.tabBar.isVisible = false
-
-    myApp.titleBar.indietro.optionsBack = { effect = "slideRight", time = 500 }
 end
 
 function scene:exitScene( event )
     print("ESCI SCENA TRANSITI")
-    myApp.tabBar.isVisible = true
     myApp.titleBar.ricerca.isVisible = false
     myApp.ricerca = nil
 end

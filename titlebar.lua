@@ -94,6 +94,7 @@ end
 
 function titleBar.goBack()
 	print("GOBACK ")
+	print(titleBar.indietro.scene)
     storyboard.gotoScene(titleBar.indietro.scene, titleBar.indietro.optionsBack)
 end
 
