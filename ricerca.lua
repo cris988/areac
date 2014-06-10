@@ -2,7 +2,6 @@ local storyboard = require( "storyboard" )
 local scene = storyboard.newScene()
 local widget = require('widget')
 local myApp = require('myapp')
-local library = require('library')
 
 
 
@@ -11,14 +10,14 @@ local newTitle = {}
 local retrieveData = {}
 
 -- variabili
-local param = 0
 local targheTable
 local importoTable
 local periodoTable
-local title
 local scrollView 
+
+
 myApp.ricerca = {}
-local background = {1,1,1}
+
 
 function scene:createScene(event)
 
@@ -29,35 +28,17 @@ function scene:createScene(event)
 
   -- Background
 
-  library.setBackground(group, background )
+  library.setBackground(group, _Background )
   
   -- Preparo titleBar
 
   myApp.titleBar.titleText.text = "Ricerca"
   myApp.titleBar.indietro.isVisible = true
-  myApp.titleBar.profilo.isVisible = false
-  myApp.titleBar.ricerca.isVisible = false
   myApp.titleBar.cerca.isVisible = true
-  myApp.titleBar.indietro.scene = storyboard.getPrevious()
-
-  myApp.tabBar.isVisible = false
 
   -- Contenuto
 
   myApp.ricerca = {}
-
-  scrollView = widget.newScrollView
-  {
-      top = titleBar.height,
-      left = 0,
-      width =  _W,
-      height = _H,
-      scrollWidth = _W,
-      scrollHeight = _H,
-      bottomPadding = 100,
-      horizontalScrollDisabled = true,
-      hideBackground = true
-  }
 
   local options = {
         text = "Seleziona i criteri per la ricerca",
@@ -73,7 +54,22 @@ function scene:createScene(event)
   group:insert(areaT)
 
 
-  local y = 0.13 * _H
+  scrollView = widget.newScrollView
+  {
+      top = (areaT.height + areaT.y),
+      left = 0,
+      width =  _W,
+      height = _H - (areaT.height + areaT.y),
+      scrollWidth = _W,
+      scrollHeight = 0,
+      bottomPadding = 100,
+      horizontalScrollDisabled = true,
+      hideBackground = true
+  }
+  print(scrollView.top)
+
+
+  local y = 0
   local x = 0.05 * _W
   local padding = 20
 
@@ -119,9 +115,12 @@ function scene:createScene(event)
   local height = 40 * #importo
   y = y + 40
   importoTable = library.makeList("i", importo, 0, y, _W, height, 40, false, onRowRender, onRowTouch)
+  y = y + height
 
   scrollView:insert(title)
   scrollView:insert(importoTable)
+
+  scrollView:setScrollHeight( y )
 
   group:insert(scrollView)
 
@@ -227,12 +226,13 @@ end
 
 function scene:enterScene( event )
     print("ENTRA SCENA RICERCA")
+    myApp.story.add(storyboard.getCurrentSceneName())
 end
 
 function scene:exitScene( event )
     print("ESCI SCENA RICERCA")
     myApp.tabBar.isVisible = true
-    myApp.titleBar.cerca.isVisible = false
+    myApp.titleBar.indietro.isVisible = false
     myApp.titleBar.cerca.isVisible = false
     targheTable:removeSelf()
     periodoTable:removeSelf()
@@ -247,18 +247,9 @@ function scene:destroyScene( event )
     print("DISTRUGGI SCENA RICERCA")
 end
 
--- "createScene" event is dispatched if scene's view does not exist
 scene:addEventListener( "createScene", scene )
-
--- "enterScene" event is dispatched whenever scene transition has finished
 scene:addEventListener( "enterScene", scene )
-
--- "exitScene" event is dispatched before next scene's transition begins
 scene:addEventListener( "exitScene", scene )
-
--- "destroyScene" event is dispatched before view is unloaded, which can be
--- automatically unloaded in low memory situations, or explicitly via a call to
--- storyboard.purgeScene() or storyboard.removeScene().
 scene:addEventListener( "destroyScene", scene )
 
 return scene

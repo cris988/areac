@@ -1,6 +1,11 @@
 local storyboard = require ( "storyboard" )
 local widget = require( "widget" )
-local myApp = require( "myapp" ) 
+local myApp = require( "myapp" )
+
+local tabBarBackgroundFile = "img/tabBarBg7.png"
+local tabBarLeft = "img/tabBar_tabSelectedLeft7.png"
+local tabBarMiddle = "img/tabBar_tabSelectedMiddle7.png"
+local tabBarRight = "img/tabBar_tabSelectedRight7.png"
 
 myApp.tabBar = {}
 
@@ -19,14 +24,16 @@ end
 function myApp.showVerifica()
     myApp.tabBar:setSelected(2)
     storyboard.removeAll()
-    storyboard.gotoScene("verificatarga")
+    require("verifica")
+    storyboard.gotoScene("verifica0")
     return true
 end
 
 function myApp.showAcquista()
     myApp.tabBar:setSelected(3)
     storyboard.removeAll()
-    storyboard.gotoScene("acquista")
+    require("acquista")
+    storyboard.gotoScene("acquista0")
     return true
 end
 
@@ -95,9 +102,9 @@ local tabButtons = {
 -- Creazione tabBar
 
 myApp.tabBar = widget.newTabBar{
-    top =  display.contentHeight - 50,
+    top =  _H - 50,
     left = 0,
-    width = display.contentWidth,
+    width = _W,
     backgroundFile = tabBarBackgroundFile,
     tabSelectedLeftFile = tabBarLeft,      -- New
     tabSelectedRightFile = tabBarRight,    -- New
@@ -105,7 +112,6 @@ myApp.tabBar = widget.newTabBar{
     tabSelectedFrameWidth = 20,                                         -- New
     tabSelectedFrameHeight = 50,                                        -- New    
     height = 50,                                      -- New    
-    top = display.contentHeight - 50,
     buttons = tabButtons
 }
 

@@ -11,9 +11,6 @@ widget.setTheme(myApp.theme)
 -- variabili
 local background = {1,1,1}
 
-local function ignoreTouch( event )
-	return true
-end
 
 
 function scene:createScene(event)
@@ -24,18 +21,13 @@ function scene:createScene(event)
 
     -- Preparo titleBar
     myApp.titleBar.titleText.text = "Mappa"
-    myApp.titleBar.indietro.isVisible = false
     myApp.titleBar.logo.isVisible = true
-    
-    myApp.tabBar.isVisible = true
-
-    myApp.tabBar:setSelected(1)
 
     library.checkLogIn()
 
     -- Background
 
-    library.setBackground(group, background )
+    library.setBackground(group, _Background )
 
     -- Finta mappa per corona simulator
     local mappa = display.newRect( group, 0, myApp.titleBar.height -1, _W, _H - myApp.titleBar.height - myApp.tabBar.height)
@@ -175,11 +167,20 @@ function scene:createScene(event)
 end
 
 
-function scene:enterScene( event ) print("ENTRA SCENA MAPPA") end
+function scene:enterScene( event ) 
+    print("ENTRA SCENA MAPPA")
+    myApp.story.removeAll()
+    myApp.story.add(storyboard.getCurrentSceneName())
+end
 
-function scene:exitScene( event ) print("ESCI SCENA MAPPA") end
+function scene:exitScene( event ) 
+    print("ESCI SCENA MAPPA") 
+    myApp.titleBar.logo.isVisible = false
+end
 
-function scene:destroyScene( event ) print("DISTRUGGI SCENA MAPPA") end
+function scene:destroyScene( event )
+    print("DISTRUGGI SCENA MAPPA") 
+end
 
 scene:addEventListener( "createScene", scene )
 scene:addEventListener( "enterScene", scene )

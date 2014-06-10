@@ -10,11 +10,17 @@ local paypal1 = storyboard.newScene("paypal1")
 local paypal2 = storyboard.newScene("paypal2")
 
 -- Funzioni
-local avantiButton = {}
-local fineAcquisto = {}
+local avantiButton
+local fineAcquisto
+local riepilogoButton
+local completaButton
 
 -- Variabili
-local background = {1,1,1}
+local txtUser
+local txtPass
+
+
+
 
 
 
@@ -22,57 +28,42 @@ function paypal0:createScene(event)
 
     -- Scena di inserimento dati PayPal
 
-    print("CREA SCENA PAYPAL")
+    print("CREA SCENA PAYPAL0")
 
     local group = self.view
     
     myApp.titleBar.titleText.text = "PayPal"
-    myApp.titleBar.logo.isVisible = false
     myApp.titleBar.indietro.isVisible = true
-    myApp.titleBar.indietro.scene = 'acquista2'
-    myApp.titleBar.indietro.optionsBack = { effect = "slideRight", time = 500 }
-
-    myApp.tabBar.isVisible = true
 
     library.checkLogIn()
 
     -- Background
 
-    library.setBackground(group, background )
-
-    print("Paypal Step 0")
-
-    riepilogo = widget.newButton({
+    library.setBackground(group, _Background )
+    
+    local BtRiepilogo = widget.newButton({
         id  = 'BtRiepilogo',
-        label = 'Prosegui',
         x = _W*0.5,
-        y = _H*0.8,
-        color = { 0.062745,0.50980,0.99607 },
-        fontSize = 26,
-        font = myApp.font,
+        y = _H*0.58,
+        width = 270,
+        height = 40,
         onRelease = riepilogoButton
     })
-    group:insert(riepilogo)
+    BtRiepilogo.alpha = 0
+    BtRiepilogo.isHitTestable = true
 
+    local paypal = display.newImageRect( "img/paypal.png", _W, _H)
+    paypal.anchorX = 0
+    paypal.anchorY = 0
 
-	-- testo in alto
-    local options = {
-        text = 'Inserisci i tuoi dati PayPal per il pagamento:',
-        x = _W*0.5,
-        y = _H*0.425,
-        width = _W - 30,
-        height = 300,
-        fontSize = 16,
-        align = "center"
-    }
-    local areaT = display.newText( options )
-    areaT:setFillColor( 0, 0, 0 )
-    group:insert(areaT)
+    txtUser = library.textArea(group, _W*0.5, _H*0.40, 195, 28, {0.75,0.75,0.75}, native.newFont( myApp.font, 17 ), "center", "Username")
+    txtPass = library.textArea(group, _W*0.5, _H*0.48, 195, 28, {0.75,0.75,0.75}, native.newFont( myApp.font, 17 ), "center", "Password")
 
+    txtUser.bg.alpha = 0
+    txtPass.bg.alpha = 0
 
-    txtUser = library.textArea(_W*0.5, _H*0.35, 195, 28, {0.75,0.75,0.75}, native.newFont( myApp.font, 17 ), "center", "Username")
-    txtPass = library.textArea(_W*0.5, _H*0.5, 195, 28, {0.75,0.75,0.75}, native.newFont( myApp.font, 17 ), "center", "Password")
-
+    group:insert(paypal)
+    group:insert(BtRiepilogo)
     group:insert(txtUser)
     group:insert(txtPass)
 
@@ -81,81 +72,88 @@ end
 
 function paypal1:createScene(event)
 
+    print("CREA SCENA PAYPAL1")
+
     -- Scena di riepilogo acquisto Paypal
     
     local group = self.view
 
     myApp.titleBar.titleText.text = "PayPal"
-    myApp.titleBar.logo.isVisible = false
     myApp.titleBar.indietro.isVisible = true
-    myApp.titleBar.indietro.scene = 'paypal0'
-    myApp.titleBar.indietro.optionsBack = { effect = "slideRight", time = 500 }
 
-    myApp.tabBar.isVisible = true
-    
     library.checkLogIn()
 
     -- Background
 
-    library.setBackground(group, background)
+    library.setBackground(group, _Background)
 
-    print("Paypal Step 1")
-    print( myApp.acquisto.user)
+    local paypal = display.newImageRect( "img/paypal" .. myApp.acquisto.importo .. ".png", _W, _H)
+    paypal.anchorX = 0
+    paypal.anchorY = 0
+
+    local optionsAcc = {
+        text = myApp.acquisto.user,
+        x = _W * 0.5,
+        y = _H * 0.3,
+        font = myApp.font,
+        fontSize = 14,
+        align = 'center'
+
+    }
+    local textAccount = display.newText(optionsAcc)
 
     local options ={
-        parent = group,
-        text = 'Stai effettuando il pagamento con l\'account\n\n'..
-                        myApp.acquisto.user:upper()..
-                        '\n\nper l\'acquisto di un ticket '..myApp.acquisto.ticket..' da '..myApp.acquisto.ingressi..' ingressi '..
-                        ' di '..myApp.acquisto.importo..'€'..
-                        '\n\nsull\'autovettura targata\n'..myApp.acquisto.targa:upper(),
+        text = 'Acquisto di un ticket:\n\n'..myApp.acquisto.ticket..' da '..
+                        myApp.acquisto.ingressi..' ingressi '..
+                        '\nsull\'autovettura targata\n'..myApp.acquisto.targa:upper(),
         x = _W * 0.5,
-        y = _H * 0.5,
+        y = _H * 0.75,
         width = _W * 0.8,
         height = 400,
         font = myApp.font,
         fontSize = 20,
-        align = 'center'
+        align = 'left'
     }
 
     local areaT = display.newText(options)
     areaT:setFillColor(0)
 
-    completa = widget.newButton({
+    local BtCompleta = widget.newButton({
         id  = 'BtCompleta',
-        label = 'Completa acquisto',
         x = _W*0.5,
-        y = _H*0.8,
-        color = { 0.062745,0.50980,0.99607 },
-        fontSize = 26,
+        y = _H*0.73,
+        width = 270,
+        height = 40,
         onRelease = completaButton
     })
-    group:insert(completa)
+
+    --BtRiepilogo.alpha = 0
+    BtCompleta.isHitTestable = true
+
+    group:insert(paypal)
+    group:insert(textAccount)
+    group:insert(areaT)
+    group:insert(BtCompleta)
 
 end
 
 
 function paypal2:createScene(event)
 
+    print("CREA SCENA PAYPAL2")
+
     -- Scena conferma acquisto
 
     local group = self.view
 
     myApp.titleBar.titleText.text = "PayPal"
-    myApp.titleBar.logo.isVisible = false
-    myApp.titleBar.indietro.isVisible = false
-    myApp.titleBar.indietro.scene = 'paypal1'
-
-    myApp.tabBar.isVisible = true
     
     library.checkLogIn()
 
     -- Background
 
-    library.setBackground(group, background)
+    library.setBackground(group, _Background)
 
-   
-    print("Paypal Step 2")
 
     local myText1 = display.newText( 'Il pagamento è stato',  _W*0.5, _H*0.35, myApp.font, 20)
     myText1:setFillColor(0)
@@ -176,20 +174,21 @@ function paypal2:createScene(event)
     local myText3 = display.newText( options)
     myText3:setFillColor(0)
 
-    group:insert(myText1)
-    group:insert(myText2)
-    group:insert(myText3)
-
-    fine = widget.newButton({
+    local BtFine = widget.newButton({
         id  = 'BtFine',
         label = 'Fine',
         x = _W*0.5,
         y = _H*0.8,
         color = { 0.062745,0.50980,0.99607 },
         fontSize = 26,
-        onRelease = function () storyboard.gotoScene( 'mappa' ) end
+        onRelease = myApp.showHome
     })
-    group:insert(fine)
+
+
+    group:insert(myText1)
+    group:insert(myText2)
+    group:insert(myText3)
+    group:insert(BtFine)
 
 end
 
@@ -208,23 +207,47 @@ function completaButton()
     storyboard.gotoScene( 'paypal2', { effect = "slideLeft", time = 500 })
 end
 
-function paypal0:enterScene( event ) print("ENTRA SCENA PAYPAL0") end
 
-function paypal0:exitScene( event ) print("ESCI SCENA PAYPAL0") end
 
-function paypal0:destroyScene( event ) print("DISTRUGGI SCENA PAYPAL0") end
+function paypal0:enterScene( event )
+    print("ENTRA SCENA PAYPAL0")
+    myApp.story.add(storyboard.getCurrentSceneName())
+end
 
-function paypal1:enterScene( event ) print("ENTRA SCENA PAYPAL1") end
+function paypal0:exitScene( event ) 
+    print("ESCI SCENA PAYPAL0")
+    myApp.titleBar.indietro.isVisible = false
+end
 
-function paypal1:exitScene( event ) print("ESCI SCENA PAYPAL1") end
+function paypal0:destroyScene( event ) 
+    print("DISTRUGGI SCENA PAYPAL0") 
+end
 
-function paypal1:destroyScene( event ) print("DISTRUGGI SCENA PAYPAL1") end
+function paypal1:enterScene( event ) 
+    print("ENTRA SCENA PAYPAL1")
+    myApp.story.add(storyboard.getCurrentSceneName())
+end
 
-function paypal2:enterScene( event ) print("ENTRA SCENA PAYPAL2") end
+function paypal1:exitScene( event ) 
+    print("ESCI SCENA PAYPAL1") 
+    myApp.titleBar.indietro.isVisible = false
+end
 
-function paypal2:exitScene( event ) print("ESCI SCENA PAYPAL2") end
+function paypal1:destroyScene( event )
+    print("DISTRUGGI SCENA PAYPAL1") 
+end
 
-function paypal2:destroyScene( event ) print("DISTRUGGI SCENA PAYPAL2") end
+function paypal2:enterScene( event ) 
+    print("ENTRA SCENA PAYPAL2") 
+end
+
+function paypal2:exitScene( event ) 
+    print("ESCI SCENA PAYPAL2") 
+end
+
+function paypal2:destroyScene( event ) 
+    print("DISTRUGGI SCENA PAYPAL2") 
+end
 
 paypal0:addEventListener( "createScene" )
 paypal0:addEventListener( "enterScene" )

@@ -19,11 +19,6 @@ function scene:createScene(event)
 
     myApp.titleBar.indietro.isVisible = true
     myApp.titleBar.titleText.text = 'Info'
-    myApp.titleBar.logo.isVisible = false
-    myApp.titleBar.indietro.scene = 'informazioni'
-    myApp.titleBar.indietro.optionsBack = { effect = "slideRight", time = 500 }
-
-    myApp.tabBar.isVisible = true
 
     library.checkLogIn()
 
@@ -44,9 +39,17 @@ function scene:createScene(event)
 
 end
 
-function scene:enterScene( event ) print("ENTRA SCENA INFO DETTAGLIO "..myApp.section) end
-function scene:exitScene( event ) print("ESCI SCENA INFO DETTAGLIO "..myApp.section) end
-function scene:destroyScene( event ) print("DISTRUGGI SCENA INFO DETTAGLIO "..myApp.section) end
+function scene:enterScene( event ) 
+    print("ENTRA SCENA INFO DETTAGLIO "..myApp.section) 
+    myApp.story.add(storyboard.getCurrentSceneName())
+end
+function scene:exitScene( event ) 
+    print("ESCI SCENA INFO DETTAGLIO "..myApp.section)
+    myApp.titleBar.indietro.isVisible = false
+end
+function scene:destroyScene( event )
+    print("DISTRUGGI SCENA INFO DETTAGLIO "..myApp.section)
+end
 
 scene:addEventListener( "createScene", scene )
 scene:addEventListener( "enterScene", scene )

@@ -47,7 +47,6 @@ local function onRowRender( event )
 	    rowArrow.y = row.contentHeight * 0.5
 
 	end
-
 end
 
 
@@ -55,14 +54,15 @@ local function makeList(id, values, x, y, width, height, rowHeight, arrow, event
 
 	local group = display.newGroup( )
 
-
+    x = math.ceil(x)
+    y = math.ceil(y)
 
 	if eventRowRender == nil then eventRowRender = onRowRender end
 
 	local tableView = widget.newTableView
 	{
-	    x = math.ceil(x),
-	    y = math.ceil(y),
+	    x = x,
+	    y = y,
 	    id = id,
 	    height = height,
 	    width = width,
@@ -75,7 +75,9 @@ local function makeList(id, values, x, y, width, height, rowHeight, arrow, event
 
 
         local rowColor = { default={ 1, 1, 1 }, over={ 1, 0.5, 0, 0.2 } }
-        local lineColor = { 0.8, 0.8, 0.8 }
+        local lineColor
+
+        if i < #values then lineColor = { 0.8, 0.8, 0.8 }  else lineColor = { 1, 1, 1 } end
 
 	    -- Insert a row into the listaInfo
 	    tableView:insertRow(
@@ -99,8 +101,9 @@ local function makeList(id, values, x, y, width, height, rowHeight, arrow, event
 
 	local lineA = display.newLine( group, x, y, width, y)
 	lineA:setStrokeColor( 0.8, 0.8, 0.8 )
-	local lineB = display.newLine( group, x, y + tableView.height, width, y + tableView.height)
+	local lineB = display.newLine( group, x, tableView.y + tableView.height - 1, width, tableView.y + tableView.height - 1)
 	lineB:setStrokeColor( 0.8, 0.8, 0.8 )
+
 
 	return group
 
@@ -126,10 +129,15 @@ local function clearListener( campoInserimento, btClear )
 	end
 end
 
-function textListener( campoInserimento, btClear ) 
+local function textListener(group, campoInserimento, btClear ) 
+    local trans = false
 	return function(event)
 	    if event.phase == "began" then
 	        if campoInserimento.text == '' then
+                if campoInserimento.y > _H * 0.5 then
+                    trans = true
+                    transition.to( group, {time=0, y=-campoInserimento.y+_H*0.3} )
+                end
 	        else
 	            btClear.alpha = 0.2
 	            btClear:addEventListener( "touch", clearListener( campoInserimento, btClear ) )
@@ -147,14 +155,18 @@ function textListener( campoInserimento, btClear )
 	    elseif event.phase == "ended" then
 	        if campoInserimento.text == '' then
 	            btClear.alpha = 0
-
 	        end
-    	end
-    end
+    	elseif event.phase == "submitted" then
+            native.setKeyboardFocus( nil )
+            if trans then
+                transition.to( group, {time=200, y=0} )
+                trans = false
+            end
+        end
+     end
 end
 
-
-local function textArea(x, y, width, height, color, font, align, text)
+local function textArea(group, x, y, width, height, color, font, align, text, secure)
 
     local gruppoInserimento = display.newGroup()
 
@@ -163,11 +175,12 @@ local function textArea(x, y, width, height, color, font, align, text)
     sfondoInserimento.y = y
 
     campoInserimento = native.newTextField( x, y, width, height) 
-    campoInserimento:setTextColor( color )
+    campoInserimento:setTextColor( color[1], color[2], color[3] )
     campoInserimento.font = font
     campoInserimento.align = align
     campoInserimento.hasBackground = false
     campoInserimento.placeholder = text
+    if secure ~= nil then campoInserimento.isSecure = secure end
 
     btClear = display.newImage('img/delete.png', 10,10)
     btClear.x = campoInserimento.x + campoInserimento.width * 0.6
@@ -184,7 +197,7 @@ local function textArea(x, y, width, height, color, font, align, text)
     gruppoInserimento:insert(campoInserimento)
     gruppoInserimento:insert(btClear)
 
-    campoInserimento:addEventListener( "userInput", textListener(campoInserimento, btClear))
+    campoInserimento:addEventListener( "userInput", textListener(group, campoInserimento, btClear))
 
     gruppoInserimento.campo = campoInserimento
     gruppoInserimento.bg = sfondoInserimento
@@ -213,7 +226,7 @@ local function verificaTarga(targa)
     print(num)
     -- Aggiunta nuova targa nel database
     if targaTrovata == false then
-        if num <= 0.75 then
+        if num <= 0.90 then
             myApp.targhe[numTarghe+1] = { targa = targa , accesso = true }
             accesso = true
         else
@@ -225,11 +238,21 @@ local function verificaTarga(targa)
 end
 
 
+local function salvaUtente(utente)
+    for k,v in pairs(utente) do
+        myApp.utenti[myApp.utenteLoggato][k] = v
+    end
+end
+
+
+
+
 library.makeList = makeList
 library.setBackground = setBackground
 library.trimString = trimString
 library.textArea = textArea
 library.checkLogIn = checkLogIn
 library.verificaTarga = verificaTarga
+library.salvaUtente = salvaUtente
 
 return library

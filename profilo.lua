@@ -2,24 +2,16 @@ local storyboard = require( "storyboard" )
 local scene = storyboard.newScene()
 local widget = require('widget')
 local myApp = require('myapp')
-local library = require('library')
 
 widget.setTheme(myApp.theme)
 
 -- funzioni
-local views = {}
-local disconnessione = {}
-local makeList = {}
-local onRowRender = {}
+local disconnessioneButton = {}
 local onRowTouch = {}
 
 
 -- variabili
-local listaInfo
-local disconnetti
-local right_padding = 10
-local background = {1,1,1}
-
+local indietroEffect
 
 
 -- titoli dei menu
@@ -41,32 +33,33 @@ function scene:createScene(event)
     myApp.titleBar.titleText.text = "Profilo"
     myApp.titleBar.indietro.isVisible = true
     myApp.tabBar.isVisible = false
-    myApp.titleBar.logo.isVisible = false
     myApp.titleBar.accedi.isVisible = false
     myApp.titleBar.profilo.isVisible = false
 
-    myApp.titleBar.indietro.scene = myApp.ultimaPagina
-    myApp.titleBar.indietro.optionsBack = { effect = "slideDown", time = 500 }
-
+    -- Imposto effetti indietro
+    indietroEffect = myApp.titleBar.indietro.effect.effect
+    myApp.titleBar.indietro.func = function () 
+        myApp.titleBar.indietro.effect.effect = "fromTop"
+        myApp.tabBar.isVisible = true
+    end
+    
 
     -- Background
 
-    library.setBackground(group, background )
+    library.setBackground(group, _Background )
 
-    local disconnetti = widget.newButton({
-        id  = 'BtAvanti',
+    local BtDisconnetti = widget.newButton({
+        id  = 'BtDisconnetti',
         label = 'Disconnetti utente',
         x = _W*0.5,
         y = _H*0.925,
         labelColor = { default = { 0.8470, 0.13725, 0.13725 }, },
         fontSize = 26,
-        onRelease = disconnessione
+        onRelease = disconnessioneButton
     })
-    group:insert(disconnetti)
    
-
     -- Nome e Cognome
-    local optionsNome = {
+    local optionsUtente = {
         text = myApp.utenti[myApp.utenteLoggato].nome ..' '.. myApp.utenti[myApp.utenteLoggato].cognome,
         x = _W*0.5,
         y = _H*0.175,
@@ -74,13 +67,12 @@ function scene:createScene(event)
         fontSize = 26,
         align = "center"
     }
-    local areaT = display.newText( optionsNome )
-    areaT:setFillColor( 0, 0, 0 )
-    group:insert(areaT)
+    local utente = display.newText( optionsUtente )
+    utente:setFillColor( 0, 0, 0 )
 
 
     -- targa principale
-    local optionsTarga1 = {
+    local optionsTarga = {
         text = 'TARGA PRINCIPALE:',
         x = _W*0.5,
         y = _H*0.27,
@@ -88,11 +80,10 @@ function scene:createScene(event)
         fontSize = 13,
         align = 'center'
     }
-    local text1 = display.newText( optionsTarga1 )
-    text1:setFillColor( 0, 0, 0 )
-    group:insert(text1)
+    local targaText = display.newText( optionsTarga )
+    targaText:setFillColor( 0, 0, 0 )
 
-    local optionsTarga2 = {
+    local optionsTargaDati = {
         text = myApp.utenti[myApp.utenteLoggato].targa,
         x = _W*0.5,
         y = _H*0.31,
@@ -100,14 +91,12 @@ function scene:createScene(event)
         fontSize = 20,
         align = 'center'
     }
-    local text2 = display.newText( optionsTarga2 )
-    text2:setFillColor( 0, 0, 0 )
-    group:insert(text2)    
-
+    local targaDatiText = display.newText( optionsTargaDati )
+    targaDatiText:setFillColor( 0, 0, 0 ) 
 
 
     -- ingressi multipli
-    local optionsMulti1 = {
+    local optionsMulti = {
         text = 'INGRESSI ACQUISTATI RIMANENTI:',
         x = _W*0.5,
         y = _H*0.37,
@@ -115,11 +104,10 @@ function scene:createScene(event)
         fontSize = 13,
         align = 'center'
     }
-    local text3 = display.newText( optionsMulti1 )
-    text3:setFillColor( 0, 0, 0 )
-    group:insert(text3)
+    local multiText = display.newText( optionsMulti )
+    multiText:setFillColor( 0, 0, 0 )
 
-    local optionsMulti2 = {
+    local optionsMultiDati = {
         text = myApp.utenti[myApp.utenteLoggato].multiplo,
         x = _W*0.5,
         y = _H*0.41,
@@ -127,15 +115,23 @@ function scene:createScene(event)
         fontSize = 20,
         align = 'center'
     }
-    local text4 = display.newText( optionsMulti2 )
-    text4:setFillColor( 0, 0, 0 )
-    group:insert(text4)
+    local multiDatiText = display.newText( optionsMultiDati )
+    multiDatiText:setFillColor( 0, 0, 0 )
+
+
+
+    group:insert(utente)
+    group:insert(targaText)
+    group:insert(targaDatiText)
+    group:insert(multiText)
+    group:insert(multiDatiText)
+
 
 
 
     -- ingressi gratuiti residenti
     if myApp.utenti[myApp.utenteLoggato].tipo == 'Residente' then
-       local optionsGratis1 = {
+       local optionsTextGratuiti = {
             text = 'INGRESSI GRATUITI RIMANENTI:',
             x = _W*0.5,
             y = _H*0.47,
@@ -143,11 +139,10 @@ function scene:createScene(event)
             fontSize = 13,
             align = 'center'
         }
-        local text5 = display.newText( optionsGratis1 )
-        text5:setFillColor( 0, 0, 0 )
-        group:insert(text5)
+        local textGratuiti = display.newText( optionsTextGratuiti )
+        textGratuiti:setFillColor( 0, 0, 0 )
 
-        local optionsGratis2 = {
+        local optionsNumGratuiti = {
             text = myApp.utenti[myApp.utenteLoggato].accessi,
             x = _W*0.5,
             y = _H*0.51,
@@ -155,15 +150,19 @@ function scene:createScene(event)
             fontSize = 20,
             align = 'center'
         }
-        local text6 = display.newText( optionsGratis2 )
-        text6:setFillColor( 0, 0, 0 )
-        group:insert(text6)
+        local numGratuiti = display.newText( optionsNumGratuiti )
+        numGratuiti:setFillColor( 0, 0, 0 )
+
+
+        group:insert(textGratuiti)
+        group:insert(numGratuiti)
     else
-        text3.y = _H*0.45 
-        text4.y = _H*0.49
+        multiText.y = _H*0.45 
+        multiDatiText.y = _H*0.49
     end
 
     group:insert(library.makeList("pf", strings, 0, _H*0.6, _W, 150, 50, true, nil, onRowTouch))
+    group:insert(BtDisconnetti)
     
 end
 
@@ -187,16 +186,22 @@ end
 
 function disconnessione()
     myApp.utenteLoggato = 0
-    storyboard.gotoScene(myApp.ultimaPagina, { effect = "slideDown", time = 500, params = { targa = myApp.targaAcquista } })
+    storyboard.gotoScene(myApp.story.back(), { effect = "slideDown", time = 500})
 end
 
 
 function scene:enterScene( event )
     print("ENTRA SCENA PROFILO")
+    myApp.story.add(storyboard.getCurrentSceneName())
 end
 
 function scene:exitScene( event )
     print("ESCI SCENA PROFILO")
+
+    -- Ripristino effetti indietro
+    myApp.titleBar.indietro.isVisible = false
+    myApp.titleBar.indietro.func = nil
+    myApp.titleBar.indietro.effect.effect = indietroEffect
 end
 
 function scene:destroyScene( event )
@@ -204,19 +209,9 @@ function scene:destroyScene( event )
 end
 
 
-
--- "createScene" event is dispatched if scene's view does not exist
 scene:addEventListener( "createScene", scene )
-
--- "enterScene" event is dispatched whenever scene transition has finished
 scene:addEventListener( "enterScene", scene )
-
--- "exitScene" event is dispatched before next scene's transition begins
 scene:addEventListener( "exitScene", scene )
-
--- "destroyScene" event is dispatched before view is unloaded, which can be
--- automatically unloaded in low memory situations, or explicitly via a call to
--- storyboard.purgeScene() or storyboard.removeScene().
 scene:addEventListener( "destroyScene", scene )
 
 return scene

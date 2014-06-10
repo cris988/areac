@@ -1,4 +1,8 @@
 
+-- Dimensioni schermo
+_H = display.contentHeight
+_W = display.contentWidth
+
 --
 -- load in storyboard
 --
@@ -11,10 +15,6 @@ local tabBar = require("tabbar")
 local utenti = require("utenti")
 
 print ("MAIN")
-
--- barra di stato traslucita
-display.setStatusBar( display.TranslucentStatusBar )
-
 
 --
 -- Handle Graphics 2.0 changes
@@ -49,14 +49,11 @@ math.randomseed(os.time())
 --
 -- Load our fonts and define our styles
 --
-
-local tabBarBackgroundFile = "img/tabBarBg7.png"
-local tabBarLeft = "img/tabBar_tabSelectedLeft7.png"
-local tabBarMiddle = "img/tabBar_tabSelectedMiddle7.png"
-local tabBarRight = "img/tabBar_tabSelectedRight7.png"
-
 myApp.topBarBg = "img/topBarBg7.png"
 
+
+-- barra di stato traslucita
+display.setStatusBar(display.DarkStatusBar)
 
 
 local iconInfo = {
@@ -77,9 +74,8 @@ myApp.fontBoldItalic = "Helvetica-BoldItalic"
 
 widget.setTheme(myApp.theme)
 
--- Dimensioni schermo
-_H = display.contentHeight
-_W = display.contentWidth
+
+_Background = {1,1,1}
 
 -- Instanzio titleBar 
 myApp.titleBar = titleBar.new()
@@ -89,31 +85,34 @@ storyboard.purgeOnSceneChange = true
 
 -- Storyboard
 myApp.story = {}
-myApp.story.index = 0
+myApp.story.__scenes = {}
 
 function myApp.story.add(scene)
-    table.insert(myApp.story, scene)
-end
-
-function myApp.story.back()
-    if myApp.story.index > 1 then
-        myApp.story[myApp.story.index] = nil
-        myApp.story.index = myApp.story.index - 1
-        return myApp.story[myApp.story.index]
-    else
-        return myApp.story[myApp.story.index]
+    if scene ~= myApp.story.__scenes[#myApp.story.__scenes] then
+        table.insert(myApp.story.__scenes, scene)
+        for i=1, #myApp.story.__scenes do
+            print(myApp.story.__scenes[i])
+        end
     end
 end
 
-
-
-
-function myApp.story.removeAll()
-    myApp.story = {}
+function myApp.story.back()
+    if #myApp.story.__scenes > 1 then
+        table.remove(myApp.story.__scenes, #myApp.story.__scenes)
+        for i=1, #myApp.story.__scenes do
+            print("STORIA: "..i.." "..myApp.story.__scenes[i])
+        end
+        return myApp.story.__scenes[#myApp.story.__scenes]
+    else
+        return myApp.story.__scenes[#myApp.story.__scenes]
+    end
 end
 
+function myApp.story.removeAll()
+    myApp.story.__scenes = {}
+end
 
 -- Attesa splash screen
-
-timer.performWithDelay(1500, myApp.showHome())
+myApp.showHome()
+--timer.performWithDelay(1500, myApp.showHome())
 

@@ -6,7 +6,6 @@ local myApp = require('myapp')
 widget.setTheme(myApp.theme)
 
 -- funzioni
-local views = {}
 local modificaDati = {}
 local fineModifica = {}
 local aggiungiTarga = {}
@@ -15,35 +14,44 @@ local onRowRender = {}
 local onRowTouch = {}
 local eliminaRow = {}
 local selezionaStar = {}
-local sistemaRighe = {}
 
 
 -- variabili
-local modifica
-local fine
-local aggiungi
+local BtModifica
+local BtFine
+local BtAggiungi
 local rowTitle
 local rowDelete = {}
 local rowStar = {}
-local numTargheIniz
+local edit = true
+local group
 
 function scene:createScene(event)
-    local group = self.view
+    group = self.view
 
     print("CREA SCENA GESTIONE TARGHE")
 
     -- Background
 
-    library.setBackground(group, {1,1,1})
+    library.setBackground(group, _Background)
 
-    numTargheIniz = myApp:getNumTargheUtente(myApp.utenteLoggato)
 
-    makeList()
-    group:insert(listaInfo)
+    -- Preparo titleBar
+    myApp.titleBar.titleText.text = "Gestione targhe"
+    myApp.titleBar.indietro.isVisible = true
 
-    if storyboard.getPrevious( ) == 'profilo' or storyboard.getPrevious( ) == 'gestione_targhe_verifica' then
+
+    local numTarghe = myApp:getNumTargheUtente(myApp.utenteLoggato)
+
     
-        modifica = widget.newButton({
+    group:insert(makeList())
+
+    if event.params ~= nil then edit = event.params.edit end
+    if edit == false then myApp.titleBar.titleText.text = 'Seleziona targa' end
+
+    if edit ~= false then
+    
+        BtModifica = widget.newButton({
             id  = 'BtModifica',
             label = 'Gestisci targhe',
             x = _W*0.5,
@@ -52,10 +60,8 @@ function scene:createScene(event)
             fontSize = 26,
             onRelease =  modificaDati
         })
-        group:insert(modifica)
-
     
-        fine = widget.newButton({
+        BtFine = widget.newButton({
             id  = 'BtModifica',
             label = 'Fine modifiche',
             x = _W*0.5,
@@ -64,11 +70,9 @@ function scene:createScene(event)
             fontSize = 26,
             onRelease =  fineModifica
         })
-        group:insert(fine)
-        fine.isVisible = false
+        BtFine.isVisible = false
 
-
-        aggiungi = widget.newButton({
+        BtAggiungi = widget.newButton({
             id  = 'BtAggiungi',
             label = '+ Aggiungi targa',
             x = _W*0.5,
@@ -79,9 +83,12 @@ function scene:createScene(event)
             align = 'center',
             onRelease =  aggiungiTarga
         })
-        aggiungi.anchorX = 0.5
-        -- aggiungi.isVisible = false    
-        group:insert(aggiungi)
+        BtAggiungi.anchorX = 0.5
+
+        group:insert(BtModifica)  
+        group:insert(BtAggiungi)
+        group:insert(BtFine)
+
     end
 
 
@@ -91,11 +98,11 @@ function scene:createScene(event)
             numFrames = 2,
             sheetContentWidth = 60,
             sheetContentHeight = 30,
-        }
+    }
+
     local mySheet = graphics.newImageSheet( "img/star_sheet.png", opt )
 
-    local numTarghe = myApp:getNumTargheUtente(myApp.utenteLoggato)
-    for i=1, numTargheIniz do
+    for i=1, numTarghe do
         
         rowDelete[i] = widget.newButton({
             id = i,
@@ -105,12 +112,13 @@ function scene:createScene(event)
             height = 49,
             defaultFile = "img/elimina_on.png",
             overFile = "img/elimina_off.png",
-            onRelease = eliminaRow
+            onRelease = function(event) 
+                local index = event.target.id
+                native.showAlert( "Eliminazione", "Sei sicuro di voler eliminare la targa?", {"Ok", "Annulla "}, 
+                function(event) eliminaRow(event, index) end ) end
         })
         rowDelete[i].anchorY = 0
         rowDelete[i].isVisible = false
-        group:insert(rowDelete[i])
-
 
         rowStar[i] = widget.newSwitch {
             id = i,
@@ -130,6 +138,9 @@ function scene:createScene(event)
         else
             rowStar[i].isVisible = false
         end
+
+
+        group:insert(rowDelete[i])
         group:insert(rowStar[i])
 
     end
@@ -138,15 +149,9 @@ function scene:createScene(event)
 end
 
 
-
-
-
-
-
-
 function modificaDati()
     local numTarghe = myApp:getNumTargheUtente(myApp.utenteLoggato)
-    for i=1, numTargheIniz do
+    for i=1, numTarghe do
         rowStar[i].isVisible = true
         if i == myApp.utenti[myApp.utenteLoggato].targaSelezionata then
             rowDelete[i].isVisible = false
@@ -155,47 +160,66 @@ function modificaDati()
         end
     end
 
-    -- aggiungi.isVisible = true
-    modifica.isVisible = false
-    fine.isVisible = true
-    myApp.titleBar.indietro.isVisible = false
+    BtModifica.isVisible = false
+    BtFine.isVisible = true
+
 end
 
 
 function fineModifica()
     local numTarghe = myApp:getNumTargheUtente(myApp.utenteLoggato)
-    for i=1, numTargheIniz do
+    for i=1, numTarghe do
         if rowStar[i].isOn == false then
             rowDelete[i].isVisible = false
             rowStar[i].isVisible = false
         end
     end
-
-    -- aggiungi.isVisible = false
-    modifica.isVisible = true
-    fine.isVisible = false
-    myApp.titleBar.indietro.isVisible = true
+    BtModifica.isVisible = true
+    BtFine.isVisible = false
 end
 
-function eliminaRow( event )
-    local index = event.target.id
+local function listener( event )
+    listaInfo:removeSelf( )
+    group:insert(makeList())
+
     local numTarghe = myApp:getNumTargheUtente(myApp.utenteLoggato)
-
-    rowStar[index]:removeSelf( )
-    rowDelete[index]:removeSelf( )
-    listaInfo:deleteRow( index )
-    
-    local funzioneTargheUtente = myApp:getTargheUtente(myApp.utenteLoggato)
-    table.remove( funzioneTargheUtente, index )
-    
-    for i = index+1, numTargheIniz do        
-        transition.to( rowStar[i], { time = 480, delay = 430, x =(rowStar[i].x), y =(rowStar[i].y-50) } )
-        transition.to( rowDelete[i], { time = 480, delay = 430, x =(rowDelete[i].x), y =(rowDelete[i].y-49) } )       
+    for i=1, numTarghe do
+        rowStar[i]:toFront( )
+        rowDelete[i]:toFront( )
     end
-    transition.to( aggiungi, { time = 480, delay = 430, x =(aggiungi.x), y =(aggiungi.y-50) } )       
+end
 
-    if index < myApp.utenti[myApp.utenteLoggato].targaSelezionata then
-        myApp.utenti[myApp.utenteLoggato].targaSelezionata = myApp.utenti[myApp.utenteLoggato].targaSelezionata-1
+function eliminaRow( event, index )
+
+    if "clicked" == event.action then
+        local i = event.index
+        if 1 == i then
+
+            local targheUtente = myApp:getTargheUtente(myApp.utenteLoggato)
+
+            listaInfo:deleteRow( index )
+            rowStar[index]:removeSelf( )
+            rowDelete[index]:removeSelf( )
+            table.remove( rowStar, index )
+            table.remove( rowDelete, index )
+            table.remove( targheUtente, index )
+
+            local numTarghe = myApp:getNumTargheUtente(myApp.utenteLoggato)
+            for i = index, numTarghe do 
+                rowStar[i].id = i
+                rowDelete[i].id = i
+                transition.to( rowStar[i], { time = 480, delay = 430, x =(rowStar[i].x), y =(rowStar[i].y-50) } )
+                transition.to( rowDelete[i], { time = 480, delay = 430, x =(rowDelete[i].x), y =(rowDelete[i].y-49) } )
+            end
+            transition.to( BtAggiungi, { time = 480, delay = 430, x =(BtAggiungi.x), y =(BtAggiungi.y-50) } )  
+
+            if index < myApp.utenti[myApp.utenteLoggato].targaSelezionata then
+                myApp.utenti[myApp.utenteLoggato].targaSelezionata = myApp.utenti[myApp.utenteLoggato].targaSelezionata-1
+            end
+
+            timer.performWithDelay(910,  listener)
+
+        end
     end
 end
 
@@ -205,12 +229,13 @@ function selezionaStar( event )
     local index = event.target.id
     myApp.utenti[myApp.utenteLoggato].targaSelezionata = index
 
-    local funzioneTargheUtente = myApp:getTargheUtente(myApp.utenteLoggato)
-    myApp.utenti[myApp.utenteLoggato].targa = funzioneTargheUtente[index]
+    local targheUtente = myApp:getTargheUtente(myApp.utenteLoggato)
+    myApp.utenti[myApp.utenteLoggato].targa = targheUtente[index]
 
     local numTarghe = myApp:getNumTargheUtente(myApp.utenteLoggato)
-    for i=1, numTargheIniz do
-        if i == myApp.utenti[myApp.utenteLoggato].targaSelezionata then
+
+    for i=1, numTarghe do
+        if i == index then
             rowDelete[i].isVisible = false
         else
             rowDelete[i].isVisible = true
@@ -219,14 +244,9 @@ function selezionaStar( event )
 end
 
 function aggiungiTarga()
-        storyboard.gotoScene( 'gestione_targhe_verifica' )
+    require("gestione_targhe_verifica")
+    storyboard.gotoScene( 'gestioneVerifica0' )
 end
-
-
-
-
-
-
 
 
 -- creo spazio per la lista
@@ -248,7 +268,7 @@ function makeList()
         local rowColor = { default={ 1, 1, 1 }, }
         local lineColor = { 0.8, 0.8, 0.8 }
 
-        if storyboard.getPrevious( ) == 'acquista' then
+        if edit == false then
             rowColor = { default = { 1, 1, 1 }, over = { 0.3, 0.3, 0.3 } }
         end
 
@@ -262,6 +282,7 @@ function makeList()
             }
         )
     end
+    return listaInfo
 end
 
 
@@ -287,59 +308,26 @@ end
 
 -- gestisce le azioni dell'utente sulle righe della lista
 function onRowTouch( event )
-    if storyboard.getPrevious( ) == 'acquista' then
+    if edit == false then
         local row = event.target
         if event.phase == "release" or event.phase == 'tap' then
             local funzioneTargheUtente = myApp:getTargheUtente(myApp.utenteLoggato)
             myApp.acquisto.targa = funzioneTargheUtente[event.target.index]
-            storyboard.gotoScene('acquista2', { effect = "slideLeft", time = 500 })
+            require("acquista")
+            storyboard.gotoScene('acquista1', { effect = "slideLeft", time = 500 })
         end
     end
 end
-
-
-
-
-
-
-
-
-
-
-
+    
 
 function scene:enterScene( event )
     print("ENTRA SCENA GESTIONE TARGHE")
-
-
-    -- Preparo titleBar
-    myApp.titleBar.titleText.text = "Gestione targhe"
-    myApp.titleBar.indietro.isVisible = true
-    myApp.titleBar.indietro.scene = 'profilo'
-    myApp.titleBar.indietro.optionsBack = { effect = "slideRight", time = 500 }
-
-    if myApp.utenteLoggato == 0 then
-        myApp.titleBar.accedi.isVisible = false
-    else
-        myApp.titleBar.profilo.isVisible = false
-    end
-
-    myApp.tabBar.isVisible = false
-
-
-    if storyboard.getPrevious( ) == 'acquista' then
-        myApp.titleBar.titleText.text = 'Seleziona targa'
-        myApp.titleBar.indietro.isVisible = false
-        myApp.titleBar.chiudi.isVisible = true
-        myApp.titleBar.logo.isVisible = false
-        myApp.titleBar.indietro.scene = 'acquista'
-        myApp.titleBar.indietro.optionsBack = { effect = "slideRight", time = 500 }
-    end
+    myApp.story.add(storyboard.getCurrentSceneName())
 end
 
 function scene:exitScene( event )
     print("ESCI SCENA GESTIONE TARGHE")
-    myApp.titleBar.chiudi.isVisible = false
+    myApp.titleBar.indietro.isVisible = false
 end
 
 function scene:destroyScene( event )
@@ -348,18 +336,9 @@ end
 
 
 
--- "createScene" event is dispatched if scene's view does not exist
 scene:addEventListener( "createScene", scene )
-
--- "enterScene" event is dispatched whenever scene transition has finished
 scene:addEventListener( "enterScene", scene )
-
--- "exitScene" event is dispatched before next scene's transition begins
 scene:addEventListener( "exitScene", scene )
-
--- "destroyScene" event is dispatched before view is unloaded, which can be
--- automatically unloaded in low memory situations, or explicitly via a call to
--- storyboard.purgeScene() or storyboard.removeScene().
 scene:addEventListener( "destroyScene", scene )
 
 return scene

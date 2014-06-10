@@ -3,13 +3,10 @@ local scene = storyboard.newScene()
 local widget = require('widget')
 local myApp = require('myapp')
 
-
-
 -- funzioni
 local makeList ={}
 
 -- variabili
-local scrollView
 local titles = {"DATA", "TARGA", "IMPORTO"}
 
 
@@ -23,16 +20,11 @@ function scene:createScene(event)
 
     myApp.titleBar.titleText.text = "Transiti"
     myApp.titleBar.indietro.isVisible = true
-    myApp.titleBar.profilo.isVisible = false
     myApp.titleBar.ricerca.isVisible = true
-    myApp.titleBar.indietro.scene = "profilo"
-    myApp.tabBar.isVisible = false
-
-    myApp.titleBar.indietro.optionsBack = { effect = "slideRight", time = 500 }
   
     -- Background
 
-    library.setBackground(group, {0.9,0.9,0.9})
+    library.setBackground(group, _Background)
 
 
     local utente = myApp.transiti[myApp.utenteLoggato]
@@ -162,11 +154,13 @@ end
 
 function scene:enterScene( event )
     print("ENTRA SCENA TRANSITI")
+    myApp.story.add(storyboard.getCurrentSceneName())
 end
 
 function scene:exitScene( event )
     print("ESCI SCENA TRANSITI")
     myApp.titleBar.ricerca.isVisible = false
+    myApp.titleBar.indietro.isVisible = false
     myApp.ricerca = nil
 end
 
@@ -174,18 +168,9 @@ function scene:destroyScene( event )
     print("DISTRUGGI SCENA TRANSITI")
 end
 
--- "createScene" event is dispatched if scene's view does not exist
 scene:addEventListener( "createScene", scene )
-
--- "enterScene" event is dispatched whenever scene transition has finished
 scene:addEventListener( "enterScene", scene )
-
--- "exitScene" event is dispatched before next scene's transition begins
 scene:addEventListener( "exitScene", scene )
-
--- "destroyScene" event is dispatched before view is unloaded, which can be
--- automatically unloaded in low memory situations, or explicitly via a call to
--- storyboard.purgeScene() or storyboard.removeScene().
 scene:addEventListener( "destroyScene", scene )
 
 return scene

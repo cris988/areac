@@ -6,64 +6,26 @@ local myApp = require('myapp')
 widget.setTheme(myApp.theme)
 
 -- funzioni
-local views = {}
-local goBack = {}
-local textListenerNome = {}
-local clearListenerNome = {}
-local textListenerCognome = {}
-local clearListenerCognome = {}
-local trimString = {}
+local avantiButton = {}
 local checkBoxListener = {}
-local AvantiScene = {}
-
-
 
 -- variabili
-local campoInserimentoNome
-local sfondoInserimentoNome
-local btClearNome
-local campoInserimentoCognome
-local sfondoInserimentoCognome
-local btClearCognome
 local checkNonRes
 local checkRes
 local checkDis
-local textNonRes
-local textRes
-local textDis
-local avanti
-local background = {1,1,1}
-
-
-
-
-
-
-
-
-
+local txtNome
+local txtCognome
 
 
 function scene:createScene(event)
+
+    print("CREA SCENA REGISTRAZIONE2")
+
     local group = self.view
 
     -- Background
 
-    library.setBackground(group, background )
-
-
-    avanti = widget.newButton({
-        id  = 'BtAvanti',
-        label = 'Avanti',
-        x = _W*0.5,
-        y = _H*0.925,
-        color = { 0.062745,0.50980,0.99607 },
-        fontSize = 26,
-        font = myApp.font,
-        onRelease = AvantiScene
-    })
-    group:insert(avanti)
-
+    library.setBackground(group, _Background )
 
 	-- testo in alto
     local options = {
@@ -77,87 +39,13 @@ function scene:createScene(event)
     }
     local areaT = display.newText( options )
     areaT:setFillColor( 0, 0, 0 )
-    group:insert(areaT)
-
-    -- creazione textArea per nome
-
-    local gruppoInserimentoNome = display.newGroup()
-
-    sfondoInserimentoNome = display.newImageRect('img/textArea.png', 564*0.45, 62*0.6)
-    sfondoInserimentoNome.x = _W*0.5
-    sfondoInserimentoNome.y = _H*0.325
-
-    campoInserimentoNome = native.newTextField( 40, 85, 195, 28)
-    campoInserimentoNome.x = _W/2
-    campoInserimentoNome.y = _H*0.325
-    campoInserimentoNome:setTextColor( 0.75,0.75,0.75 )
-    campoInserimentoNome.font = native.newFont( myApp.font, 17 )
-    campoInserimentoNome.align = "center"
-    campoInserimentoNome.hasBackground = false
-    campoInserimentoNome.placeholder = 'Nome'
 
 
-    if myApp.datiUtente.nome == '' then
-    else
-        campoInserimentoNome.text = myApp.datiUtente.nome
-        campoInserimentoNome:setTextColor( 0 )
-    end
-
-
-    btClearNome = display.newImage('img/delete.png', 10,10)
-    btClearNome.x = _W*0.85
-    btClearNome.y = _H*0.325
-    btClearNome.alpha = 0
-
-    gruppoInserimentoNome:insert(sfondoInserimentoNome)
-    gruppoInserimentoNome:insert(campoInserimentoNome)
-    gruppoInserimentoNome:insert(btClearNome)
-
-    campoInserimentoNome:addEventListener( "userInput", textListenerNome)
-
-
-
-    -- creazione textArea per cognome
-
-    local gruppoInserimentoCognome = display.newGroup()
-
-    sfondoInserimentoCognome = display.newImageRect('img/textArea.png', 564*0.45, 62*0.6)
-    sfondoInserimentoCognome.x = _W*0.5
-    sfondoInserimentoCognome.y = _H*0.45
-
-    campoInserimentoCognome = native.newTextField( 40, 85, 195, 28)
-    campoInserimentoCognome.x = _W/2
-    campoInserimentoCognome.y = _H*0.45
-    campoInserimentoCognome:setTextColor( 0.75,0.75,0.75 )
-    campoInserimentoCognome.font = native.newFont( myApp.font, 17 )
-    campoInserimentoCognome.align = "center"
-    campoInserimentoCognome.hasBackground = false
-    campoInserimentoCognome.placeholder = 'Cognome'
-
-    btClearCognome = display.newImage('img/delete.png', 10,10)
-    btClearCognome.x = _W*0.85
-    btClearCognome.y = _H*0.45
-    btClearCognome.alpha = 0
-
-    gruppoInserimentoCognome:insert(sfondoInserimentoCognome)
-    gruppoInserimentoCognome:insert(campoInserimentoCognome)
-    gruppoInserimentoCognome:insert(btClearCognome)
-
-    campoInserimentoCognome:addEventListener( "userInput", textListenerCognome)
-
-
-
-
-
-    group:insert(gruppoInserimentoNome)
-    group:insert(gruppoInserimentoCognome)
-
-
-
-
-
-
-
+    -- Text field dati
+    txtNome =library.textArea(group,_W*0.5, _H*0.4, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Nome")
+    print("NOME: "..txtNome.campo.text)
+    txtCognome =library.textArea(group,_W*0.5, _H*0.55, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Cognome")
+    print("COGNOME: "..txtCognome.campo.text)
 
     -- creazione dei checkBox
 
@@ -191,34 +79,45 @@ function scene:createScene(event)
        onPress = checkBoxListener
     }
 
-    group:insert(checkNonRes)
-    group:insert(checkRes)
-    group:insert(checkDis)
     
-    textNonRes = display.newText('Non residente a Milano', _W*0.25, _H*0.6, myApp.font, 20)
+    local textNonRes = display.newText('Non residente a Milano', _W*0.25, _H*0.6, myApp.font, 20)
     textNonRes:setFillColor( 0 )
     textNonRes.anchorX = 0
-    textRes = display.newText('Residente a Milano', _W*0.25, _H*0.7, myApp.font, 20)
+    local textRes = display.newText('Residente a Milano', _W*0.25, _H*0.7, myApp.font, 20)
     textRes:setFillColor( 0 )
     textRes.anchorX = 0
-    textDis = display.newText('Disabile', _W*0.25, _H*0.80, myApp.font, 20)
+    local textDis = display.newText('Disabile', _W*0.25, _H*0.80, myApp.font, 20)
     textDis:setFillColor( 0 )
     textDis.anchorX = 0
 
+    local BtAvanti = widget.newButton({
+        id  = 'BtAvanti',
+        label = 'Avanti',
+        x = _W*0.5,
+        y = _H*0.925,
+        color = { 0.062745,0.50980,0.99607 },
+        fontSize = 26,
+        font = myApp.font,
+        onRelease = avantiButton
+    })
+
+    group:insert(areaT)
+    group:insert(txtNome)
+    group:insert(txtCognome)
+    group:insert(checkNonRes)
+    group:insert(checkRes)
+    group:insert(checkDis)
     group:insert(textNonRes)
     group:insert(textRes)
     group:insert(textDis)
+    group:insert(BtAvanti)
 
 
+    -- Recupero dati in memoria
+    if myApp.datiUtente.nome ~= '' then
+        txtNome.campo.text = myApp.datiUtente.nome
+        txtCognome.campo.text = myApp.datiUtente.cognome
 
-
-
-
-
-    if myApp.datiUtente.cognome == '' then
-    else
-        campoInserimentoCognome.text = myApp.datiUtente.cognome
-        campoInserimentoCognome:setTextColor( 0 )
         if myApp.datiUtente.tipo == 'Non residente' then
             checkNonRes:setState( { isOn = true } )
             checkRes:setState( { isOn = false } )
@@ -232,24 +131,9 @@ function scene:createScene(event)
             checkRes:setState( { isOn = false } )
             checkNonRes:setState( { isOn = false } )
         end
+
     end
-
-    
-
-
 end
-
-
-
-
--- fa il trim della stringa inserita dall'utente
-function trimString( s )
-   return string.match( s,"^()%s*$") and "" or string.match(s,"^%s*(.*%S)" )
-end
-
-
-
-
 
 
 -- Inibisce la doppia selezione dei checkBox
@@ -272,132 +156,26 @@ end
 
 
 
--- fa il trim della stringa inserita dall'utente
-function trimString( s )
-   return string.match( s,"^()%s*$") and "" or string.match(s,"^%s*(.*%S)" )
-end
+function avantiButton()
+    local nome = txtNome.campo.text
+    local cognome = txtCognome.campo.text
 
+    local utente =  myApp.datiUtente
 
+	if 	nome ~= '' or cognome ~= '' then
 
---gestisce le fasi dell'inserimento del nome
-function textListenerNome( event )
-    if event.phase == "began" then
-        if event.target.text == '' then
-        else
-            btClearNome.alpha = 0.2
-            btClearNome:addEventListener( "touch", clearListenerNome )
-        end
-        campoInserimentoNome:setTextColor( 0 )
-    elseif event.phase == "editing" then
-        
-        if(#event.target.text > 0) then
-            btClearNome.alpha = 0.2
-            btClearNome:addEventListener( "touch", clearListenerNome )
-        else
-            btClearNome.alpha = 0
-            btClearNome:removeEventListener( "touch", clearListenerNome )
-        end
-    elseif event.phase == "ended" then
-        if event.target.text == '' then
-            btClearNome.alpha = 0
-            campoInserimentoNome:setTextColor( 0.75,0.75,0.75 )
+        utente.nome = library.trimString( nome )
+        utente.cognome = library.trimString( cognome )
 
-        end
-    end
-end
-
--- gestisce la comparsa del pulsate clear
-function clearListenerNome( event ) 
-    if(event.phase == "began") then
-        event.target.alpha = 0.8
-    elseif(event.phase == "cancelled") then
-        event.target.alpha = 0.2
-    elseif(event.phase == "ended") then
-        campoInserimentoNome.text = ''
-        native.setKeyboardFocus( campoInserimentoNome )
-        btClearNome.alpha = 0
-        btClearNome:removeEventListener( "touch", clearListenerNome )
-    end
-end
-
-
---gestisce le fasi dell'inserimento della cognome
-function textListenerCognome( event )
-    if event.phase == "began" then
-        if event.target.text == '' then
-        else
-            btClearCognome.alpha = 0.2
-            btClearCognome:addEventListener( "touch", clearListenerCognome )
-        end
-        campoInserimentoCognome:setTextColor( 0 )
-    elseif event.phase == "editing" then
-        
-        if(#event.target.text > 0) then
-            btClearCognome.alpha = 0.2
-            btClearCognome:addEventListener( "touch", clearListenerCognome )
-        else
-            btClearCognome.alpha = 0
-            btClearCognome:removeEventListener( "touch", clearListenerCognome )
-        end
-    elseif event.phase == "ended" then
-        if event.target.text == '' then
-            btClearCognome.alpha = 0
-            campoInserimentoCognome:setTextColor( 0.75,0.75,0.75 )
-
-        end
-    end
-end
-
--- gestisce la comparsa del pulsate clear
-function clearListenerCognome( event ) 
-    if(event.phase == "began") then
-        event.target.alpha = 0.8
-    elseif(event.phase == "cancelled") then
-        event.target.alpha = 0.2
-    elseif(event.phase == "ended") then
-        campoInserimentoCognome.text = ''
-        native.setKeyboardFocus( campoInserimentoCognome )
-        btClearCognome.alpha = 0
-        btClearCognome:removeEventListener( "touch", clearListenerCognome )
-    end
-end
-
-
-
-
-
-function AvantiScene()
-	if 	campoInserimentoNome.text == '' or 
-        campoInserimentoCognome.text == '' then
-
-	else
 		if checkNonRes.isOn then
-            myApp.datiUtente = {
-                username = myApp.datiUtente.username,
-                password = myApp.datiUtente.password,
-                nome = trimString( campoInserimentoNome.text ),
-                cognome = trimString( campoInserimentoCognome.text ),
-                tipo = 'Non residente'
-            }
+            utente.tipo = 'Non residente'           }
             storyboard.gotoScene('riepilogo', { effect = "slideLeft", time = 500 } )
         elseif checkRes.isOn then
-            myApp.datiUtente = {
-                username = myApp.datiUtente.username,
-                password = myApp.datiUtente.password,
-                nome = trimString( campoInserimentoNome.text ),
-                cognome = trimString( campoInserimentoCognome.text ),
-                tipo = 'Residente'
-            }
-            storyboard.gotoScene('registrazione3', { effect = "slideLeft", time = 500 } )
+            utente.tipo = 'Residente'
+            storyboard.gotoScene('registrazione_res', { effect = "slideLeft", time = 500 } )
         elseif checkDis.isOn then
-            myApp.datiUtente = {
-                username = myApp.datiUtente.username,
-                password = myApp.datiUtente.password,
-                nome = trimString( campoInserimentoNome.text ),
-                cognome = trimString( campoInserimentoCognome.text ),
-                tipo = 'Disabile'
-            }
-            storyboard.gotoScene('registrazione4', { effect = "slideLeft", time = 500 } )
+            utente.tipo = 'Disabile'
+            storyboard.gotoScene('registrazione_dis', { effect = "slideLeft", time = 500 } )
         end
 
 	end
@@ -406,29 +184,13 @@ end
 
 
 
-
-
-
-
 function scene:enterScene( event )
     print("ENTRA SCENA REGISTRAZIONE2")
-    
-    -- Preparo titleBar
-
-    myApp.titleBar.titleText.text = "Registrazione"
-    myApp.titleBar.indietro.isVisible = true
-    myApp.titleBar.indietro.scene = "registrazione"
-    myApp.titleBar.indietro.optionsBack = { effect = "slideRight", time = 500 }
-    myApp.tabBar.isVisible = false
-    myApp.titleBar.accedi.isVisible = false
-
+    myApp.story.add(storyboard.getCurrentSceneName())
 end
 
 function scene:exitScene( event )
     print("ESCI SCENA REGISTRAZIONE2")
-
-    myApp.tabBar.isVisible = false
-
 end
 
 function scene:destroyScene( event )
@@ -437,18 +199,9 @@ end
 
 
 
--- "createScene" event is dispatched if scene's view does not exist
 scene:addEventListener( "createScene", scene )
-
--- "enterScene" event is dispatched whenever scene transition has finished
 scene:addEventListener( "enterScene", scene )
-
--- "exitScene" event is dispatched before next scene's transition begins
 scene:addEventListener( "exitScene", scene )
-
--- "destroyScene" event is dispatched before view is unloaded, which can be
--- automatically unloaded in low memory situations, or explicitly via a call to
--- storyboard.purgeScene() or storyboard.removeScene().
 scene:addEventListener( "destroyScene", scene )
 
 return scene

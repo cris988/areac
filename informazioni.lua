@@ -39,7 +39,6 @@ function scene:createScene(event)
     -- Preparo titleBar
 
     myApp.titleBar.titleText.text = "Informazioni"
-    myApp.titleBar.indietro.isVisible = false
     myApp.titleBar.logo.isVisible = true
     
     library.checkLogIn()
@@ -50,7 +49,7 @@ function scene:createScene(event)
 
     library.setBackground(group, {1, 1, 1})
 
-    group:insert(library.makeList("info", strings, 0, 70, _W, 50 * #strings, 50, true,nil, onRowTouch))
+    group:insert(library.makeList("info", strings, 0, 69, _W, 50 * #strings, 50, true,nil, onRowTouch))
 
 end
 
@@ -67,10 +66,13 @@ end
 
 function scene:enterScene( event )
     print("ENTRA SCENA INFORMAZIONI")
+    myApp.story.removeAll()
+    myApp.story.add(storyboard.getCurrentSceneName())
 end
 
 function scene:exitScene( event )
     print("ESCI SCENA INFORMAZIONI")
+    myApp.titleBar.logo.isVisible = false
 end
 
 function scene:destroyScene( event )
