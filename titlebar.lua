@@ -124,6 +124,7 @@ function titleBar.ricerca()
 end
 
 function titleBar.cerca()
+	myApp.story.back()
 	storyboard.gotoScene( "transiti", titleBar.cerca.effect)
 end
 

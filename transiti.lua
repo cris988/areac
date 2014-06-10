@@ -8,6 +8,7 @@ local makeList ={}
 
 -- variabili
 local titles = {"DATA", "TARGA", "IMPORTO"}
+local transitiTable = {}
 
 
 function scene:createScene(event)
@@ -30,9 +31,21 @@ function scene:createScene(event)
     local utente = myApp.transiti[myApp.utenteLoggato]
 
 
+    scrollView = widget.newScrollView
+    {
+      top = myApp.titleBar.height,
+      left = 0,
+      width =  _W,
+      height = _H - myApp.titleBar.height,
+      scrollWidth = _W,
+      scrollHeight = 0,
+      horizontalScrollDisabled = true,
+      hideBackground = true
+    }
+
     -- Se non è una ricerca
     if myApp.ricerca == nil then
-        makeList(group, utente)	
+        transitiTable = makeList(utente)
     else
         -- Se è una ricerca
         local transiti = {}
@@ -85,8 +98,13 @@ function scene:createScene(event)
             end
         end
 
-        makeList(group, transiti)
+        transitiTable = makeList(transiti)
+
     end
+    
+    scrollView:insert(transitiTable)
+    
+    group:insert(scrollView)
  end
 
 
@@ -97,13 +115,14 @@ function scene:createScene(event)
     return convertedTimestamp
 end
 
- function makeList(group, transiti)
+ function makeList(transiti)
 
     local textX = { 0.17, 0.5, 0.83}
-    local textY = 0.17 * _H
+    local textY = 20
 	local lineV1X = _W * 0.33
 	local lineV2X = _W * 0.66
     local padding = 5
+    local group = display.newGroup( )
 
 
     -- Stampa titoli
@@ -151,7 +170,7 @@ end
     local lineV2 = display.newLine( group, lineV2X, 0, lineV2X, textY)
     lineV2:setStrokeColor( 0.8, 0.8, 0.8 )
 
-
+    return group
  end
 
 
@@ -165,6 +184,7 @@ function scene:exitScene( event )
     myApp.titleBar.ricerca.isVisible = false
     myApp.titleBar.indietro.isVisible = false
     myApp.ricerca = nil
+    transitiTable:removeSelf( )
 end
 
 function scene:destroyScene( event )

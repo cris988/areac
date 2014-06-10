@@ -37,9 +37,9 @@ function scene:createScene(event)
     myApp.titleBar.profilo.isVisible = false
 
     -- Imposto effetti indietro
-    indietroEffect = myApp.titleBar.indietro.effect.effect
+    indietroEffect = myApp.titleBar.indietro.effect
     myApp.titleBar.indietro.func = function () 
-        myApp.titleBar.indietro.effect.effect = "slideUp"
+        myApp.titleBar.indietro.effect = { effect = "slideUp", time=100 }
         myApp.tabBar.isVisible = true
     end
     
@@ -184,9 +184,10 @@ end
 
 
 
-function disconnessione()
+function disconnessioneButton()
     myApp.utenteLoggato = 0
-    storyboard.gotoScene(myApp.story.back(), { effect = "slideDown", time = 500})
+    myApp.tabBar.isVisible = true
+    storyboard.gotoScene(myApp.story.back(), { effect = "slideUp", time=100 })
 end
 
 
@@ -201,7 +202,7 @@ function scene:exitScene( event )
     -- Ripristino effetti indietro
     myApp.titleBar.indietro.isVisible = false
     myApp.titleBar.indietro.func = nil
-    myApp.titleBar.indietro.effect.effect = indietroEffect
+    myApp.titleBar.indietro.effect = indietroEffect
 end
 
 function scene:destroyScene( event )

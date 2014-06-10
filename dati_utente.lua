@@ -31,6 +31,9 @@ function scene:createScene(event)
 
     library.setBackground(group, _Background)
 
+    
+    myApp.titleBar.indietro.isVisible = true
+
     step = 0
 
     -- Preparo titleBar
@@ -255,8 +258,8 @@ end
 function scene:enterScene( event )
     print("ENTRA SCENA DATI UTENTE")
     
-    myApp.story.add(storyboard.getCurrentSceneName())
     myApp.titleBar.indietro.isVisible = true
+    myApp.story.add(storyboard.getCurrentSceneName())
 
 end
 

@@ -36,9 +36,9 @@ function scene:createScene(event)
     library.setBackground(group, _Background)
 
     -- Imposto effetti indietro
-    indietroEffect = myApp.titleBar.indietro.effect.effect
+    indietroEffect = myApp.titleBar.indietro.effect
     myApp.titleBar.indietro.func = function () 
-        myApp.titleBar.indietro.effect.effect = "slideUp"
+        myApp.titleBar.indietro.effect = { effect = "slideUp", time=100 }
         myApp.tabBar.isVisible = true
     end
 
@@ -161,7 +161,7 @@ function scene:exitScene( event )
     -- Ripristino effetti indietro
     myApp.titleBar.indietro.isVisible = false
     myApp.titleBar.indietro.func = nil
-    myApp.titleBar.indietro.effect.effect = indietroEffect
+    myApp.titleBar.indietro.effect = indietroEffect
 end
 
 function scene:destroyScene( event )

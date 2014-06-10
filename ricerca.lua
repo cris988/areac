@@ -8,6 +8,9 @@ local myApp = require('myapp')
 -- funzioni
 local newTitle = {}
 local retrieveData = {}
+local onRowRender = {}
+local onRowTouch = {}
+local order = {}
 
 -- variabili
 local targheTable
@@ -224,6 +227,7 @@ end
 
 function scene:enterScene( event )
     print("ENTRA SCENA RICERCA")
+    myApp.story.add(storyboard.getCurrentSceneName())
 end
 
 function scene:exitScene( event )
