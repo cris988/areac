@@ -30,11 +30,11 @@ function titleBar.new()
 	}
 
 	optionsProfilo ={
-		effect = { effect = "fromBottom", time = 500 }
+		effect = { effect = "fromTop", time = 100 }
 	}
 
 	optionsAccedi ={
-		effect = { effect = "fromBottom", time = 500 }
+		effect = { effect = "fromTop", time = 100 }
 	}
 
 	optionsAnnulla ={
@@ -45,7 +45,7 @@ function titleBar.new()
 	}
 
 	optionsCerca ={
-		effect = { effect = "fromTop", time = 500 }
+		effect = { effect = "slideUp", time = 500 }
 	}
 
 
@@ -65,7 +65,7 @@ function titleBar.new()
 		display.contentCenterX*1.75, bgTitle.height * 0.5 + 7, { 0.062745,0.50980,0.99607 }, 18, titleBar.ricerca, optionsRicerca)
 
 	titleBar.createButton("cerca", "BtCerca", "Cerca", 
-		display.contentCenterX*1.75, bgTitle.height * 0.5 + 7, { 0.062745,0.50980,0.99607 }, 18, titleBar.cerca, optionCerca)
+		display.contentCenterX*1.75, bgTitle.height * 0.5 + 7, { 0.062745,0.50980,0.99607 }, 18, titleBar.cerca, optionsCerca)
 
 	titleBar.accedi.isVisible = true
 	titleBar.profilo.isVisible = false
@@ -85,6 +85,7 @@ function titleBar.createButton(name, id, label, x, y, color, fontSize, onRelease
 		label = label,
 	    x = x,
 	    y = y,
+	    width = 90,
 	    color = color,
 	    fontSize = fontSize,
 	   	onRelease = onRelease,

@@ -56,8 +56,8 @@ function paypal0:createScene(event)
     paypal.anchorX = 0
     paypal.anchorY = 0
 
-    txtUser = library.textArea(group, _W*0.5, _H*0.40, 195, 28, {0.75,0.75,0.75}, native.newFont( myApp.font, 17 ), "center", "Username")
-    txtPass = library.textArea(group, _W*0.5, _H*0.48, 195, 28, {0.75,0.75,0.75}, native.newFont( myApp.font, 17 ), "center", "Password")
+    txtUser = library.textArea(group, _W*0.5, _H*0.40, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Username")
+    txtPass = library.textArea(group, _W*0.5, _H*0.48, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Password")
 
     txtUser.bg.alpha = 0
     txtPass.bg.alpha = 0

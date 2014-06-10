@@ -8,16 +8,12 @@ widget.setTheme(myApp.theme)
 -- funzioni
 local avantiButton = {}
 
-
-
 -- variabili
 local textError
 local txtUser
 local txtPass
 local txtPassC
-myApp.datiUtente = {}
-
-
+myApp.datiUtente = {}
 
 function scene:createScene(event)
 
@@ -96,6 +92,7 @@ function scene:createScene(event)
 
 
     group:insert(areaT)
+    group:insert(txtUser)
     group:insert(txtPass)
     group:insert(txtPassC)
     group:insert(textError)
@@ -117,8 +114,8 @@ function avantiButton()
 
 			storyboard.gotoScene('registrazione2', { effect = "slideLeft", time = 500 })
         else
-            pass:setTextColor( 1, 0, 0 )
-            passc:setTextColor( 1, 0, 0 )
+            txtPass.campo:setTextColor( 1, 0, 0 )
+            txtPassC.campo:setTextColor( 1, 0, 0 )
 
              -- testo di errore
             textError.alpha = 1

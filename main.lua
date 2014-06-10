@@ -112,7 +112,4 @@ function myApp.story.removeAll()
     myApp.story.__scenes = {}
 end
 
--- Attesa splash screen
 myApp.showHome()
---timer.performWithDelay(1500, myApp.showHome())
-

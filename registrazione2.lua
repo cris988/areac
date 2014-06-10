@@ -42,9 +42,9 @@ function scene:createScene(event)
 
 
     -- Text field dati
-    txtNome =library.textArea(group,_W*0.5, _H*0.4, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Nome")
+    txtNome =library.textArea(group,_W*0.5, _H*0.35, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Nome")
     print("NOME: "..txtNome.campo.text)
-    txtCognome =library.textArea(group,_W*0.5, _H*0.55, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Cognome")
+    txtCognome =library.textArea(group,_W*0.5, _H*0.45, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Cognome")
     print("COGNOME: "..txtCognome.campo.text)
 
     -- creazione dei checkBox
@@ -168,7 +168,7 @@ function avantiButton()
         utente.cognome = library.trimString( cognome )
 
 		if checkNonRes.isOn then
-            utente.tipo = 'Non residente'           }
+            utente.tipo = 'Non residente'
             storyboard.gotoScene('riepilogo', { effect = "slideLeft", time = 500 } )
         elseif checkRes.isOn then
             utente.tipo = 'Residente'

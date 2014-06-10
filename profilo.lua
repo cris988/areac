@@ -39,7 +39,7 @@ function scene:createScene(event)
     -- Imposto effetti indietro
     indietroEffect = myApp.titleBar.indietro.effect.effect
     myApp.titleBar.indietro.func = function () 
-        myApp.titleBar.indietro.effect.effect = "fromTop"
+        myApp.titleBar.indietro.effect.effect = "slideUp"
         myApp.tabBar.isVisible = true
     end
     

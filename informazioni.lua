@@ -47,7 +47,7 @@ function scene:createScene(event)
 
     -- Background
 
-    library.setBackground(group, {1, 1, 1})
+    library.setBackground(group, _Background)
 
     group:insert(library.makeList("info", strings, 0, 69, _W, 50 * #strings, 50, true,nil, onRowTouch))
 

@@ -29,9 +29,12 @@ function scene:createScene(event)
 
     local utente = myApp.transiti[myApp.utenteLoggato]
 
+
+    -- Se non è una ricerca
     if myApp.ricerca == nil then
         makeList(group, utente)	
     else
+        -- Se è una ricerca
         local transiti = {}
         local periodo = nil
 

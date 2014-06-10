@@ -41,6 +41,7 @@ function scene:createScene(event)
         align = "center"
     }
     local areaT = display.newText( options )
+    areaT:setFillColor(0,0,0) 
 
     -- Text field dati
     txtTarga=library.textArea(group,_W*0.5, _H*0.4, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Targa principale")
@@ -71,6 +72,7 @@ function scene:createScene(event)
     group:insert(txtCell)
     group:insert(txtEmail)
     group:insert(BtAvanti)
+    group:inser(textError)
 
 
 end

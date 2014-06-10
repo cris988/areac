@@ -125,7 +125,7 @@ function acquista0:createScene(event)
     
     end 
 
-    txtTarga =library.textArea(group, _W*0.5, _H*y, 160, 28, {0.75,0.75,0.75}, native.newFont( myApp.font, 17 ), "center", "Targa")
+    txtTarga =library.textArea(group, _W*0.5, _H*y, 160, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Targa")
 
 
     textError = display.newText('FORMATO NON CORRETTO',_W*0.5,_H*0.555, myApp.font, 13)

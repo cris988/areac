@@ -25,7 +25,6 @@ function scene:createScene(event)
 
     myApp.titleBar.titleText.text = "Riepilogo"
 
-
     -- testo in alto
     local options = {
         text = 'Controlla con attenzione!\nQuesti dati NON saranno più modificabili dall\'applicazione.',
@@ -37,36 +36,40 @@ function scene:createScene(event)
         align = "center"
     }
     local areaT = display.newText( options )
-    areaT:setFillColor{ 255,0,0 }
+    areaT:setFillColor(0,0,0) 
 
-
-    local textDati = display.newText(_W*0.5,_H*0.615, _W-30, _H*0.55)
-    textDati.align = 'left'
-    textDati.font = native.newFont( myApp.fontSize, 19 )
-    textDati.hasBackground = false
-    textDati:setTextColor(0)
+    -- testo in alto
+    local optionsDati = {
+        text = '',
+        x = _W*0.5,
+        y = _H*0.58,
+        width = _W - 30,
+        height = _H * 0.55,
+        fontSize = 20,
+        align = "lefts"
+    }
+    local textDati = display.newText(optionsDati)
+    textDati:setFillColor(0,0,0) 
 
     -- Tutti
-    local txt.text = 'Username:\t' .. myApp.datiUtente.username .. '\n\n' ..
+    textDati.text = 'Username:\t' .. myApp.datiUtente.username .. '\n\n' ..
                  'Nome:\t' .. myApp.datiUtente.nome .. '\n\n' ..
                  'Cognome:\t' .. myApp.datiUtente.cognome .. '\n\n'
     
 
 
     -- Residenti
-    if myApp.datiUtente.tipo == 'Residente' 
-        txt.text = txt.text .. 'Codice fiscale:\t' .. myApp.datiUtente.cf .. '\n\n' ..
-                     'Numero patente:\t' .. myApp.datiUtente.patente .. '\n\n' ..
-                     'Via:\t' .. myApp.datiUtente.via .. '\n\n' ..
-                     'Numero civico:\t' .. myApp.datiUtente.civico .. '\n\n' ..
-                     'CAP:\t' .. myApp.datiUtente.cap .. '\n\n' ..
+    if myApp.datiUtente.tipo == 'Residente' then
+        textDati.text = textDati.text .. 'Codice fiscale:\t' .. myApp.datiUtente.cf .. '\n\n' ..
+                         'Numero patente:\t' .. myApp.datiUtente.patente .. '\n\n' ..
+                         'Via:\t' .. myApp.datiUtente.via .. '\n\n' ..
+                         'Numero civico:\t' .. myApp.datiUtente.civico .. '\n\n' ..
+                         'CAP:\t' .. myApp.datiUtente.cap .. '\n\n'
     end
     -- Disabili
-    if myApp.datiUtente.tipo == 'Disabile' 
-        txt.text = txt.text .. 'Pass:\t' .. myApp.datiUtente.pass
+    if myApp.datiUtente.tipo == 'Disabile' then
+        textDati.text = textDati.text .. 'Pass:\t' .. myApp.datiUtente.pass
     end
-
-    textDati.text = txt
 
     local BtAvanti = widget.newButton({
         id  = 'BtAvanti',
@@ -96,6 +99,7 @@ end
 
 function scene:enterScene( event )
     print("ENTRA SCENA RIEPILOGO")
+    myApp.story.add(storyboard.getCurrentSceneName())
 end
 
 function scene:exitScene( event )

@@ -124,44 +124,40 @@ local function clearListener( campoInserimento, btClear )
 	        campoInserimento.text = ''
 	        native.setKeyboardFocus( campoInserimento )
 	        btClear.alpha = 0
-	        btClear:removeEventListener( "touch", clearListener )
 	    end
 	end
 end
 
 local function textListener(group, campoInserimento, btClear ) 
-    local trans = false
+
 	return function(event)
 	    if event.phase == "began" then
-	        if campoInserimento.text == '' then
-                if campoInserimento.y > _H * 0.5 then
-                    trans = true
-                    transition.to( group, {time=0, y=-campoInserimento.y+_H*0.3} )
-                end
-	        else
+            print("beg")
+            if campoInserimento.y > _H * 0.5 then
+                transition.to( group, {time=120, y=-campoInserimento.y+_H*0.5} )
+            end
+	        if campoInserimento.text ~= '' then
 	            btClear.alpha = 0.2
-	            btClear:addEventListener( "touch", clearListener( campoInserimento, btClear ) )
 	        end
 	        campoInserimento:setTextColor( 0 )
 	    elseif event.phase == "editing" then
-	        
+            print("edit")
 	        if(#campoInserimento.text > 0) then
 	            btClear.alpha = 0.2
-	            btClear:addEventListener( "touch", clearListener( campoInserimento, btClear ) )
 	        else
 	            btClear.alpha = 0
-	            btClear:removeEventListener( "touch", clearListener( campoInserimento, btClear ) )
 	        end
+
 	    elseif event.phase == "ended" then
+        print("end")
 	        if campoInserimento.text == '' then
 	            btClear.alpha = 0
 	        end
+            --native.setKeyboardFocus( nil )
+            --transition.to( group, {time=100, y=0} )
     	elseif event.phase == "submitted" then
             native.setKeyboardFocus( nil )
-            if trans then
-                transition.to( group, {time=200, y=0} )
-                trans = false
-            end
+            transition.to( group, {time=100, y=0} )
         end
      end
 end
@@ -190,13 +186,13 @@ local function textArea(group, x, y, width, height, color, font, align, text, se
 
     if campoInserimento.text ~= "" then
         btClear.alpha = 0.2
-        btClear:addEventListener( "touch", clearListener(campoInserimento, btClear) )
     end
 
     gruppoInserimento:insert(sfondoInserimento)
     gruppoInserimento:insert(campoInserimento)
     gruppoInserimento:insert(btClear)
 
+    btClear:addEventListener( "touch", clearListener(campoInserimento, btClear) )
     campoInserimento:addEventListener( "userInput", textListener(group, campoInserimento, btClear))
 
     gruppoInserimento.campo = campoInserimento

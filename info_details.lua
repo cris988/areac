@@ -24,7 +24,7 @@ function scene:createScene(event)
 
     -- Background
 
-    library.setBackground(group, {1, 1, 1})
+    library.setBackground(group, _Background)
 
      -- scrivo le stringhe riferite a section
     if event.params ~= nil then

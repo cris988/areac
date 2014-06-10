@@ -66,8 +66,6 @@ function scene:createScene(event)
       horizontalScrollDisabled = true,
       hideBackground = true
   }
-  print(scrollView.top)
-
 
   local y = 0
   local x = 0.05 * _W
@@ -226,12 +224,10 @@ end
 
 function scene:enterScene( event )
     print("ENTRA SCENA RICERCA")
-    myApp.story.add(storyboard.getCurrentSceneName())
 end
 
 function scene:exitScene( event )
     print("ESCI SCENA RICERCA")
-    myApp.tabBar.isVisible = true
     myApp.titleBar.indietro.isVisible = false
     myApp.titleBar.cerca.isVisible = false
     targheTable:removeSelf()
