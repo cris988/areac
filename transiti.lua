@@ -5,6 +5,7 @@ local myApp = require('myapp')
 
 -- funzioni
 local makeList ={}
+local parseDate = {}
 
 -- variabili
 local titles = {"DATA", "TARGA", "IMPORTO"}

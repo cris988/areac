@@ -132,7 +132,6 @@ local function textListener(group, campoInserimento, btClear )
 
 	return function(event)
 	    if event.phase == "began" then
-            print("beg")
             if campoInserimento.y > _H * 0.5 then
                 transition.to( group, {time=120, y=-campoInserimento.y+_H*0.5} )
             end
@@ -141,7 +140,6 @@ local function textListener(group, campoInserimento, btClear )
 	        end
 	        campoInserimento:setTextColor( 0 )
 	    elseif event.phase == "editing" then
-            print("edit")
 	        if(#campoInserimento.text > 0) then
 	            btClear.alpha = 0.2
 	        else
@@ -149,7 +147,6 @@ local function textListener(group, campoInserimento, btClear )
 	        end
 
 	    elseif event.phase == "ended" then
-        print("end")
 	        if campoInserimento.text == '' then
 	            btClear.alpha = 0
 	        end
@@ -234,9 +231,9 @@ local function verificaTarga(targa)
 end
 
 
-local function salvaUtente(utente)
+local function salvaUtente(utente, id)
     for k,v in pairs(utente) do
-        myApp.utenti[myApp.utenteLoggato][k] = v
+        myApp.utenti[id][k] = v
     end
 end
 

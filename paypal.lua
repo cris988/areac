@@ -203,6 +203,8 @@ end
 function completaButton()
     if myApp.acquisto.ticket == 'Multiplo' and myApp.utenteLoggato > 0 then
         myApp.utenti[myApp.utenteLoggato].multiplo = myApp.utenti[myApp.utenteLoggato].multiplo + myApp.acquisto.ingressi
+    elseif myApp.acquisto.ticket == 'Giornaliero' and myApp.utenteLoggato > 0 then
+        table.insert(myApp.transiti[myApp.utenteLoggato], 1, { os.date("%d/%m/%Y"), myApp.acquisto.targa, myApp.acquisto.importo.."€"})
     end
     storyboard.gotoScene( 'paypal2', { effect = "slideLeft", time = 500 })
 end

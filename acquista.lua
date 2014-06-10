@@ -168,8 +168,7 @@ function acquista1:createScene(event)
 
     library.setBackground(group, _Background)
 
-
-    if myApp.utenti[myApp.utenteLoggato] == 'Residente' then
+    if myApp.utenti[myApp.utenteLoggato].tipo == 'Residente' then
         ingressi = ingressiR
         importi = importiR
     else

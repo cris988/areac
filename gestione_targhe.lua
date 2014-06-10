@@ -42,7 +42,6 @@ function scene:createScene(event)
 
 
     local numTarghe = myApp:getNumTargheUtente(myApp.utenteLoggato)
-
     
     group:insert(makeList())
 

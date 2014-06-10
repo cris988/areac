@@ -7,6 +7,7 @@ widget.setTheme(myApp.theme)
 
 -- funzioni
 local avantiButton = {}
+local salvaUtente = {}
 
 -- variabili
 local txtTarga
@@ -45,11 +46,17 @@ function scene:createScene(event)
 
     -- Text field dati
     txtTarga=library.textArea(group,_W*0.5, _H*0.4, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Targa principale")
-    print("TARGA: "..txtTarga.campo.text)
     txtCell =library.textArea(group,_W*0.5, _H*0.55, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Cellulare")
-    print("CELLULARE: "..txtCell.campo.text)
     txtEmail =library.textArea(group,_W*0.5, _H*0.7, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Email")
-    print("EMAIL: "..txtEmail.campo.text)
+
+
+    -- Recupero dati in meoria
+    if myApp.datiUtente.username ~= '' then
+        txtTarga.campo.text = myApp.datiUtente.targa
+        txtCell.campo.text = myApp.datiUtente.cellulare
+        txtEmail.campo.text = myApp.datiUtente.email
+    end
+
 
     -- Testo di errore
     textError = display.newText('FORMATO NON CORRETTO',_W*0.5,_H*0.8, myApp.font, 13)
@@ -72,7 +79,7 @@ function scene:createScene(event)
     group:insert(txtCell)
     group:insert(txtEmail)
     group:insert(BtAvanti)
-    group:inser(textError)
+    group:insert(textError)
 
 
 end
@@ -85,6 +92,15 @@ function avantiButton()
 
     if  targa ~= '' or cell ~= '' or email~='' then
         if #library.trimString( targa ) == 7 and library.trimString( targa ):match( '[A-Za-z][A-Za-z][0-9][0-9][0-9][A-Za-z][A-Za-z]' ) then
+
+            myApp.datiUtente.targa = trimString( txtTarga.campo.text ):upper()
+            myApp.datiUtente.cell = trimString( txtCell.campo.text )
+            myApp.datiUtente.email = trimString( txtEmail.campo.text )
+
+            print("TARGA: "..txtTarga.campo.text)
+            print("CELL: "..txtCell.campo.text)
+            print("EMAIL: "..txtEmail.campo.text)
+
             salvaUtente()
             storyboard.gotoScene( 'registrazione_fine', { effect = "slideLeft", time = 500 }  )
         else
@@ -100,105 +116,18 @@ end
 
 function salvaUtente()
 
-    local targa = txtTarga.campo.text
-    local cell = txtCell.campo.text
-    local email = txtEmail.campo.text
-
-    local i = myApp:getNumUtenti()
+    local newUser = myApp:getNumUtenti() + 1
     if myApp.datiUtente.tipo == 'Residente' then
-        myApp.utenti[i+1] = {
-            username = myApp.datiUtente.username,
-            password = myApp.datiUtente.password,
-            nome = myApp.datiUtente.nome,
-            cognome = myApp.datiUtente.cognome,
-            tipo = myApp.datiUtente.tipo,
-            cf = myApp.datiUtente.cf,
-            patente = myApp.datiUtente.patente,
-            via = myApp.datiUtente.via,
-            civico = myApp.datiUtente.civico,
-            cap = myApp.datiUtente.cap,
-            email = trimString( campoInserimentoEmail.text ),
-            cellulare = trimString( cell ),
-            targa = trimString( targa ):upper(),
-            accessi = 50,
-            multiplo = 0,
-            targaSelezionata = 1,
-        }
-        if i+1 == 4 then
-            myApp.targheUtente_4 = { trimString( targa ):upper() }
-        elseif i+1 == 5 then
-            myApp.targheUtente_5 = { trimString( targa ):upper() }
-        elseif i+1 == 6 then
-            myApp.targheUtente_6 = { trimString( targa ):upper() }
-        elseif i+1 == 7 then
-            myApp.targheUtente_7 = { trimString( targa ):upper() }
-        elseif i+1 == 8 then
-            myApp.targheUtente_8 = { trimString( targa ):upper() }
-        elseif i+1 == 9 then
-            myApp.targheUtente_9 = { trimString( targa ):upper() }
-        elseif i+1 == 10 then
-            myApp.targheUtente_10 = { trimString( targa ):upper() }
-        end
-    elseif myApp.datiUtente.tipo == 'Disabile' then
-        myApp.utenti[i+1] = {
-            username = myApp.datiUtente.username,
-            password = myApp.datiUtente.password,
-            nome = myApp.datiUtente.nome,
-            cognome = myApp.datiUtente.cognome,
-            tipo = myApp.datiUtente.tipo,
-            pass = myApp.datiUtente.pass,
-            email = trimString( campoInserimentoEmail.text ),
-            cellulare = trimString( cell ),
-            targa = trimString( targa ):upper(),
-            multiplo = 0,
-            targaSelezionata = 1,
-        }
-        if i+1 == 4 then
-            myApp.targheUtente_4 = { trimString( targa ):upper() }
-        elseif i+1 == 5 then
-            myApp.targheUtente_5 = { trimString( targa ):upper() }
-        elseif i+1 == 6 then
-            myApp.targheUtente_6 = { trimString( targa ):upper() }
-        elseif i+1 == 7 then
-            myApp.targheUtente_7 = { trimString( targa ):upper() }
-        elseif i+1 == 8 then
-            myApp.targheUtente_8 = { trimString( targa ):upper() }
-        elseif i+1 == 9 then
-            myApp.targheUtente_9 = { trimString( targa ):upper() }
-        elseif i+1 == 10 then
-            myApp.targheUtente_10 = { trimString( targa ):upper() }
-        end
-    else
-        myApp.utenti[i+1] = {
-            username = myApp.datiUtente.username,
-            password = myApp.datiUtente.password,
-            nome = myApp.datiUtente.nome,
-            cognome = myApp.datiUtente.cognome,
-            tipo = myApp.datiUtente.tipo,
-            email = trimString( email ),
-            cellulare = trimString( cell ),
-            targa = trimString( targa ):upper(),
-            multiplo = 0,
-            targaSelezionata = 1,
-        }
-        if i+1 == 4 then
-            myApp.targheUtente_4 = { trimString( targa ):upper() }
-        elseif i+1 == 5 then
-            myApp.targheUtente_5 = { trimString( targa ):upper() }
-        elseif i+1 == 6 then
-            myApp.targheUtente_6 = { trimString( targa ):upper() }
-        elseif i+1 == 7 then
-            myApp.targheUtente_7 = { trimString( targa ):upper() }
-        elseif i+1 == 8 then
-            myApp.targheUtente_8 = { trimString( targa ):upper() }
-        elseif i+1 == 9 then
-            myApp.targheUtente_9 = { trimString( targa ):upper() }
-        elseif i+1 == 10 then
-            myApp.targheUtente_10 = { trimString( targa ):upper() }
-        end
+        myApp.datiUtente.accessi = 50
     end
+    
+    myApp.utenti[newUser] = {}
+    myApp.targheUtente[newUser] = { myApp.datiUtente.targa }
+    myApp.transiti[newUser] = {}
 
-    myApp.utenteLoggato = i+1
+    library.salvaUtente(myApp.datiUtente, newUser)
+
+    myApp.utenteLoggato = newUser
 end
 
 
@@ -211,6 +140,7 @@ end
 
 function scene:exitScene( event )
     print("ESCI SCENA REGISTRAZIONE")
+    myApp.datiUtente = nil
 end
 
 function scene:destroyScene( event )

@@ -240,10 +240,8 @@ end
 
 function fineModifica()
     if txtCell.campo.text ~= '' or txtEmail.campo.text ~= '' then
-
-        for k,v in pairs({cell = txtCell.campo.text, email=txtEmail.campo.text}) do
-            myApp.utenti[myApp.utenteLoggato][k] = v
-        end
+        
+        library.salvaUtente({cellulare = txtCell.campo.text, email=txtEmail.campo.text}, myApp.utenteLoggato)
 
         storyboard.reloadScene( )
     end

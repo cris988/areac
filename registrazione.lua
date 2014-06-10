@@ -29,7 +29,10 @@ function scene:createScene(event)
 
     myApp.titleBar.titleText.text = "Registrazione"
     myApp.titleBar.indietro.isVisible = true
-    myApp.titleBar.annulla.isVisible = true
+    myApp.titleBar.annulla.isVisible = true 
+    myApp.titleBar.indietro.func = function () 
+        myApp.titleBar.annulla.isVisible = false
+    end
 
     myApp.datiUtente = {
         username = '',
@@ -38,17 +41,26 @@ function scene:createScene(event)
         cognome = '',
         tipo = ',',
         targa  = '',
+        targaSelezionata = 1,
         cellulare = '',
         email = '',
-        cf = '',
-        patente = '',
-        via = '',
-        civico = '',
-        cap = '',
-        pass = '',
+        multiplo = 0,
     }
 
-
+    if debugMode then
+        myApp.datiUtente = {
+            username = 'Marco',
+            password = 'ciao',
+            nome = 'Marco',
+            cognome = 'Pluto',
+            tipo = 'Residente',
+            targa  = 'AA123AA',
+            targaSelezionata = 1,
+            cellulare = '3331234567',
+            email = 'marco@marco.it',
+            multiplo = 0,
+        }
+    end
 	-- testo in alto
     local options = {
         text = 'Inserisci le informazioni:',
@@ -64,9 +76,7 @@ function scene:createScene(event)
 
     -- Text field dati
     txtUser =library.textArea(group,_W*0.5, _H*0.4, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Username")
-    print("USERNAME: "..txtUser.campo.text)
     txtPass =library.textArea(group,_W*0.5, _H*0.55, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Password", true)
-    print("PASSWORD: "..txtPass.campo.text)
     txtPassC =library.textArea(group,_W*0.5, _H*0.7, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Ripeti Password", true)
 
     -- Recupero dati in meoria
@@ -108,6 +118,9 @@ function avantiButton()
 
 	if 	user ~= '' or pass ~= '' or passc ~= '' then
 		if pass == passc then
+            
+            print("USERNAME: "..txtUser.campo.text)
+            print("PASSWORD: "..txtPass.campo.text)
 
             myApp.datiUtente.username = library.trimString( user )
 			myApp.datiUtente.password = library.trimString( pass )
@@ -135,6 +148,8 @@ end
 
 function scene:exitScene( event )
     print("ESCI SCENA REGISTRAZIONE")
+    
+    myApp.titleBar.indietro.func = nil
 end
 
 function scene:destroyScene( event )

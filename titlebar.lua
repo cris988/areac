@@ -99,7 +99,6 @@ function titleBar.createButton(name, id, label, x, y, color, fontSize, onRelease
 end
 
 function titleBar.goBack()
-	print("GOBACK ")
 	-- Eseguo eventuale funzione passata
 	if type(titleBar.indietro.func) == "function" then
 		titleBar.indietro.func()
@@ -116,6 +115,9 @@ function titleBar.accedi()
 end
 
 function titleBar.annulla()
+	myApp.titleBar.annulla.isVisible = false
+    myApp.titleBar.indietro.isVisible = false
+    myApp.story.removeAll()
 	myApp.showHome()
 end
 

@@ -6,7 +6,7 @@ local myApp = require('myapp')
 widget.setTheme(myApp.theme)
 
 -- funzioni
-local completaButton = {}
+local fineButton = {}
 
 -- variabili
 
@@ -27,37 +27,53 @@ function scene:createScene(event)
     myApp.titleBar.titleText.text = "Registrazione"
 
     local options = {
-        text = 'Registrazione completata con successo!',
+        text = 'Registrazione avvenuta\ncon successo!',
         x = _W*0.5,
-        y = _H*0.5,
+        y = _H*0.4,
+        width = _W - 30,
+        fontSize = 24,
+        align = "center"
+    }
+    local areaT = display.newText( options )
+    areaT:setFillColor(0.1333,0.54509,0.13334)
+
+    local optionsProfilo = {
+        text = 'Potrai consultare i tuoi dati nel Profilo',
+        x = _W*0.5,
+        y = _H*0.7,
         width = _W - 30,
         fontSize = 20,
         align = "center"
     }
-    local areaT = display.newText( options )
+    local textProfilo = display.newText( optionsProfilo )
+    textProfilo:setFillColor( 0,0,0 )
 
-    local BtProfilo = widget.newButton({
-        id  = 'BtProfilo',
-        label = 'Vai al tuo profilo',
+    local BtFine = widget.newButton({
+        id  = 'BtFine',
+        label = 'Fine',
         x = _W*0.5,
         y = _H*0.925,
         color = { 0.062745,0.50980,0.99607 },
         fontSize = 26,
         font = myApp.font,
-        onRelease = completaButton
+        onRelease = fineButton
     })
 
 
     group:insert(areaT)
-    group:insert(BtProfilo)
+    group:insert(textProfilo)
+    group:insert(BtFine)
 
     return group
 end
 
 
 
-function completaButton()
-    storyboard.gotoScene('profilo')
+function fineButton()
+    myApp.titleBar.annulla.isVisible = false
+    myApp.titleBar.indietro.isVisible = false
+    myApp.story.removeAll()
+    myApp.showHome()
 end
 
 

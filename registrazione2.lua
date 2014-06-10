@@ -43,9 +43,8 @@ function scene:createScene(event)
 
     -- Text field dati
     txtNome =library.textArea(group,_W*0.5, _H*0.35, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Nome")
-    print("NOME: "..txtNome.campo.text)
     txtCognome =library.textArea(group,_W*0.5, _H*0.45, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Cognome")
-    print("COGNOME: "..txtCognome.campo.text)
+
 
     -- creazione dei checkBox
 
@@ -177,6 +176,13 @@ function avantiButton()
             utente.tipo = 'Disabile'
             storyboard.gotoScene('registrazione_dis', { effect = "slideLeft", time = 500 } )
         end
+
+        print(utente.nome)
+        print(myApp.datiUtente.nome)
+
+        print("NOME: "..txtNome.campo.text)
+        print("COGNOME: "..txtCognome.campo.text)
+        print("TIPO: "..myApp.datiUtente.tipo)
 
 	end
 end

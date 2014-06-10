@@ -39,7 +39,6 @@ function scene:createScene(event)
 
     -- Text field dati
     txtPass =library.textArea(group,_W*0.5, _H*0.5, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Numero Pass")
-    print("PASS: "..txtPass.campo.text)
 
 
     local BtAvanti = widget.newButton({
@@ -68,6 +67,7 @@ end
 
 function avantiButton()
     if txtPass.campo.text ~= '' then
+        print("PASS: "..txtPass.campo.text)
         myApp.datiUtente.pass = library.trimString( txtPass.campo.text )
         storyboard.gotoScene('riepilogo', { effect = "slideLeft", time = 500 })
     end

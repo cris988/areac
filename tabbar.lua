@@ -11,6 +11,7 @@ myApp.tabBar = {}
 
 -- Funzioni tabBar
 function myApp.showHome()
+    myApp.tabBar.isVisible = true
     myApp.showMappa()
 end
 

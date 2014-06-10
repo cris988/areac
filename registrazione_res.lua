@@ -45,15 +45,11 @@ function scene:createScene(event)
 
     -- Text field dati
     txtCF =library.textArea(group,_W*0.5, _H*0.37, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Codice Fiscale")
-    print("CF: "..txtCF.campo.text)
     txtPatente =library.textArea(group,_W*0.5, _H*0.47, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Numero di patente")
-    print("PATENTE: "..txtPatente.campo.text)
     txtIndirizzo =library.textArea(group,_W*0.5, _H*0.57, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Via di domicilio")
-    print("INDIRIZZO: "..txtIndirizzo.campo.text)
     txtCivico =library.textArea(group,_W*0.5, _H*0.67, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Numero civico")
-    print("CIVICO: "..txtCivico.campo.text)
     txtCAP =library.textArea(group,_W*0.5, _H*0.77, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "CAP")
-    print("CAP: "..txtCAP.campo.text)
+
 
 
     local BtAvanti = widget.newButton({
@@ -110,6 +106,12 @@ function avantiButton()
         myApp.datiUtente.civico = library.trimString( civico )
         myApp.datiUtente.cap = library.trimString( cap )
 
+        print("CF: "..txtCF.campo.text)
+        print("PATENTE: "..txtPatente.campo.text)
+        print("INDIRIZZO: "..txtIndirizzo.campo.text)
+        print("CIVICO: "..txtCivico.campo.text) 
+        print("CAP: "..txtCAP.campo.text)  
+
         storyboard.gotoScene('riepilogo', { effect = "slideLeft", time = 500 } )
     end
 end
@@ -117,11 +119,11 @@ end
 
 function scene:enterScene( event )
     print("ENTRA SCENA REGISTRAZIONE RESIDENTI")
+    myApp.story.add(storyboard.getCurrentSceneName())
 end
 
 function scene:exitScene( event )
     print("ESCI SCENA REGISTRAZIONE RESIDENTI")
-    myApp.story.add(storyboard.getCurrentSceneName())
 end
 
 function scene:destroyScene( event )
