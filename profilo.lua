@@ -1,3 +1,8 @@
+--[[
+    Project name: AreaC
+    Authors: Matteo Lanza, Cristian Speranza
+]]--
+
 local storyboard = require( "storyboard" )
 local scene = storyboard.newScene()
 local widget = require('widget')
@@ -82,6 +87,10 @@ function scene:createScene(event)
     }
     local targaText = display.newText( optionsTarga )
     targaText:setFillColor( 0, 0, 0 )
+
+    if myApp.utenti[myApp.utenteLoggato].tipo == 'Residente' or myApp.utenti[myApp.utenteLoggato].tipo == 'Disabile' then
+        targaText.text = 'TARGA PRINCIPALE AGEVOLATA:'
+    end
 
     local optionsTargaDati = {
         text = myApp.utenti[myApp.utenteLoggato].targa,
@@ -173,11 +182,11 @@ function onRowTouch( event )
         -- è il numero della riga della lista che è stato cliccato
         index = event.target.index
         if index == 1 then
-            storyboard.gotoScene('dati_utente', { effect = "slideLeft", time = 500 } )
+            storyboard.gotoScene('profilo_dati_utente', { effect = "slideLeft", time = 500 } )
         elseif index == 2 then
-            storyboard.gotoScene('gestione_targhe', { effect = "slideLeft", time = 500 } )
+            storyboard.gotoScene('profilo_gestione_targhe', { effect = "slideLeft", time = 500 } )
         elseif index == 3 then
-            storyboard.gotoScene('transiti', { effect = "slideLeft", time = 500 } )
+            storyboard.gotoScene('profilo_transiti', { effect = "slideLeft", time = 500 } )
         end
     end
 end
@@ -185,8 +194,8 @@ end
 
 
 function disconnessioneButton()
-    myApp.utenteLoggato = 0
     myApp.tabBar.isVisible = true
+    myApp.utenteLoggato = 0
     storyboard.gotoScene(myApp.story.back(), { effect = "slideUp", time=100 })
 end
 

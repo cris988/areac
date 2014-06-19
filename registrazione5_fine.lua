@@ -1,3 +1,17 @@
+--[[
+    Project name: AreaC
+    Authors: Matteo Lanza, Cristian Speranza
+]]--
+
+--[[
+    
+    registrazione5_fine.lua
+
+        Conferma della registrazione
+        Rimanda alla home
+
+]]--
+
 local storyboard = require( "storyboard" )
 local scene = storyboard.newScene()
 local widget = require('widget')
@@ -72,7 +86,6 @@ end
 function fineButton()
     myApp.titleBar.annulla.isVisible = false
     myApp.titleBar.indietro.isVisible = false
-    myApp.story.removeAll()
     myApp.showHome()
 end
 

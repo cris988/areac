@@ -1,3 +1,8 @@
+--[[
+    Project name: AreaC
+    Authors: Matteo Lanza, Cristian Speranza
+]]--
+
 local storyboard = require( "storyboard" )
 local scene = storyboard.newScene()
 local widget = require('widget')
@@ -243,7 +248,7 @@ function selezionaStar( event )
 end
 
 function aggiungiTarga()
-    require("gestione_targhe_verifica")
+    require("profilo_gestione_targhe_verifica")
     storyboard.gotoScene( 'gestioneVerifica0' )
 end
 

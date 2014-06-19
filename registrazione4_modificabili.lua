@@ -1,3 +1,17 @@
+--[[
+    Project name: AreaC
+    Authors: Matteo Lanza, Cristian Speranza
+]]--
+
+--[[
+    
+    registrazione4_opzionale.lua
+
+        L'utente inserisce la targa principale, 
+        il numero di cellulare e la mail
+
+]]--
+
 local storyboard = require( "storyboard" )
 local scene = storyboard.newScene()
 local widget = require('widget')
@@ -102,7 +116,7 @@ function avantiButton()
             print("EMAIL: "..txtEmail.campo.text)
 
             salvaUtente()
-            storyboard.gotoScene( 'registrazione_fine', { effect = "slideLeft", time = 500 }  )
+            storyboard.gotoScene( 'registrazione5_fine', { effect = "slideLeft", time = 500 }  )
         else
            txtTarga.campo:setTextColor(1,0,0)
             -- testo di errore

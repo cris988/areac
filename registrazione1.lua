@@ -1,3 +1,16 @@
+--[[
+    Project name: AreaC
+    Authors: Matteo Lanza, Cristian Speranza
+]]--
+
+--[[
+    
+    registrazione1.lua
+
+        L'utente inserisce nome e cognome e sceglie la tipologia: Residente, Non residente, Disabile
+
+]]--
+
 local storyboard = require( "storyboard" )
 local scene = storyboard.newScene()
 local widget = require('widget')
@@ -168,13 +181,13 @@ function avantiButton()
 
 		if checkNonRes.isOn then
             utente.tipo = 'Non residente'
-            storyboard.gotoScene('riepilogo', { effect = "slideLeft", time = 500 } )
+            storyboard.gotoScene('registrazione3_riepilogo', { effect = "slideLeft", time = 500 } )
         elseif checkRes.isOn then
             utente.tipo = 'Residente'
-            storyboard.gotoScene('registrazione_res', { effect = "slideLeft", time = 500 } )
+            storyboard.gotoScene('registrazione2_res', { effect = "slideLeft", time = 500 } )
         elseif checkDis.isOn then
             utente.tipo = 'Disabile'
-            storyboard.gotoScene('registrazione_dis', { effect = "slideLeft", time = 500 } )
+            storyboard.gotoScene('registrazione2_dis', { effect = "slideLeft", time = 500 } )
         end
 
         print(utente.nome)

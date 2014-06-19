@@ -1,3 +1,22 @@
+--[[
+    Project name: AreaC
+    Authors: Matteo Lanza, Cristian Speranza
+]]--
+
+--[[
+    Storyboard registrazione:
+                          ___________________                                          _________________________________
+                         |                   | Residente -> registrazione2_res.lua -> |                                 | 
+    registrazione.lua -> |registrazione1.lua | Disabile  -> registrazione2_dis.lua -> |  registrazione3_riepilogo.lua   | -> registrazione4_opzionale.lua -> registrazione5_fine.lua
+                         |___________________| Tutti -------------------------------> |_________________________________|
+
+    registrazione.lua
+
+        L'utente sceglie username e password
+
+
+]]--
+
 local storyboard = require( "storyboard" )
 local scene = storyboard.newScene()
 local widget = require('widget')
@@ -13,7 +32,48 @@ local textError
 local txtUser
 local txtPass
 local txtPassC
-myApp.datiUtente = {}
+
+myApp.datiUtente = {
+    username = '',
+    password = '',
+    nome = '',
+    cognome = '',
+    tipo = ',',
+    targa  = '',
+    targaSelezionata = 1,
+    cellulare = '',
+    email = '',
+    multiplo = 0,
+    --Residenti
+    accessi = 40,
+    patente = '',
+    via = '',
+    civico = '',
+    cap = '',
+    --Disabile
+    pass =''
+}
+
+if debugMode then
+    myApp.datiUtente = {
+        username = 'Marco',
+        password = 'ciao',
+        nome = 'Marco',
+        cognome = 'Pluto',
+        tipo = 'Residente',
+        targa  = 'AA123AA',
+        targaSelezionata = 1,
+        cellulare = '3331234567',
+        email = 'marco@marco.it',
+        multiplo = 0,
+        accessi = 40,
+        patente = 'de345ed',
+        via = 'Via Monti',
+        civico = '3',
+        cap = '20100',
+    }
+end
+
 
 function scene:createScene(event)
 
@@ -34,33 +94,6 @@ function scene:createScene(event)
         myApp.titleBar.annulla.isVisible = false
     end
 
-    myApp.datiUtente = {
-        username = '',
-        password = '',
-        nome = '',
-        cognome = '',
-        tipo = ',',
-        targa  = '',
-        targaSelezionata = 1,
-        cellulare = '',
-        email = '',
-        multiplo = 0,
-    }
-
-    if debugMode then
-        myApp.datiUtente = {
-            username = 'Marco',
-            password = 'ciao',
-            nome = 'Marco',
-            cognome = 'Pluto',
-            tipo = 'Residente',
-            targa  = 'AA123AA',
-            targaSelezionata = 1,
-            cellulare = '3331234567',
-            email = 'marco@marco.it',
-            multiplo = 0,
-        }
-    end
 	-- testo in alto
     local options = {
         text = 'Inserisci le informazioni:',
@@ -125,7 +158,7 @@ function avantiButton()
             myApp.datiUtente.username = library.trimString( user )
 			myApp.datiUtente.password = library.trimString( pass )
 
-			storyboard.gotoScene('registrazione2', { effect = "slideLeft", time = 500 })
+			storyboard.gotoScene('registrazione1', { effect = "slideLeft", time = 500 })
         else
             txtPass.campo:setTextColor( 1, 0, 0 )
             txtPassC.campo:setTextColor( 1, 0, 0 )
@@ -135,7 +168,6 @@ function avantiButton()
 		end
 	end
 end
-
 
 
 

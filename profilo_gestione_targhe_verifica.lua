@@ -1,3 +1,8 @@
+--[[
+    Project name: AreaC
+    Authors: Matteo Lanza, Cristian Speranza
+]]--
+
 local storyboard = require ('storyboard')
 local widget = require('widget')
 local myApp = require('myapp')
@@ -115,44 +120,80 @@ function gestioneVerifica1:createScene(event)
         group:insert(line1)
 
     else
+        
+        require("verifica")
+        local accesso = verificaTarga(targa)
+        local groupVerifica
+        local text
 
-        local accesso = library.verificaTarga(targa)
+        if  accesso == 'g' then
 
-        if accesso then
+                groupVerifica = verificaPrint('g', targa)
 
-            aggiungereTarga = true
+                text = display.newText( 'TARGA NON INSERITA', _W*0.5, _H*0.8, myApp.font, 24 )
+                text:setFillColor(1,0,0)
+
+        elseif accesso == 'p' then
 
 
-            local line1 = display.newText( 'Il veicolo con targa '..targa,  _W*0.5, 100, myApp.font, 20)
-            line1:setFillColor(0)
+        -- local accesso = library.verificaTarga(targa)
 
-            local line2
-            if myApp.utenti[myApp.utenteLoggato].tipo == "Disabile" then
-                line2 = display.newText( 'PUO\' ACCEDERE\nGRATUITAMENTE',  _W*0.5, 125, myApp.font, 20)
-                line2:setFillColor(0.1333,0.54509,0.13334)
-                line2.width = _W *0.8
-                line2.height = 300
-            else 
-                line2 = display.newText( 'PUO\' ACCEDERE',  _W*0.5, 125, myApp.font, 20)
-                line2:setFillColor(0.1333,0.54509,0.13334)
-            end
-            local line3 = display.newText( 'all\'area C',  _W*0.5, 150, myApp.font, 20)
-            line3:setFillColor(0)
-            local line4 = display.newText( 'ACCESSO A PAGAMENTO', _W*0.5, _H*0.5, myApp.font, 24 )
-            line4:setFillColor(0.1333,0.54509,0.13334)
-            local line5 = display.newText( 'TARGA AGGIUNTA', _W*0.5, _H*0.6, myApp.font, 24 )
-            line5:setFillColor(0.1333,0.54509,0.13334)
+        -- if accesso then
 
-            group:insert(line1)
-            group:insert(line2)
-            group:insert(line3)
-            group:insert(line4)
-            group:insert(line5)
+        --     aggiungereTarga = true
+
+
+        --     -- local line1 = display.newText( 'Il veicolo con targa '..targa,  _W*0.5, 100, myApp.font, 20)
+        --     -- line1:setFillColor(0)
+
+        --     -- local line2
+        --     if  myApp.utenti[myApp.utenteLoggato].tipo == "Disabile" then
+
+        --         require("verifica")
+        --         verificaPrint('g', targa)
+        --         -- line2 = display.newText( 'PUO\' ACCEDERE\nGRATUITAMENTE',  _W*0.5, 125, myApp.font, 20)
+        --         -- line2:setFillColor(0.1333,0.54509,0.13334)
+        --         -- line2.width = _W *0.8
+        --         -- line2.height = 300
+        --     else 
+        --         -- line2 = display.newText( 'PUO\' ACCEDERE',  _W*0.5, 125, myApp.font, 20)
+        --         -- line2:setFillColor(0.1333,0.54509,0.13334)
+        --     end
+        --     -- local line3 = display.newText( 'all\'area C',  _W*0.5, 150, myApp.font, 20)
+        --     -- line3:setFillColor(0)
+        --     --local line4 = display.newText( 'ACCESSO A PAGAMENTO', _W*0.5, _H*0.5, myApp.font, 24 )
+        --     --line4:setFillColor(0.1333,0.54509,0.13334)
+
+
+                groupVerifica = verificaPrint('p', targa)
+                
+                text = display.newText( 'TARGA INSERITA', _W*0.5, _H*0.8, myApp.font, 24 )
+                text:setFillColor(0.1333,0.54509,0.13334)
 
         else
-            require("verifica")
-            notEnter(group, targa)
+
+            groupVerifica = verificaPrint('v', targa)
+
+
+            text = display.newText( 'TARGA NON INSERITA', _W*0.5, _H*0.8, myApp.font, 24 )
+            text:setFillColor(1,0,0)
+
         end
+                -- group:insert(line1)
+                -- group:insert(line2)
+                -- group:insert(line3)
+                -- group:insert(line4)
+                -- group:insert(line5)
+
+        -- else
+        --     require("verifica")
+        --     notEnter(group, targa)
+        -- end
+
+        --transition.to( groupVerifica, {time = 0, y = _H * 0.1} )
+
+        group:insert(groupVerifica)
+        group:insert(text)
     end
 
 
@@ -161,7 +202,7 @@ function gestioneVerifica1:createScene(event)
         id  = 'BtFine',
         label = 'Fine',
         x = _W*0.5,
-        y = _H*0.7,
+        y = _H*0.9,
         color = { 0.062745,0.50980,0.99607 },
         fontSize = 26,
         onRelease = fineAggiunta
@@ -177,7 +218,8 @@ function fineAggiunta()
         table.insert( targheUtente, targa )
     end
     myApp.story.back()
-    storyboard.gotoScene( "gestione_targhe", { effect = "slideLeft", time = 500 })
+    myApp.story.back()
+    storyboard.gotoScene( "profilo_gestione_targhe", { effect = "slideLeft", time = 500 })
 end
 
 
@@ -219,6 +261,7 @@ end
 
 function gestioneVerifica1:enterScene( event ) 
     print("ENTRA SCENA VERIFICA1") 
+    myApp.story.add(storyboard.getCurrentSceneName())
 end
 
 function gestioneVerifica1:exitScene( event ) 

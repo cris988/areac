@@ -1,3 +1,8 @@
+--[[
+    Project name: AreaC
+    Authors: Matteo Lanza, Cristian Speranza
+]]--
+
 local storyboard = require( "storyboard" )
 local scene = storyboard.newScene()
 local widget = require('widget')
@@ -44,15 +49,16 @@ function scene:createScene(event)
       hideBackground = true
     }
 
-    -- Se non è una ricerca
+    -- Tabella da stampare se non è una ricerca
     if myApp.ricerca == nil then
         transitiTable = makeList(utente)
     else
-        -- Se è una ricerca
+        -- Tabella da stampare se è una ricerca
         local transiti = {}
         local periodo = nil
 
         if myApp.ricerca["p"] ~= nil then
+            -- Estrai i giorni dalla ricerca
             periodo = tonumber(string.sub(myApp.ricerca["p"], 8,9))
         end
 
@@ -60,7 +66,7 @@ function scene:createScene(event)
             local transito = utente[i]
 
             if periodo ~= nil then
-                -- Verifica se è nell'intervallo
+                -- Sottrae la data attuale a quella del transito e verifica se è nell'intervallo della ricerca
                 inDate = periodo >= math.ceil(os.difftime(os.time(),parseDate(transito[1])) / 60 / 60 / 24)
             end
 
@@ -108,7 +114,7 @@ function scene:createScene(event)
     group:insert(scrollView)
  end
 
-
+-- Effettua il parse della data da stringa a secondi da 1970
  function parseDate(dateString)
     local pattern = "(%d+)%/(%d+)%/(%d+)"
     local xday, xmonth, xyear = dateString:match(pattern)

@@ -1,6 +1,10 @@
+--[[
+    Project name: AreaC
+    Authors: Matteo Lanza, Cristian Speranza
+]]--
 
-local myApp = require('myapp')
-local widget = require('widget')
+local widget = require( "widget" )
+local myApp = require( "myapp" ) 
 
 library = {}
 
@@ -199,36 +203,39 @@ local function textArea(group, x, y, width, height, color, font, align, text, se
 
 end
 
-local function verificaTarga(targa)
+-- local function verificaTarga(targa)
 
-    local accesso = false
+--     local accesso = false
 
-    local targaTrovata = false
+--     local targaTrovata = false
 
-    local numTarghe = myApp:getNumTarghe()
+--     local numTarghe = myApp:getNumTarghe()
 
-    for i = 1, numTarghe, 1 do
-        if targa == myApp.targhe[i].targa and targaTrovata == false then
-            -- targa presente nel database
-            accesso = myApp.targhe[i].accesso
-            targaTrovata = true
-        end
-    end
+--     for i = 1, numTarghe, 1 do
+--         if targa == myApp.targhe[i].targa and targaTrovata == false then
+--             -- targa presente nel database
+--             accesso = myApp.targhe[i].accesso
+--             targaTrovata = true
+--         end
+--     end
 
-    num = math.random()
-    print(num)
-    -- Aggiunta nuova targa nel database
-    if targaTrovata == false then
-        if num <= 0.90 then
-            myApp.targhe[numTarghe+1] = { targa = targa , accesso = true }
-            accesso = true
-        else
-            myApp.targhe[numTarghe+1] = { targa = targa , accesso = false }
-        end
-    end
+--     num = math.random()
+--     print(num)
+--     -- Aggiunta nuova targa nel database
+--     if targaTrovata == false then
+--         if num <= 0.80 then
+--             myApp.targhe[numTarghe+1] = { targa = targa , accesso = true }
+--             accesso = true
+--         elseif num <= 0.90 then
+--             -- myApp.targhe[numTarghe+1] = { targa = targa , accesso = true }
+--             -- accesso = true
+--         else
+--             myApp.targhe[numTarghe+1] = { targa = targa , accesso = false }
+--         end
+--     end
 
-    return accesso
-end
+--     return accesso
+-- end
 
 
 local function salvaUtente(utente, id)
@@ -245,7 +252,7 @@ library.setBackground = setBackground
 library.trimString = trimString
 library.textArea = textArea
 library.checkLogIn = checkLogIn
-library.verificaTarga = verificaTarga
+--library.verificaTarga = verificaTarga
 library.salvaUtente = salvaUtente
 
 return library

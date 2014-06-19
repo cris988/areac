@@ -1,3 +1,9 @@
+--[[
+    Project name: AreaC
+    Authors: Matteo Lanza, Cristian Speranza
+]]--
+
+
 local storyboard = require ('storyboard')
 local scene = storyboard.newScene()
 local widget = require('widget')
@@ -43,7 +49,7 @@ function scene:createScene(event)
         group:insert(myText)
     end
 
-    myMap = native.newMapView(display.contentCenterX, (_H - myApp.titleBar.height - myApp.tabBar.height) /2 + myApp.titleBar.height -1, _W, _H - myApp.titleBar.height - myApp.tabBar.height)
+    local myMap = native.newMapView(display.contentCenterX, (_H - myApp.titleBar.height - myApp.tabBar.height) /2 + myApp.titleBar.height -1, _W, _H - myApp.titleBar.height - myApp.tabBar.height)
 
     if ( myMap ) then
         -- Display a normal map with vector drawings of the streets.

@@ -1,3 +1,16 @@
+--[[
+    Project name: AreaC
+    Authors: Matteo Lanza, Cristian Speranza
+]]--
+
+--[[
+    
+    registrazione3_riepilogo.lua
+
+        L'utente controlla i dati prima dell'invio definitivo
+
+]]--
+
 local storyboard = require( "storyboard" )
 local scene = storyboard.newScene()
 local widget = require('widget')
@@ -92,7 +105,7 @@ end
 function avantiButton()
     myApp.story.removeAll()
     myApp.titleBar.indietro.isVisible = false
-    storyboard.gotoScene('registrazione_opzionale',  { effect = "slideLeft", time = 500 } )
+    storyboard.gotoScene('registrazione4_modificabili',  { effect = "slideLeft", time = 500 } )
 end
 
 

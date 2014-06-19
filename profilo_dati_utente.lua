@@ -1,3 +1,8 @@
+--[[
+    Project name: AreaC
+    Authors: Matteo Lanza, Cristian Speranza
+]]--
+
 local storyboard = require( "storyboard" )
 local scene = storyboard.newScene()
 local widget = require('widget')
@@ -173,7 +178,7 @@ function step0()
             align = "left"
         }
         local residenzaDatiText = display.newText( optionsResidenzaDati )
-        residenzaDatiText.text = myApp.utenti[myApp.utenteLoggato].via .. ', ' .. myApp.utenti[myApp.utenteLoggato].civico
+        residenzaDatiText.text = myApp.utenti[myApp.utenteLoggato].via .. ', ' .. myApp.utenti[myApp.utenteLoggato].civico .. ', ' .. myApp.utenti[myApp.utenteLoggato].cap
         residenzaDatiText:setFillColor( 0, 0, 0 )
 
         

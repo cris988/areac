@@ -1,3 +1,8 @@
+--[[
+    Project name: AreaC
+    Authors: Matteo Lanza, Cristian Speranza
+]]--
+
 local storyboard = require ('storyboard')
 local widget = require('widget')
 local myApp = require('myapp')
@@ -36,10 +41,8 @@ local importiR ={ 2, 30, 60 }
 local ingressiN ={ 1, 10, 20 }
 local ingressiR ={ 1, 20, 30 }
 
-myApp.acquisto = nil
-
-
-
+-- Inizializzo
+myApp.acquisto = {}
 
 function acquista0:createScene(event)
 
@@ -58,7 +61,6 @@ function acquista0:createScene(event)
 
     library.setBackground(group, _Background)
 
-    myApp.acquisto ={}
 
     local BtAvanti = widget.newButton({
         id  = 'BtAvanti',
@@ -168,7 +170,7 @@ function acquista1:createScene(event)
 
     library.setBackground(group, _Background)
 
-    if myApp.utenti[myApp.utenteLoggato].tipo == 'Residente' then
+    if myApp.utenteLoggato ~= 0 and myApp.utenti[myApp.utenteLoggato].tipo == 'Residente' then
         ingressi = ingressiR
         importi = importiR
     else
@@ -178,15 +180,17 @@ function acquista1:createScene(event)
         
 
     -- Recupera parametro da verificatarga
-    if myApp.acquisto == nil then
-        myApp.acquisto = {}
-        print("fatto")
+    if event.params ~= nil then
         myApp.acquisto.targa = event.params.targa
     end
 
-    local accesso = library.verificaTarga(myApp.acquisto.targa)
+    --local accesso = library.verificaTarga(myApp.acquisto.targa)
 
-    if accesso then
+
+    require("verifica")
+    local accesso = verificaTarga(myApp.acquisto.targa)
+
+    if accesso == 'p' then
 
         local options = {
             text = 'Seleziona il ticket da acquistare per questa targa: '..myApp.acquisto.targa,
@@ -261,9 +265,16 @@ function acquista1:createScene(event)
         group:insert(info)
         group:insert(BtAcquista)
 
+    elseif accesso == 'g' then
+
+        local groupVerifica = verificaPrint('g', myApp.acquisto.targa)
+        group:insert(groupVerifica)
+
     else
-        require("verifica")
-        notEnter(group, myApp.acquisto.targa)
+        
+        local groupVerifica = verificaPrint('v', myApp.acquisto.targa)
+
+        group:insert(groupVerifica)
     end
 
 end
@@ -362,20 +373,6 @@ function acquistaTicket()
         storyboard.gotoScene('paypal0', { effect = "slideLeft", time = 500 } )
     end
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

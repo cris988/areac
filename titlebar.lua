@@ -1,3 +1,8 @@
+--[[
+    Project name: AreaC
+    Authors: Matteo Lanza, Cristian Speranza
+]]--
+
 local storyboard = require ( "storyboard" )
 local widget = require( "widget" )
 local myApp = require( "myapp" ) 
@@ -122,12 +127,12 @@ function titleBar.annulla()
 end
 
 function titleBar.ricerca()
-    storyboard.gotoScene( "ricerca", titleBar.accedi.effect)
+    storyboard.gotoScene( "profilo_ricerca", titleBar.accedi.effect)
 end
 
 function titleBar.cerca()
 	myApp.story.back()
-	storyboard.gotoScene( "transiti", titleBar.cerca.effect)
+	storyboard.gotoScene( "profilo_transiti", titleBar.cerca.effect)
 end
 
 return titleBar

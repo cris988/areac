@@ -1,3 +1,7 @@
+--[[
+    Project name: AreaC
+    Authors: Matteo Lanza, Cristian Speranza
+]]--
 
 -- Dimensioni schermo
 _H = display.contentHeight
@@ -110,5 +114,7 @@ end
 function myApp.story.removeAll()
     myApp.story.__scenes = {}
 end
+
+myApp.utenteLoggato = 0 -- Per il login
 
 myApp.showHome()

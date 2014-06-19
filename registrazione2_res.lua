@@ -1,3 +1,18 @@
+--[[
+    Project name: AreaC
+    Authors: Matteo Lanza, Cristian Speranza
+]]--
+
+--[[
+
+    registrazione2_res.lua
+
+        L'utente residente inserisce il Codice Fiscale,
+        il numero della Patente, l'indirizzo di residenza,
+        il numero civico, il CAP
+
+]]--
+
 local storyboard = require( "storyboard" )
 local scene = storyboard.newScene()
 local widget = require('widget')

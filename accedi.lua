@@ -1,3 +1,8 @@
+--[[
+    Project name: AreaC
+    Authors: Matteo Lanza, Cristian Speranza
+]]--
+
 local storyboard = require ('storyboard')
 local scene = storyboard.newScene()
 local widget = require('widget')

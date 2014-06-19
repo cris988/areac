@@ -1,3 +1,8 @@
+--[[
+    Project name: AreaC
+    Authors: Matteo Lanza, Cristian Speranza
+]]--
+
 local storyboard = require ( "storyboard" )
 local widget = require( "widget" )
 local myApp = require( "myapp" )
@@ -12,6 +17,7 @@ myApp.tabBar = {}
 -- Funzioni tabBar
 function myApp.showHome()
     myApp.tabBar.isVisible = true
+    myApp.story.removeAll()
     myApp.showMappa()
 end
 

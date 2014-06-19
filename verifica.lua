@@ -1,3 +1,8 @@
+--[[
+    Project name: AreaC
+    Authors: Matteo Lanza, Cristian Speranza
+]]--
+
 local storyboard = require ('storyboard')
 local widget = require('widget')
 local myApp = require('myapp')
@@ -11,7 +16,8 @@ local verifica1 = storyboard.newScene("verifica1")
 -- funzioni
 local acquistaButton
 local verificaButton
-notEnter ={}
+verificaPrint = {}
+verificaTarga = {}
 
 -- variabili
 local txtTarga
@@ -100,44 +106,48 @@ function verifica1:createScene(event)
 
     library.setBackground(group, _Background )
 
-    
-    local accesso = library.verificaTarga(targa)
+    local accesso = verificaTarga(targa)
 
-    if accesso then
-        local line1 = display.newText( 'Il veicolo con targa '..targa,  _W*0.5, 100, myApp.font, 20)
-        line1:setFillColor(0)
-        local line2 = display.newText( 'PUO\' ACCEDERE',  _W*0.5, 125, myApp.font, 20)
-        line2:setFillColor(0.1333,0.54509,0.13334)
-        local line3 = display.newText( 'all\'area C',  _W*0.5, 150, myApp.font, 20)
-        line3:setFillColor(0)
-        local line4 = display.newText( 'ACCESSO A PAGAMENTO', _W*0.5, 220, myApp.font, 24 )
-        line4:setFillColor(0.1333,0.54509,0.13334)
+    local groupVerifica = verificaPrint(accesso, targa)
 
-        local bordoDati = display.newImageRect( "img/bordo_verifica.png", _W * 0.9, 160)
-        bordoDati.x = _W * 0.5
-        bordoDati.y = 340
+    group:insert(groupVerifica)
 
-        local textDatiTitle = display.newText( "Dati del veicolo \n", _W * 0.3, 280, native.systemFontBold, 17) 
-        textDatiTitle:setFillColor(0)
+    if accesso == 'p' then
 
-        local options ={
+        -- local line1 = display.newText( 'Il veicolo con targa '..targa,  _W*0.5, 100, myApp.font, 20)
+        -- line1:setFillColor(0)
+        -- local line2 = display.newText( 'PUO\' ACCEDERE',  _W*0.5, 125, myApp.font, 20)
+        -- line2:setFillColor(0.1333,0.54509,0.13334)
+        -- local line3 = display.newText( 'all\'area C',  _W*0.5, 150, myApp.font, 20)
+        -- line3:setFillColor(0)
+        -- local line4 = display.newText( 'ACCESSO A PAGAMENTO', _W*0.5, 220, myApp.font, 24 )
+        -- line4:setFillColor(0.1333,0.54509,0.13334)
+
+        -- local bordoDati = display.newImageRect( "img/bordo_verifica.png", _W * 0.9, 160)
+        -- bordoDati.x = _W * 0.5
+        -- bordoDati.y = 340
+
+        -- local textDatiTitle = display.newText( "Dati del veicolo \n", _W * 0.3, 280, native.systemFontBold, 17) 
+        -- textDatiTitle:setFillColor(0)
+
+        -- local options ={
         
-            text = "- EURO"..myApp.datiTarghe.euro[math.random(1,#myApp.datiTarghe.euro)]:upper().. "\n"..
-                    "- "..myApp.datiTarghe.tipo[math.random(1,#myApp.datiTarghe.tipo)].. "\n"..
-                    "- "..myApp.datiTarghe.alim[math.random(1,#myApp.datiTarghe.alim)],
+        --     text = "- EURO"..myApp.datiTarghe.euro[math.random(1,#myApp.datiTarghe.euro)]:upper().. "\n"..
+        --             "- "..myApp.datiTarghe.tipo[math.random(1,#myApp.datiTarghe.tipo)].. "\n"..
+        --             "- "..myApp.datiTarghe.alim[math.random(1,#myApp.datiTarghe.alim)],
 
-            x = _W * 0.49,
-            y = 380,
-            width = _W * 0.8,
-            height = 150,
-            font = myApp.font,
-            fontSize = 17,
-            align = 'left'
-        }
+        --     x = _W * 0.49,
+        --     y = 380,
+        --     width = _W * 0.8,
+        --     height = 150,
+        --     font = myApp.font,
+        --     fontSize = 17,
+        --     align = 'left'
+        -- }
 
 
-        local textDati = display.newText(options)
-        textDati:setFillColor(0)
+        -- local textDati = display.newText(options)
+        -- textDati:setFillColor(0)
 
 
         local acquista = widget.newButton({
@@ -150,26 +160,134 @@ function verifica1:createScene(event)
             onRelease = acquistaButton
         })
 
-        group:insert(line1)
-        group:insert(line2)
-        group:insert(line3)
-        group:insert(line4)
-        group:insert(bordoDati)
-        group:insert(textDatiTitle)
-        group:insert(textDati)
+        -- -- group:insert(line1)
+        -- -- group:insert(line2)
+        -- -- group:insert(line3)
+        -- -- group:insert(line4)
+        -- group:insert(bordoDati)
+        -- group:insert(textDatiTitle)
+        -- group:insert(textDati)
         group:insert(acquista)
 
-    else
-        notEnter(group, targa)
+    -- else
+    --     notEnter(group, targa)
     end
 end
 
 
+function verificaPrint(accesso, targa)
+
+    local group = display.newGroup()
+
+    local line1 = display.newText( 'Il veicolo con targa '..targa, _W * 0.5, 100, myApp.font, 20)
+    line1:setFillColor(0)
+
+    local line2 = display.newText( 'PUO\' ACCEDERE',  _W * 0.5, 125, myApp.font, 20)
+    line2:setFillColor(0)
+
+    local line3 = display.newText( 'all\'area C',  _W * 0.5, 150, myApp.font, 20)
+    line3:setFillColor(0)
+
+    local line4 = display.newText( '', _W*0.5, 220, native.systemFontBold, 24 )
+
+    if accesso == 'g' then
+
+        line4.text = 'ACCESSO GRATUITO'
+        line4:setFillColor(0.14,0.5,0.15)
+
+    elseif accesso == 'p' then
+
+        line4.text = 'ACCESSO A PAGAMENTO'
+        line4:setFillColor(0.95,0.85,0.2)
+
+    else
+
+        line2.text = 'NON PUO\' ACCEDERE'
+        line4.text = 'ACCESSO VIETATO'
+        line4:setFillColor(1,0,0)
+
+    end 
+
+    local bordoDati = display.newImageRect( "img/bordo_verifica.png", _W * 0.9, 160)
+    bordoDati.x = _W * 0.5
+    bordoDati.y = 340
+
+    local textDatiTitle = display.newText( "Dati del veicolo \n", _W * 0.3, 280, native.systemFontBold, 17) 
+    textDatiTitle:setFillColor(0)
+
+    local options ={
+
+        text = '',
+        x = _W * 0.49,
+        y = 380,
+        width = _W * 0.8,
+        height = 150,
+        font = myApp.font,
+        fontSize = 17,
+        align = 'left'
+    }
 
 
+    local textDati = display.newText(options)
+    textDati:setFillColor(0)
 
+    if accesso == 'g' then
+        textDati.text = "- EURO"..myApp.datiTarghe.euro[math.random(5,#myApp.datiTarghe.euro)]:upper().. "\n"..
+                "- "..myApp.datiTarghe.tipo[math.random(1,#myApp.datiTarghe.tipo)].. "\n"..
+                "- "..myApp.datiTarghe.alim[math.random(3,#myApp.datiTarghe.alim)]
+    else
+        textDati.text = "- EURO"..myApp.datiTarghe.euro[math.random(1,#myApp.datiTarghe.euro)]:upper().. "\n"..
+                "- "..myApp.datiTarghe.tipo[math.random(1,#myApp.datiTarghe.tipo)].. "\n"..
+                "- "..myApp.datiTarghe.alim[math.random(1,2)]
+    end
 
+    group:insert(line1)
+    group:insert(line2)
+    group:insert(line3)
+    group:insert(line4)
+    group:insert(bordoDati)
+    group:insert(textDatiTitle)
+    group:insert(textDati)
 
+    return group
+
+end
+
+function verificaTarga(targa)
+
+    local accesso = "v"
+
+    local targaTrovata = false
+
+    local numTarghe = myApp:getNumTarghe()
+
+    for i = 1, numTarghe, 1 do
+        if targa == myApp.targhe[i].targa and targaTrovata == false then
+            -- targa presente nel database
+            accesso = myApp.targhe[i].accesso
+            targaTrovata = true
+        end
+    end
+
+    num = math.random()
+    print(num)
+    if targaTrovata == false then
+        if num <= 0.90 then
+            if num <= 0.80 then
+                accesso = "p"
+            else
+                accesso = "g"
+            end
+
+        end
+        
+        -- Aggiunta nuova targa nel database
+        myApp.targhe[numTarghe+1] = { targa = targa , accesso = accesso }
+
+    end
+
+    return accesso
+end
 
 
 -- Funzioni per pulsanti
@@ -186,7 +304,6 @@ function verificaButton()
     
     -- controllo se il formato della targa è giusto
 
-    --ESPLODE IN CASO DI VERIFICA0 TARGA REGISTRATA
     elseif #txtTarga.campo.text == 7 and txtTarga.campo.text:match( '[A-Za-z][A-Za-z][0-9][0-9][0-9][A-Za-z][A-Za-z]' ) then
         -- passo la targa come parametro facendogli il trim e l'upperCase
         targa = library.trimString( txtTarga.campo.text ):upper()
@@ -197,22 +314,23 @@ function verificaButton()
         -- testo di errore
         textError.alpha = 1
     end
-end
-
-function notEnter(group, targa)
-
-    local line1 = display.newText( 'Il veicolo con targa '..targa,  _W*0.5, (_H*0.5)-25, myApp.font, 20)
-    line1:setFillColor(0)
-    local line2 = display.newText( 'NON PUO\' ACCEDERE',  _W*0.5, _H*0.5, myApp.font, 20)
-    line2:setFillColor(1,0,0)
-    local line3 = display.newText( 'all\'area C',  _W*0.5, (_H*0.5)+25, myApp.font, 20)
-    line3:setFillColor(0)  
-
-    group:insert(line1)
-    group:insert(line2)
-    group:insert(line3)
 
 end
+
+-- function notEnter(group, targa)
+
+--     local line1 = display.newText( 'Il veicolo con targa '..targa,  _W*0.5, (_H*0.5)-25, myApp.font, 20)
+--     line1:setFillColor(0)
+--     local line2 = display.newText( 'NON PUO\' ACCEDERE',  _W*0.5, _H*0.5, myApp.font, 20)
+--     line2:setFillColor(1,0,0)
+--     local line3 = display.newText( 'all\'area C',  _W*0.5, (_H*0.5)+25, myApp.font, 20)
+--     line3:setFillColor(0)  
+
+--     group:insert(line1)
+--     group:insert(line2)
+--     group:insert(line3)
+
+-- end
 
 
 
