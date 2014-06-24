@@ -61,7 +61,7 @@ function scene:createScene(event)
     local options = {
         text = 'Inserisci i tuoi dati personali. Non saranno più modificabili',
         x = _W*0.5,
-        y = scrollView.height * 0.10,
+        y = scrollView.height * 0.07,
         width = _W - 30,
         fontSize = 16,
         align = "center"
@@ -71,17 +71,17 @@ function scene:createScene(event)
 
 
     -- Text field dati
-    txtCF =library.textArea(group,_W*0.5, scrollView.height*0.25, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Codice Fiscale")
-    txtPatente =library.textArea(group,_W*0.5, scrollView.height*0.35, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Numero di patente")
-    txtIndirizzo =library.textArea(group,_W*0.5, scrollView.height*0.45, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Via di domicilio")
-    txtCivico =library.textArea(group,_W*0.5, scrollView.height*0.55, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Numero civico")
-    txtCAP =library.textArea(group,_W*0.5, scrollView.height*0.65, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "CAP")
+    txtCF =library.textArea(group,_W*0.5, scrollView.height*0.2, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Codice Fiscale")
+    txtPatente =library.textArea(group,_W*0.5, scrollView.height*0.3, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Numero di patente")
+    txtIndirizzo =library.textArea(group,_W*0.5, scrollView.height*0.4, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Via di domicilio")
+    txtCivico =library.textArea(group,_W*0.5, scrollView.height*0.5, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Numero civico")
+    txtCAP =library.textArea(group,_W*0.5, scrollView.height*0.6, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "CAP")
 
 
     -- informativa
     local optionsAreaTInfo = {
         x = _W*0.5,
-        y = scrollView.height*0.85,
+        y = scrollView.height*0.775,
         width = _W - 30,
         fontSize = 12,
         align = "left",
@@ -98,7 +98,7 @@ function scene:createScene(event)
         id  = 'BtAvanti',
         label = 'Avanti',
         x = _W*0.5,
-        y = areaTInfo.height + areaTInfo.y + 20,
+        y = areaTInfo.height + areaTInfo.y - 12,
         color = { 0.062745,0.50980,0.99607 },
         fontSize = 26,
         font = myApp.font,

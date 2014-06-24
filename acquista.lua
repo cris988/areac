@@ -312,7 +312,7 @@ end
 
 
 function selezionaTarga()
-    storyboard.gotoScene( 'gestione_targhe', { effect = "slideLeft", time = 500, params = {edit = false} })
+    storyboard.gotoScene( 'profilo_gestione_targhe', { effect = "slideLeft", time = 500, params = {edit = false} })
 end
 
 -- Inibisce la doppia selezione dei checkBox

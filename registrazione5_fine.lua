@@ -43,7 +43,7 @@ function scene:createScene(event)
     local options = {
         text = 'Registrazione avvenuta\ncon successo!',
         x = _W*0.5,
-        y = _H*0.4,
+        y = _H*0.45,
         width = _W - 30,
         fontSize = 24,
         align = "center"
@@ -54,7 +54,7 @@ function scene:createScene(event)
     local optionsProfilo = {
         text = 'Potrai consultare i tuoi dati nel Profilo',
         x = _W*0.5,
-        y = _H*0.7,
+        y = _H*0.575,
         width = _W - 30,
         fontSize = 20,
         align = "center"

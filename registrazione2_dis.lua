@@ -100,7 +100,7 @@ function avantiButton()
     if txtPass.campo.text ~= '' then
         print("PASS: "..txtPass.campo.text)
         myApp.datiUtente.pass = library.trimString( txtPass.campo.text )
-        storyboard.gotoScene('riepilogo', { effect = "slideLeft", time = 500 })
+        storyboard.gotoScene('registrazione3_riepilogo', { effect = "slideLeft", time = 500 })
     end
 end
 
