@@ -40,18 +40,35 @@ function scene:createScene(event)
     local options = {
         text = 'Inserisci il numero del Pass per disabile',
         x = _W*0.5,
-        y = _H*0.425,
+        y = _H*0.3,
         width = _W - 30,
-        height = 300,
+        height = 150,
         fontSize = 16,
         align = "center"
     }
     local areaT = display.newText( options )
-    areaT:setFillColor{ 255,0,0 }
+    areaT:setFillColor(0,0,0)
 
 
     -- Text field dati
-    txtPass =library.textArea(group,_W*0.5, _H*0.5, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Numero Pass")
+    txtPass =library.textArea(group,_W*0.5, _H*0.4, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Numero Pass")
+
+
+    -- informativa
+    local optionsAreaTInfo = {
+        x = _W*0.5,
+        y = _H*0.85,
+        width = _W - 30,
+        height = 200,
+        fontSize = 12,
+        align = "left",
+        text = "Si ricorda che il dichiarante è soggetto alle sanzioni previste dal Codice Penale e dalle Leggi speciali " ..
+        "in materia, qualora rilasci dichiarazioni mendaci, formi o faccia uso di atti falsi o esibisca atti contenenti " ..
+        "dati non più rispondenti a verità (art. 76 del D.P.R. 445/2000). "
+    }
+
+    local areaTInfo = display.newText( optionsAreaTInfo )
+    areaTInfo:setFillColor( 0,0,0 )
 
 
     local BtAvanti = widget.newButton({
@@ -66,6 +83,7 @@ function scene:createScene(event)
     })
     
     group:insert(areaT)
+    group:insert(areaTInfo)
     group:insert(txtPass)
     group:insert(BtAvanti)
 

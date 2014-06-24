@@ -37,7 +37,7 @@ function scene:createScene(event)
     local utente = myApp.transiti[myApp.utenteLoggato]
 
 
-    scrollView = widget.newScrollView
+    local scrollView = widget.newScrollView
     {
       top = myApp.titleBar.height,
       left = 0,

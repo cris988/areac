@@ -48,6 +48,7 @@ myApp.datiUtente = {
     accessi = 40,
     patente = '',
     via = '',
+    cf = '',
     civico = '',
     cap = '',
     --Disabile
@@ -67,6 +68,7 @@ if debugMode then
         email = 'marco@marco.it',
         multiplo = 0,
         accessi = 40,
+        cf = 'RMNDESH32U84Y235E',
         patente = 'de345ed',
         via = 'Via Monti',
         civico = '3',
@@ -96,7 +98,7 @@ function scene:createScene(event)
 
 	-- testo in alto
     local options = {
-        text = 'Inserisci le informazioni:',
+        text = 'Inserisci username e password desiderate:',
         x = _W*0.5,
         y = _H*0.425,
         width = _W - 30,

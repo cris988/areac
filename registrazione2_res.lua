@@ -44,52 +44,84 @@ function scene:createScene(event)
 
     library.setBackground(group, _Background )
 
+
+    local scrollView = widget.newScrollView
+    {
+      top = myApp.titleBar.height,
+      left = 0,
+      width =  _W,
+      height = _H - myApp.titleBar.height,
+      scrollWidth = _W,
+      scrollHeight = 0,
+      horizontalScrollDisabled = true,
+      hideBackground = true
+    }
+
     -- testo in alto
     local options = {
         text = 'Inserisci i tuoi dati personali. Non saranno più modificabili',
         x = _W*0.5,
-        y = _H*0.425,
+        y = scrollView.height * 0.10,
         width = _W - 30,
-        height = 300,
         fontSize = 16,
         align = "center"
     }
     local areaT = display.newText( options )
-    areaT:setFillColor{ 255,0,0 }
+    areaT:setFillColor(0,0,0)
 
 
     -- Text field dati
-    txtCF =library.textArea(group,_W*0.5, _H*0.37, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Codice Fiscale")
-    txtPatente =library.textArea(group,_W*0.5, _H*0.47, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Numero di patente")
-    txtIndirizzo =library.textArea(group,_W*0.5, _H*0.57, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Via di domicilio")
-    txtCivico =library.textArea(group,_W*0.5, _H*0.67, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Numero civico")
-    txtCAP =library.textArea(group,_W*0.5, _H*0.77, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "CAP")
+    txtCF =library.textArea(group,_W*0.5, scrollView.height*0.25, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Codice Fiscale")
+    txtPatente =library.textArea(group,_W*0.5, scrollView.height*0.35, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Numero di patente")
+    txtIndirizzo =library.textArea(group,_W*0.5, scrollView.height*0.45, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Via di domicilio")
+    txtCivico =library.textArea(group,_W*0.5, scrollView.height*0.55, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Numero civico")
+    txtCAP =library.textArea(group,_W*0.5, scrollView.height*0.65, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "CAP")
 
+
+    -- informativa
+    local optionsAreaTInfo = {
+        x = _W*0.5,
+        y = scrollView.height*0.85,
+        width = _W - 30,
+        fontSize = 12,
+        align = "left",
+        text = "Si ricorda che il dichiarante è soggetto alle sanzioni previste dal Codice Penale e dalle Leggi speciali " ..
+        "in materia, qualora rilasci dichiarazioni mendaci, formi o faccia uso di atti falsi o esibisca atti contenenti " ..
+        "dati non più rispondenti a verità (art. 76 del D.P.R. 445/2000). "
+    }
+
+    local areaTInfo = display.newText( optionsAreaTInfo )
+    areaTInfo:setFillColor( 0,0,0 )
 
 
     local BtAvanti = widget.newButton({
         id  = 'BtAvanti',
         label = 'Avanti',
         x = _W*0.5,
-        y = _H*0.925,
+        y = areaTInfo.height + areaTInfo.y + 20,
         color = { 0.062745,0.50980,0.99607 },
         fontSize = 26,
         font = myApp.font,
         onRelease = avantiButton
     })
-    
-    group:insert(areaT)
-    group:insert(txtCF)
-    group:insert(txtPatente)
-    group:insert(txtIndirizzo)
-    group:insert(txtCivico)
-    group:insert(txtCAP)
-    group:insert(BtAvanti)
 
+    scrollView:setScrollHeight( BtAvanti.y + BtAvanti.height )
+
+    scrollView:insert(areaT)
+    scrollView:insert(txtCF)
+    scrollView:insert(txtPatente)
+    scrollView:insert(txtIndirizzo)
+    scrollView:insert(txtCivico)
+    scrollView:insert(txtCAP)
+    scrollView:insert(areaTInfo)
+    scrollView:insert(BtAvanti)
+
+    group:insert(scrollView)
 
 
     -- Recupero dati in memoria
     if myApp.datiUtente.cf ~= '' then
+
 
         txtCF.campo.text = myApp.datiUtente.cf
         txtPatente.campo.text = myApp.datiUtente.patente
@@ -127,7 +159,7 @@ function avantiButton()
         print("CIVICO: "..txtCivico.campo.text) 
         print("CAP: "..txtCAP.campo.text)  
 
-        storyboard.gotoScene('riepilogo', { effect = "slideLeft", time = 500 } )
+        storyboard.gotoScene('registrazione3_riepilogo', { effect = "slideLeft", time = 500 } )
     end
 end
 
