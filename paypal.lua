@@ -245,7 +245,8 @@ function paypal1:destroyScene( event )
 end
 
 function paypal2:enterScene( event ) 
-    print("ENTRA SCENA PAYPAL2") 
+    print("ENTRA SCENA PAYPAL2")
+    myApp.story.add(storyboard.getCurrentSceneName())
 end
 
 function paypal2:exitScene( event ) 

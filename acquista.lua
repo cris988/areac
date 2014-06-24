@@ -184,8 +184,6 @@ function acquista1:createScene(event)
         myApp.acquisto.targa = event.params.targa
     end
 
-    --local accesso = library.verificaTarga(myApp.acquisto.targa)
-
 
     require("verifica")
     local accesso = verificaTarga(myApp.acquisto.targa)
