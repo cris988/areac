@@ -54,7 +54,7 @@ function scene:createScene(event)
 
     library.setBackground(group, _Background)
 
-    group:insert(library.makeList("info", strings, 0, 69, _W, 50 * #strings, 50, true,nil, onRowTouch))
+    group:insert(library.makeList("info", strings, 0, 69, _W, 50, { arrow = true },nil, onRowTouch))
 
 end
 

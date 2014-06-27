@@ -43,7 +43,7 @@ local function onRowRender( event )
     rowTitle.x = 20
     rowTitle.y = rowHeight * 0.5
 
-    if row.params.arrow == true then
+    if row.params.arrow ~= nil and row.params.arrow == true then
 
 	    local rowArrow = display.newImage( row, "img/rowArrow.png", false )
 	    rowArrow.x = row.contentWidth - 20
@@ -51,10 +51,14 @@ local function onRowRender( event )
 	    rowArrow.y = row.contentHeight * 0.5
 
 	end
+
+    if row.params.x ~= nil then
+        rowTitle.x = row.params.x
+    end
 end
 
 
-local function makeList(id, values, x, y, width, height, rowHeight, arrow, eventRowRender, eventRowTouch) 
+local function makeList(id, values, x, y, width, rowHeight, paramsRow, eventRowRender, eventRowTouch) 
 
 	local group = display.newGroup( )
 
@@ -68,7 +72,7 @@ local function makeList(id, values, x, y, width, height, rowHeight, arrow, event
 	    x = x,
 	    y = y,
 	    id = id,
-	    height = height,
+	    height = rowHeight * #values,
 	    width = width,
 	    isLocked = true,
 	    onRowRender = eventRowRender,
@@ -78,23 +82,29 @@ local function makeList(id, values, x, y, width, height, rowHeight, arrow, event
 	for i = 1, #values do
 
 
-        local rowColor = { default={ 1, 1, 1 }, over={ 1, 0.5, 0, 0.2 } }
+        local rowColor = { default={ 1, 1, 1 }, over={ 0.3, 0.3, 0, 0.3 } }
         local lineColor
 
         if i < #values then lineColor = { 0.8, 0.8, 0.8 }  else lineColor = { 1, 1, 1 } end
 
-	    -- Insert a row into the listaInfo
-	    tableView:insertRow(
-	    {
-	        isCategory = false,
-	        rowHeight = rowHeight,
-	        rowColor = rowColor,
+
+        local options = {
+            isCategory = false,
+            rowHeight = rowHeight,
+            rowColor = rowColor,
             lineColor = lineColor,
-	        params = {
-	        	value = values[i],
-	        	arrow = arrow
-	   		}
-	    })
+            params = {
+                value = values[i],
+            }
+        }
+
+        for k,v in pairs(paramsRow) do
+            options.params[k] = v
+        end
+
+
+	    -- Insert a row into the listaInfo
+	    tableView:insertRow(options)
 
 	end
 
@@ -108,6 +118,10 @@ local function makeList(id, values, x, y, width, height, rowHeight, arrow, event
 	local lineB = display.newLine( group, x, tableView.y + tableView.height - 1, width, tableView.y + tableView.height - 1)
 	lineB:setStrokeColor( 0.8, 0.8, 0.8 )
 
+    group.deleteRow = function(index, time, delay) 
+                        tableView:deleteRow( index )
+                        transition.to(lineB, { time = time, delay = delay, y = lineB.y - rowHeight} )
+                    end
 
 	return group
 
@@ -132,10 +146,13 @@ local function clearListener( campoInserimento, btClear )
 	end
 end
 
-local function textListener(group, campoInserimento, btClear ) 
+local function textListener(group, campoInserimento, btClear, funcBegan, funcSub ) 
 
 	return function(event)
 	    if event.phase == "began" then
+            if funcBegan ~= nil then
+                funcBegan()
+            end
             if campoInserimento.y > _H * 0.5 then
                 transition.to( group, {time=120, y=-campoInserimento.y+_H*0.5} )
             end
@@ -157,13 +174,16 @@ local function textListener(group, campoInserimento, btClear )
             --native.setKeyboardFocus( nil )
             --transition.to( group, {time=100, y=0} )
     	elseif event.phase == "submitted" then
+            if funcSub ~= nil then
+                funcSub()
+            end
             native.setKeyboardFocus( nil )
             transition.to( group, {time=100, y=0} )
         end
      end
 end
 
-local function textArea(group, x, y, width, height, color, font, align, text, secure)
+local function textArea(group, x, y, width, height, color, font, align, text, secure, funcBegan, funcSub)
 
     local gruppoInserimento = display.newGroup()
 
@@ -194,7 +214,7 @@ local function textArea(group, x, y, width, height, color, font, align, text, se
     gruppoInserimento:insert(btClear)
 
     btClear:addEventListener( "touch", clearListener(campoInserimento, btClear) )
-    campoInserimento:addEventListener( "userInput", textListener(group, campoInserimento, btClear))
+    campoInserimento:addEventListener( "userInput", textListener(group, campoInserimento, btClear, funcBegan, funcSub))
 
     gruppoInserimento.campo = campoInserimento
     gruppoInserimento.bg = sfondoInserimento

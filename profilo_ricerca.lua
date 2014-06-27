@@ -87,10 +87,9 @@ function scene:createScene(event)
 
   local targhe = retrieveData(2)
   order(targhe)
-  local height = 40 * #targhe
   y = y + 40
-  targheTable = library.makeList("t", targhe, 0, y, _W, height, 40, false, onRowRender, onRowTouch)
-  y = y + height
+  targheTable = library.makeList("t", targhe, 0, y, _W, 40, {}, onRowRender, onRowTouch)
+  y = y + 40 * #targhe
 
   scrollView:insert(title)
   scrollView:insert(targheTable)
@@ -102,10 +101,9 @@ function scene:createScene(event)
   title = newTitle("Periodo", x, y, _W, 40)
 
   local periodo = { "Ultimi 10 giorni", "Ultimi 20 giorni", "Ultimi 30 giorni"} 
-  local height = 40 * #periodo
   y = y + 40
-  periodoTable = library.makeList("p", periodo, 0, y, _W, height, 40, false, onRowRender, onRowTouch)
-  y = y + height
+  periodoTable = library.makeList("p", periodo, 0, y, _W, 40, {}, onRowRender, onRowTouch)
+  y = y + 40 * #periodo
 
   scrollView:insert(title)
   scrollView:insert(periodoTable)
@@ -118,10 +116,9 @@ function scene:createScene(event)
 
   local importo = retrieveData(3)
   order(importo)
-  local height = 40 * #importo
   y = y + 40
-  importoTable = library.makeList("i", importo, 0, y, _W, height, 40, false, onRowRender, onRowTouch)
-  y = y + height
+  importoTable = library.makeList("i", importo, 0, y, _W, 40, {}, onRowRender, onRowTouch)
+  y = y + 40 * #importo
 
   scrollView:insert(title)
   scrollView:insert(importoTable)
@@ -179,7 +176,7 @@ function newTitle(text, x, y, width, height)
 
   local group = display.newGroup( )
 
-  bg = display.newRect( 0, y, width, height)
+  local bg = display.newRect( 0, y, width, height)
   bg.anchorX =0
   bg.anchorY = 0
   bg:setFillColor( 0.95,0.95,0.95 )

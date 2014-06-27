@@ -171,7 +171,7 @@ function scene:createScene(event)
     group:insert(multiText)
     group:insert(multiDatiText)
 
-    group:insert(library.makeList("pf", strings, 0, _H*0.6, _W, 150, 50, true, nil, onRowTouch))
+    group:insert(library.makeList("pf", strings, 0, _H*0.6, _W, 50, {arrow = true}, nil, onRowTouch))
     group:insert(BtDisconnetti)
     
 end
@@ -185,7 +185,7 @@ function onRowTouch( event )
         if index == 1 then
             storyboard.gotoScene('profilo_dati_utente', { effect = "slideLeft", time = 500 } )
         elseif index == 2 then
-            storyboard.gotoScene('profilo_gestione_targhe', { effect = "slideLeft", time = 500 } )
+            storyboard.gotoScene('profilo_gestione_targhe', { effect = "slideLeft", time = 500, params = { edit = true} } )
         elseif index == 3 then
             storyboard.gotoScene('profilo_transiti', { effect = "slideLeft", time = 500 } )
         end

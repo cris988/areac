@@ -15,7 +15,7 @@ myApp.utenti[3] = { username = 'dis', password = 'dis' , nome = 'Mario', cognome
 
 myApp.transiti ={}
 myApp.transiti[1] ={
-{ "01/06/2014", "PP222PP" , "non pagato"}, { "31/05/2014", "KK333KK" , "non pagato"},
+{ "01/06/2014", "PP222PP" , "DA PAGARE"}, { "31/05/2014", "KK333KK" , "DA PAGARE"},
 { "30/05/2014", "QW111QW" , "5€"}, { "29/05/2014", "PP222PP" , "5€"},
 { "22/05/2014", "PP222PP" , "5€"}, { "21/05/2014", "QW111QW" , "5€"}, 
 { "30/04/2014", "QW111QW" , "5€"}, { "16/02/2014", "KK333KK" , "5€"},
@@ -50,7 +50,7 @@ myApp.targhe = {}
 myApp.targhe[1] = { accesso = "p", targa = 'SI111SI', euro = myApp.datiTarghe.euro[5], tipo=myApp.datiTarghe.tipo[1], alim=myApp.datiTarghe.alim[2] }
 myApp.targhe[2] = { accesso = "v", targa = 'NO111NO', euro = myApp.datiTarghe.euro[1], tipo=myApp.datiTarghe.tipo[1], alim=myApp.datiTarghe.alim[1] }
 myApp.targhe[3] = { accesso = "p", targa = 'QW111QW', euro = myApp.datiTarghe.euro[3], tipo=myApp.datiTarghe.tipo[1], alim=myApp.datiTarghe.alim[1] }
-myApp.targhe[4] = { accesso = "g", targa = 'PP222PP', euro = myApp.datiTarghe.euro[4], tipo=myApp.datiTarghe.tipo[1], alim=myApp.datiTarghe.alim[4] }
+myApp.targhe[4] = { accesso = "p", targa = 'PP222PP', euro = myApp.datiTarghe.euro[4], tipo=myApp.datiTarghe.tipo[1], alim=myApp.datiTarghe.alim[4] }
 myApp.targhe[5] = { accesso = "p", targa = 'KK333KK', euro = myApp.datiTarghe.euro[4], tipo=myApp.datiTarghe.tipo[1], alim=myApp.datiTarghe.alim[1] }
 myApp.targhe[6] = { accesso = "g", targa = 'GG111GG', euro = myApp.datiTarghe.euro[5], tipo=myApp.datiTarghe.tipo[1], alim=myApp.datiTarghe.alim[3] }
 

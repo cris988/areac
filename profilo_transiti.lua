@@ -157,12 +157,20 @@ end
 
 		for j = 1, #transiti[i] do
 	   		transito = display.newText(group, transiti[i][j], 0, 10, myApp.font, 18 )
-		    transito:setFillColor( 0 )
+            transito:setFillColor( 0 )
+
+            -- Contrassegna di rosso il transito non pagato
+            if not(string.match(transiti[i][j], "%d")) then
+                transito:setFillColor( 255,0,0 )
+            end
+            
 		    transito.x = _W * textX[j]
 		    transito.y = textY
 		end
 
 		textY = textY + transito.height / 2  + padding
+
+        -- Stampa linea serapazione transito
 
     	local line = display.newLine( group, 0, textY, _W, textY)
     	line:setStrokeColor( 0.8, 0.8, 0.8 )

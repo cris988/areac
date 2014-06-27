@@ -13,9 +13,19 @@ widget.setTheme(myApp.theme)
 
 
 -- funzioni
+local searchFocus
+local annullaButton
+local setMyPosition
 
 -- variabili
 local background = {1,1,1}
+local myMap
+local BtAnnulla
+local BtMyPos
+local groupTxtSearch
+local txtSearch
+local keyboardFocus = false
+local myAddress
 
 
 
@@ -35,12 +45,57 @@ function scene:createScene(event)
 
     library.setBackground(group, _Background )
 
+
+    -- Group di ricerca
+    local groupSearch = display.newGroup( )
+    groupSearch.y = myApp.titleBar.height - 1
+
+    local bgSearch = display.newRect( group, 0, 0, _W, 48)
+    bgSearch:setFillColor( 0.95,0.95,0.95  )
+    bgSearch.anchorX = 0
+    bgSearch.anchorY = 0
+
+    BtAnnulla = widget.newButton( {
+        id = 'BtAnnulla',
+        label = 'Annulla',
+        x = _W * 0.9,
+        y =  bgSearch.height / 2,
+        color = color,
+        fontSize = 17,
+        onRelease = lostFocus,
+    } )
+    BtAnnulla.alpha = 0
+
+    BtMyPos = widget.newButton({
+        defaultFile = "img/position.png",
+        x =  _W * 0.93,
+        y = bgSearch.height / 2,
+        width = 25,
+        height = 25,
+        onRelease = setMyPosition
+    } )
+
+
+    -- Casella di testo per ricerca via
+
+    txtSearch = library.textArea(group, _W*0.45, bgSearch.height / 2, _W * 0.6, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Inserisci la via", nil, searchFocus, mapLocation)
+
+    local imgLente = display.newImage( group, "img/lente.png", _W * 0.1, bgSearch.height / 2)
+    imgLente.width = 25
+    imgLente.height = 25
+
+    groupSearch:insert(bgSearch)
+    groupSearch:insert(BtMyPos)
+    groupSearch:insert(BtAnnulla)
+    groupSearch:insert(txtSearch)
+    groupSearch:insert(imgLente)
+
+
     -- Finta mappa per corona simulator
     local mappa = display.newRect( group, 0, myApp.titleBar.height -1, _W, _H - myApp.titleBar.height - myApp.tabBar.height)
     mappa:setFillColor( 0.5, 0.5, 0.5 )
     mappa.anchorX=0
     mappa.anchorY=0
-
 
     if ( system.getInfo( "environment" ) == "simulator" ) then
 
@@ -49,7 +104,8 @@ function scene:createScene(event)
         group:insert(myText)
     end
 
-    local myMap = native.newMapView(display.contentCenterX, (_H - myApp.titleBar.height - myApp.tabBar.height) /2 + myApp.titleBar.height -1, _W, _H - myApp.titleBar.height - myApp.tabBar.height)
+    myMap = native.newMapView(display.contentCenterX, (_H - myApp.titleBar.height - myApp.tabBar.height - bgSearch.height) /2 + myApp.titleBar.height -1 + bgSearch.height, _W,
+                             _H - myApp.titleBar.height - myApp.tabBar.height - bgSearch.height)
 
     if ( myMap ) then
         -- Display a normal map with vector drawings of the streets.
@@ -60,26 +116,6 @@ function scene:createScene(event)
         myMap:setCenter( 45.4640135,9.190618 )
 
 
-        --Fetch the user's current location
-        local currentLocation = myMap:getUserLocation()
-        if currentLocation.errorCode then
-            -- Current location is unknown if the "errorCode" property is not nil.
-            currentLatitude = 0
-            currentLongitude = 0
-            native.showAlert( "Error", currentLocation.errorMessage, { "OK" } )
-        else
-
-            -- Current location data was received.
-            -- Move map so that current location is at the center.
-            currentLatitude = currentLocation.latitude
-            currentLongitude = currentLocation.longitude
-
-            print("map position latitude: ", currentLatitude)
-            print("map position longitude: ", currentLongitude)
-            --myMap:setRegion( currentLatitude, currentLongitude, 0.01, 0.01, true )
-        end
-
-
         -- This is returned as a mapLocation event
         local function mapLocationListener(event)
             print("map tapped latitude: ", event.latitude)
@@ -87,7 +123,7 @@ function scene:createScene(event)
         end
         myMap:addEventListener("mapLocation", mapLocationListener)
 
-
+        
     end
 
 
@@ -169,9 +205,76 @@ function scene:createScene(event)
 
     myMap.isLocationVisible = true
     myMap.isZoomEnabled = true
+
+    group:insert(groupSearch)
     group:insert(myMap)
+
+    
 end
 
+function lostFocus()
+    -- Disabilita il pulsante annulla e mostra quello della posizione
+    keyboardFocus = false
+    native.setKeyboardFocus( nil )
+    BtAnnulla.alpha = 0
+    BtMyPos.alpha = 1
+    txtSearch.width = txtSearch.width + 20
+end
+
+function searchFocus()
+    -- Abilita il pulsante annulla e nasconde quello della posizione
+    if not(keyboardFocus) then
+        BtMyPos.alpha = 0
+        BtAnnulla.alpha = 1
+        txtSearch.width = txtSearch.width - 20
+        keyboardFocus = true
+    end
+end
+
+function setMyPosition()
+
+    --Fetch the user's current location
+    local currentLocation = myMap:getUserLocation()
+    if currentLocation.errorCode then
+        -- Current location is unknown if the "errorCode" property is not nil.
+        currentLatitude = 0
+        currentLongitude = 0
+        native.showAlert( "Error", currentLocation.errorMessage, { "OK" } )
+    else
+
+        -- Current location data was received.
+        -- Move map so that current location is at the center.
+        currentLatitude = currentLocation.latitude
+        currentLongitude = currentLocation.longitude
+
+        print("map position latitude: ", currentLatitude)
+        print("map position longitude: ", currentLongitude)
+        myMap:setRegion( currentLatitude, currentLongitude, 0.01, 0.01, true )
+    end
+
+end 
+
+local function mapLocationHandler( event )
+    -- handle mapLocation event here
+    if event.isError then
+        print( "Error: " .. event.errorMessage )
+    else
+        -- Imposta la mappa sullla posizione e aggiunge un marker
+        --myMap:setCenter( event.latitude, event.longitude)
+        myMap:setRegion( event.latitude, event.longitude, 0.01, 0.01, true )
+        if myAddress ~= nil then
+            myMap:removeMarker(myAddress)
+        end
+        myAddress = myMap:addMarker( event.latitude, event.longitude )
+        print( "The specified string is at: " .. event.latitude .. ", " .. event.longitude )
+    end
+end
+
+function mapLocation()
+    -- Ricerca la posizione selezionata
+    myMap:requestLocation( txtSearch.campo.text .. ", Milano, MI, Italy", mapLocationHandler )
+    lostFocus()
+end
 
 function scene:enterScene( event ) 
     print("ENTRA SCENA MAPPA")

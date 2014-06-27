@@ -14,13 +14,15 @@ widget.setTheme(myApp.theme)
 -- acquista0 
 local acquista0 = storyboard.newScene("acquista0")
 local acquista1 = storyboard.newScene("acquista1")
+local targheRegistrate = storyboard.newScene("targheRegistrate")
 
 -- funzioni
-local selezionaTarga = {}
+local selezionaTargaButton = {}
 local avantiButton ={}
 local acquistaTicket = {}
 local checkBoxListener = {}
 local onRowTouch = {}
+local onRowTouchTarghe = {}
 
 -- variabili
 local checkGiornaliero
@@ -30,14 +32,14 @@ local checkMultiplo60
 -- variabili
 local txtTarga
 local textError
+local tariffa
 
 local string = "Da qui puoi acquistare un ticket giornaliero o multiplo per il tuo veicolo"
 local strings = {}
 strings[1] = 'Varchi e orari'
 strings[2] = 'Tariffe e metodi di pagamento'
 
-local importiN ={ 5, 30, 60 }
-local importiR ={ 2, 30, 60 }
+local importi ={ 2, 5, 30, 60 }
 local ingressiN ={ 1, 10, 20 }
 local ingressiR ={ 1, 20, 30 }
 
@@ -62,11 +64,19 @@ function acquista0:createScene(event)
     library.setBackground(group, _Background)
 
 
+    if debugMode then
+        myApp.acquisto = {
+            targa = 'SI111SI',
+            user = 'mario.rossi@paypal.it',
+            pass = 'ciao'
+        }
+    end
+
     local BtAvanti = widget.newButton({
         id  = 'BtAvanti',
         label = 'Avanti',
         x = _W*0.5,
-        y = _H*0.8,
+        y = _H*0.75,
         color = { 0.062745,0.50980,0.99607 },
         fontSize = 26,
         onRelease = avantiButton
@@ -102,7 +112,7 @@ function acquista0:createScene(event)
             y = _H*0.4,
             color = { 0.062745,0.50980,0.99607 },
             fontSize = 26,
-            onRelease = selezionaTarga
+            onRelease = selezionaTargaButton
         })
 
         -- testo in alto
@@ -127,8 +137,11 @@ function acquista0:createScene(event)
     
     end 
 
-    txtTarga =library.textArea(group, _W*0.5, _H*y, 160, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Targa")
+    txtTarga = library.textArea(group, _W*0.5, _H*y, 160, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Targa")
 
+    if debugMode then
+        txtTarga.campo.text = myApp.acquisto.targa
+    end
 
     textError = display.newText('FORMATO NON CORRETTO',_W*0.5,_H*0.555, myApp.font, 13)
     textError:setFillColor( 1, 0, 0 )
@@ -170,11 +183,15 @@ function acquista1:createScene(event)
 
     library.setBackground(group, _Background)
 
+    tariffa = importi[2]
+
     if myApp.utenteLoggato ~= 0 and myApp.utenti[myApp.utenteLoggato].tipo == 'Residente' then
+        local targaAgevolata = myApp.utenti[myApp.utenteLoggato].targa
+        if myApp.acquisto.targa == targaAgevolata then
+            tariffa = importi[1]
+        end
         ingressi = ingressiR
-        importi = importiR
     else
-        importi = importiN
         ingressi = ingressiN
     end
         
@@ -182,6 +199,7 @@ function acquista1:createScene(event)
     -- Recupera parametro da verificatarga
     if event.params ~= nil then
         myApp.acquisto.targa = event.params.targa
+        myApp.tabBar:setSelected(3)
     end
 
 
@@ -206,7 +224,7 @@ function acquista1:createScene(event)
         checkGiornaliero = widget.newSwitch
         {
            x = _W*0.08,
-           y = 190,
+           y = 180,
            style = "checkbox",
            id = "Giornaliero",
            initialSwitchState = true,
@@ -216,7 +234,7 @@ function acquista1:createScene(event)
         checkMultiplo30 = widget.newSwitch
         {
            x = _W*0.08,
-           y = 240,
+           y = 230,
            style = "checkbox",
            id = "Multiplo30",
            initialSwitchState = false,
@@ -226,27 +244,27 @@ function acquista1:createScene(event)
         checkMultiplo60 = widget.newSwitch
         {
            x = _W*0.08,
-           y = 290,
+           y = 280,
            style = "checkbox",
            id = "Multiplo60",
            initialSwitchState = false,
            onPress = checkBoxListener
         }
 
-        local textGiornaliero = display.newText('Giornaliero                       '..importi[1]..' €', _W*0.57, 190, myApp.font, 20)
+        local textGiornaliero = display.newText('Giornaliero                       '..tariffa..' €', _W*0.57, 180, myApp.font, 20)
         textGiornaliero:setFillColor( 0 )
-        local textMultiplo30 = display.newText('Multiplo da '..ingressi[2]..' ingressi    '..importi[2]..' €', _W*0.57, 240, myApp.font, 20)
+        local textMultiplo30 = display.newText('Multiplo da '..ingressi[2]..' ingressi    '..importi[3]..' €', _W*0.57, 230, myApp.font, 20)
         textMultiplo30:setFillColor( 0 )
-        local textMultiplo60 = display.newText('Multiplo da '..ingressi[3]..' ingressi    '..importi[3]..' €', _W*0.57, 290, myApp.font, 20)
+        local textMultiplo60 = display.newText('Multiplo da '..ingressi[3]..' ingressi    '..importi[4]..' €', _W*0.57, 280, myApp.font, 20)
         textMultiplo60:setFillColor( 0 )
 
-        local info = library.makeList("info", strings, 0, _H * 0.5 +50, _W, 100, 50, true, nil,  onRowTouch)
+        local info = library.makeList("info", strings, 0, _H * 0.5 +50, _W, 50, {arrow = true}, nil,  onRowTouch)
 
         local BtAcquista = widget.newButton({
             id  = 'BtAcquista',
             label = 'Acquista ticket',
             x = _W*0.5,
-            y = _H*0.85,
+            y = _H*0.83,
             color = { 0.062745,0.50980,0.99607 },
             fontSize = 26,
             onRelease = acquistaTicket
@@ -279,12 +297,65 @@ end
 
 
 
+function targheRegistrate:createScene(event)
+
+    local group = self.view
+ 
+    -- Preparo titleBar
+
+    myApp.titleBar.titleText.text = "Seleziona Targa"
+    myApp.titleBar.indietro.isVisible = true
+
+    library.checkLogIn()
+
+    -- Background
+
+    library.setBackground(group, _Background)
+
+    local listaTarghe = library.makeList("targhe", myApp:getTargheUtente(myApp.utenteLoggato), 0, myApp.titleBar.height + 20, _W, 50, {x = 40}, nil, onRowTouchTarghe)
+    
+
+    local optionsStar = {
+            width = 30,
+            height = 30,
+            numFrames = 2,
+            sheetContentWidth = 60,
+            sheetContentHeight = 30,
+    }
+
+    local starImage = graphics.newImageSheet( "img/star_sheet.png", optionsStar )
+
+    local rowStar = widget.newSwitch {
+        top = myApp.titleBar.height + 20 + 50 * (myApp.utenti[myApp.utenteLoggato].targaSelezionata - 1) + 12,
+        left = _W*0.025,
+        width = 30,
+        height = 30,
+        style = "radio",
+        sheet = starImage,
+        frameOn = 1,
+        frameOff = 2,
+    }
+    rowStar:setState({ isOn=true })
+
+    group:insert(listaTarghe)
+    group:insert(rowStar)
+end
 
 
 
 
 
 
+
+-- Gestisce le azioni dell'utente sulle righe della lista
+function onRowTouchTarghe( event )
+    local row = event.target
+    if event.phase == "release" or event.phase == 'tap' then
+        local funzioneTargheUtente = myApp:getTargheUtente(myApp.utenteLoggato)
+        myApp.acquisto.targa = funzioneTargheUtente[event.target.index]
+        storyboard.gotoScene('acquista1', { effect = "slideLeft", time = 500 })
+    end
+end
 
 
 
@@ -311,8 +382,8 @@ function avantiButton ()
 end
 
 
-function selezionaTarga()
-    storyboard.gotoScene( 'profilo_gestione_targhe', { effect = "slideLeft", time = 500, params = {edit = false} })
+function selezionaTargaButton()
+    storyboard.gotoScene( 'targheRegistrate', { effect = "slideLeft", time = 500 })
 end
 
 -- Inibisce la doppia selezione dei checkBox
@@ -357,17 +428,17 @@ function acquistaTicket()
     if checkGiornaliero.isOn then
         myApp.acquisto.ticket = 'Giornaliero'
         myApp.acquisto.ingressi = ingressi[1]
-        myApp.acquisto.importo= importi[1]
+        myApp.acquisto.importo = tariffa
         storyboard.gotoScene('paypal0', { effect = "slideLeft", time = 500 } )
     elseif checkMultiplo30.isOn then
         myApp.acquisto.ticket = 'Multiplo'
         myApp.acquisto.ingressi = ingressi[2]
-        myApp.acquisto.importo= importi[2]
+        myApp.acquisto.importo = tariffa
         storyboard.gotoScene('paypal0', { effect = "slideLeft", time = 500 } )
     else
         myApp.acquisto.ticket = 'Multiplo'
         myApp.acquisto.ingressi = ingressi[3]
-        myApp.acquisto.importo= importi[3]
+        myApp.acquisto.importo = tariffa
         storyboard.gotoScene('paypal0', { effect = "slideLeft", time = 500 } )
     end
 end
@@ -407,6 +478,20 @@ function acquista1:destroyScene( event )
     print("DISTRUGGI SCENA ACQUISTA1")
 end
 
+function targheRegistrate:enterScene( event ) 
+    print("ENTRA SCENA ACQUISTA TARGHE REGISTRATE") 
+    myApp.story.add(storyboard.getCurrentSceneName())
+end
+
+function targheRegistrate:exitScene( event )
+    print("ESCI SCENA ACQUISTA TARGHE REGISTRATE")
+    myApp.titleBar.indietro.isVisible = false
+end
+
+function targheRegistrate:destroyScene( event ) 
+    print("DISTRUGGI SCENA ACQUISTA TARGHE REGISTRATE")
+end
+
 acquista0:addEventListener( "createScene", acquista0 )
 acquista0:addEventListener( "enterScene", acquista0 )
 acquista0:addEventListener( "exitScene", acquista0 )
@@ -416,3 +501,8 @@ acquista1:addEventListener( "createScene", acquista1 )
 acquista1:addEventListener( "enterScene", acquista1 )
 acquista1:addEventListener( "exitScene", acquista1 )
 acquista1:addEventListener( "destroyScene", acquista1 )
+
+targheRegistrate:addEventListener( "createScene", targheRegistrate )
+targheRegistrate:addEventListener( "enterScene", targheRegistrate )
+targheRegistrate:addEventListener( "exitScene", targheRegistrate )
+targheRegistrate:addEventListener( "destroyScene", targheRegistrate )

@@ -53,8 +53,15 @@ function titleBar.new()
 		effect = { effect = "slideUp", time = 500 }
 	}
 
+	optionsModificaTarghe ={
+		func = {} -- Funzione da eseguire al pulsante
+	}
 
-	titleBar.createButton("indietro", "BtIndietro", "< Indietro", 
+	optionsFineTarghe ={
+		func = {} -- Funzione da eseguire al pulsante
+	}
+
+	titleBar.createButton("indietro", "BtIndietro", "❮ Indietro", 
 		display.contentCenterX*0.3, bgTitle.height * 0.5 + 7, { 0.062745,0.50980,0.99607 }, 18, titleBar.goBack, optionsIndietro)
 
 	titleBar.createButton("accedi", "BtAccedi", "Accedi", 
@@ -72,6 +79,12 @@ function titleBar.new()
 	titleBar.createButton("cerca", "BtCerca", "Cerca", 
 		display.contentCenterX*1.75, bgTitle.height * 0.5 + 7, { 0.062745,0.50980,0.99607 }, 18, titleBar.cerca, optionsCerca)
 
+	titleBar.createButton("modificaTarghe", "BtModificaTarghe", "Modifica", 
+		display.contentCenterX*1.75, bgTitle.height * 0.5 + 7, { 0.062745,0.50980,0.99607 }, 18, titleBar.modificaTarghe, optionsModificaTarghe)
+
+	titleBar.createButton("fineTarghe", "BtFineTarghe", "Fine", 
+		display.contentCenterX*1.75, bgTitle.height * 0.5 + 7, { 0.062745,0.50980,0.99607 }, 18, titleBar.fineTarghe, optionsFineTarghe)
+
 	titleBar.accedi.isVisible = true
 	titleBar.profilo.isVisible = false
 	titleBar.indietro.isVisible = false
@@ -79,6 +92,8 @@ function titleBar.new()
 	titleBar.annulla.isVisible = false
 	titleBar.ricerca.isVisible = false
 	titleBar.cerca.isVisible = false
+	titleBar.modificaTarghe.isVisible = false
+	titleBar.fineTarghe.isVisible = false
 
 	return titleBar
 
@@ -128,6 +143,14 @@ end
 
 function titleBar.ricerca()
     storyboard.gotoScene( "profilo_ricerca", titleBar.accedi.effect)
+end
+
+function titleBar.modificaTarghe()
+	titleBar.modificaTarghe.func()
+end
+
+function titleBar.fineTarghe()
+	titleBar.fineTarghe.func()
 end
 
 function titleBar.cerca()

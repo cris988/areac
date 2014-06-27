@@ -44,24 +44,11 @@ function scene:createScene(event)
 
     library.setBackground(group, _Background )
 
-
-    local scrollView = widget.newScrollView
-    {
-      top = myApp.titleBar.height,
-      left = 0,
-      width =  _W,
-      height = _H - myApp.titleBar.height,
-      scrollWidth = _W,
-      scrollHeight = 0,
-      horizontalScrollDisabled = true,
-      hideBackground = true
-    }
-
     -- testo in alto
     local options = {
         text = 'Inserisci i tuoi dati personali. Non saranno più modificabili',
         x = _W*0.5,
-        y = scrollView.height * 0.07,
+        y = _H * 0.18,
         width = _W - 30,
         fontSize = 16,
         align = "center"
@@ -71,17 +58,17 @@ function scene:createScene(event)
 
 
     -- Text field dati
-    txtCF =library.textArea(group,_W*0.5, scrollView.height*0.2, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Codice Fiscale")
-    txtPatente =library.textArea(group,_W*0.5, scrollView.height*0.3, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Numero di patente")
-    txtIndirizzo =library.textArea(group,_W*0.5, scrollView.height*0.4, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Via di domicilio")
-    txtCivico =library.textArea(group,_W*0.5, scrollView.height*0.5, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Numero civico")
-    txtCAP =library.textArea(group,_W*0.5, scrollView.height*0.6, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "CAP")
+    txtCF =library.textArea(group,_W*0.5, _H*0.28, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Codice Fiscale")
+    txtPatente =library.textArea(group,_W*0.5, _H*0.38, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Numero di patente")
+    txtIndirizzo =library.textArea(group,_W*0.5, _H*0.48, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Via di domicilio")
+    txtCivico =library.textArea(group,_W*0.5, _H*0.58, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Numero civico")
+    txtCAP =library.textArea(group,_W*0.5, _H*0.68, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "CAP")
 
 
     -- informativa
     local optionsAreaTInfo = {
         x = _W*0.5,
-        y = scrollView.height*0.775,
+        y = _H*0.81,
         width = _W - 30,
         fontSize = 12,
         align = "left",
@@ -105,18 +92,16 @@ function scene:createScene(event)
         onRelease = avantiButton
     })
 
-    scrollView:setScrollHeight( BtAvanti.y + BtAvanti.height )
 
-    scrollView:insert(areaT)
-    scrollView:insert(txtCF)
-    scrollView:insert(txtPatente)
-    scrollView:insert(txtIndirizzo)
-    scrollView:insert(txtCivico)
-    scrollView:insert(txtCAP)
-    scrollView:insert(areaTInfo)
-    scrollView:insert(BtAvanti)
+    group:insert(areaT)
+    group:insert(txtCF)
+    group:insert(txtPatente)
+    group:insert(txtIndirizzo)
+    group:insert(txtCivico)
+    group:insert(txtCAP)
+    group:insert(areaTInfo)
+    group:insert(BtAvanti)
 
-    group:insert(scrollView)
 
 
     -- Recupero dati in memoria
