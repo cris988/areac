@@ -49,13 +49,26 @@ function scene:createScene(event)
 
     -- Contenuto
 
-    local profiloImg = display.newImage('img/profilo.png', _W*0.5, _H*0.25)
-	group:insert(profiloImg)
+    -- local profiloImg = display.newImage('img/profilo.png', _W*0.5, _H*0.25)
+	-- group:insert(profiloImg)
+
+    local optionsVantaggi = {
+        text = 'Eseguendo la registrazione puoi comodamente gestire tutti i tuoi veicoli e controllare la cronologia dei tuoi transiti.',
+        x = _W*0.5,
+        y = _H*0.23,
+        width = _W-30,
+        fontSize = 16,
+        align = "center",
+        font = myApp.font
+    }    
+    local vantaggiText = display.newText( optionsVantaggi )
+    vantaggiText:setFillColor(0) 
+
 
 	local optionsReg = {
 		text = 'Se non hai mai effettuato la registrazione su quest\'applicazione o sul sito \"areaC.it\":',
 		x = _W*0.5,
-		y = _H*0.4,
+		y = _H*0.35,
 		width = _W-30,
 		fontSize = 16,
         align = "center",
@@ -69,16 +82,16 @@ function scene:createScene(event)
         id  = 'BtRegistrati',
         label = 'Registrati',
         x = _W*0.5,
-        y = _H*0.5,
+        y = _H*0.47,
         color = { 0.062745,0.50980,0.99607 },
         fontSize = 22,
         onRelease = registrazioneScene
     })
 
     local optionsAccedi = {
-		text = 'altrimenti accedi con le tue credenziali',
+		text = 'altrimenti accedi con le tue credenziali:',
 		x = _W*0.5,
-		y = _H*0.6,
+		y = _H*0.57,
 		width = _W-30,
 		fontSize = 16,
         align = "center",
@@ -111,6 +124,7 @@ function scene:createScene(event)
 
     -- Inserimento nel gruppo
     group:insert(regText)
+    group:insert(vantaggiText)
     group:insert(BtRegistrati)
     group:insert(accediText)
     group:insert(txtUser)
@@ -139,6 +153,12 @@ function accediScene()
                 myApp.utenteLoggato = i
                 loggato = true
                 myApp.story.back() -- Rimuovo accedi dalla storia
+
+                -- crea transito non pagato con la data odierna
+                if myApp.transiti[myApp.utenteLoggato][1][1] ~= os.date("%d/%m/%Y") then
+                    table.insert(myApp.transiti[myApp.utenteLoggato], 1, { os.date("%d/%m/%Y"), myApp.utenti[myApp.utenteLoggato].targa, 'non pagato'})
+                end
+
                 storyboard.gotoScene('profilo')
             end
         end
