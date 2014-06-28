@@ -76,7 +76,7 @@ function step0()
         x = _W*0.5,
         y = _H*0.2,
         font = myApp.font,
-        fontSize = 13,
+        fontSize = 14,
         width = _W-30,
         align = "left"
     }
@@ -88,7 +88,7 @@ function step0()
         x = _W*0.5,
         y = _H*0.24,
         font = myApp.font,
-        fontSize = 20,
+        fontSize = 21,
         width = _W-30,
         align = "left"
     }
@@ -106,9 +106,9 @@ function step0()
     local optionsEmail = {
         text = 'Email:',
         x = _W*0.5,
-        y = _H*0.4,
+        y = _H*0.46,
         font = myApp.font,
-        fontSize = 13,
+        fontSize = 14,
         width = _W-30,
         align = "left"
     }
@@ -118,9 +118,9 @@ function step0()
     local optionsEmailDati = {
         text = myApp.utenti[myApp.utenteLoggato].email,
         x = _W*0.5,
-        y = _H*0.44,
+        y = _H*0.5,
         font = myApp.font,
-        fontSize = 20,
+        fontSize = 21,
         width = _W-30,
         align = "left"
     }
@@ -132,9 +132,9 @@ function step0()
     local optionsCell = {
         text = 'Cellulare:',
         x = _W*0.5,
-        y = _H*0.5,
+        y = _H*0.56,
         font = myApp.font,
-        fontSize = 13,
+        fontSize = 14,
         width = _W-30,
         align = "left"
     }
@@ -144,9 +144,9 @@ function step0()
     local optionsDatiCell = {
         text = myApp.utenti[myApp.utenteLoggato].cellulare,
         x = _W*0.5,
-        y = _H*0.54,
+        y = _H*0.6,
         font = myApp.font,
-        fontSize = 20,
+        fontSize = 21,
         width = _W-30,
         align = "left"
     }
@@ -161,7 +161,7 @@ function step0()
             x = _W*0.5,
             y = _H*0.3,
             font = myApp.font,
-            fontSize = 13,
+            fontSize = 14,
             width = _W-30,
             align = "left"
         }
@@ -173,7 +173,7 @@ function step0()
             x = _W*0.5,
             y = _H*0.34,
             font = myApp.font,
-            fontSize = 20,
+            fontSize = 21,
             width = _W-30,
             align = "left"
         }
@@ -184,6 +184,11 @@ function step0()
         
         group:insert(residenzaText)
         group:insert(residenzaDatiText)
+    else
+        emailText.y = _H*0.36
+        emailDatiText.y = _H*0.4
+        cellText.y = _H*0.46
+        cellDatiText.y = _H*0.5
     end
 
     group:insert(statoText)

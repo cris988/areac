@@ -88,7 +88,7 @@ function fineButton()
     myApp.titleBar.indietro.isVisible = false
 
     -- crea transito non pagato con la data odierna
-    table.insert(myApp.transiti[myApp.utenteLoggato], 1, { os.date("%d/%m/%Y"), myApp.utenti[myApp.utenteLoggato].targa, 'non pagato'})
+    table.insert(myApp.transiti[myApp.utenteLoggato], 1, { os.date("%d/%m/%Y"), myApp.utenti[myApp.utenteLoggato].targa, 'non pagato'}) 
 
     myApp.showHome()
 end
