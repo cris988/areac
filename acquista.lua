@@ -40,8 +40,6 @@ strings[1] = 'Varchi e orari'
 strings[2] = 'Tariffe e metodi di pagamento'
 
 local importi ={ 2, 5, 30, 60 }
-local ingressiN ={ 1, 10, 20 }
-local ingressiR ={ 1, 20, 30 }
 
 -- Inizializzo
 myApp.acquisto = {}
@@ -253,9 +251,9 @@ function acquista1:createScene(event)
 
         local textGiornaliero = display.newText('Giornaliero                       '..tariffa..' €', _W*0.57, 180, myApp.font, 20)
         textGiornaliero:setFillColor( 0 )
-        local textMultiplo30 = display.newText('Multiplo da '..ingressi[2]..' ingressi    '..importi[3]..' €', _W*0.57, 230, myApp.font, 20)
+        local textMultiplo30 = display.newText('Multiplo da                        '..importi[3]..' €', _W*0.57, 230, myApp.font, 20)
         textMultiplo30:setFillColor( 0 )
-        local textMultiplo60 = display.newText('Multiplo da '..ingressi[3]..' ingressi    '..importi[4]..' €', _W*0.57, 280, myApp.font, 20)
+        local textMultiplo60 = display.newText('Multiplo da                        '..importi[4]..' €', _W*0.57, 280, myApp.font, 20)
         textMultiplo60:setFillColor( 0 )
 
         local info = library.makeList("info", strings, 0, _H * 0.5 +50, _W, 50, {arrow = true}, nil,  onRowTouch)
@@ -427,18 +425,15 @@ end
 function acquistaTicket()
     if checkGiornaliero.isOn then
         myApp.acquisto.ticket = 'Giornaliero'
-        myApp.acquisto.ingressi = ingressi[1]
         myApp.acquisto.importo = tariffa
         storyboard.gotoScene('paypal0', { effect = "slideLeft", time = 500 } )
     elseif checkMultiplo30.isOn then
         myApp.acquisto.ticket = 'Multiplo'
-        myApp.acquisto.ingressi = ingressi[2]
-        myApp.acquisto.importo = tariffa
+        myApp.acquisto.importo = importi[3]
         storyboard.gotoScene('paypal0', { effect = "slideLeft", time = 500 } )
     else
         myApp.acquisto.ticket = 'Multiplo'
-        myApp.acquisto.ingressi = ingressi[3]
-        myApp.acquisto.importo = tariffa
+        myApp.acquisto.importo = importi[4]
         storyboard.gotoScene('paypal0', { effect = "slideLeft", time = 500 } )
     end
 end

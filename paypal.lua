@@ -142,7 +142,7 @@ function paypal1:createScene(event)
 
     local options ={
         text = 'Acquisto di un ticket:\n\n'..myApp.acquisto.ticket..' da '..
-                        myApp.acquisto.ingressi..' ingressi '..
+                        myApp.acquisto.importo..' € '..
                         '\nsull\'autovettura targata\n'..myApp.acquisto.targa:upper(),
         x = _W * 0.47,
         y = _H * 0.88,
@@ -243,53 +243,33 @@ function loginButton()
 end
 
 function completaButton()
-    if myApp.acquisto.ticket == 'Multiplo' and myApp.utenteLoggato > 0 then
-        myApp.utenti[myApp.utenteLoggato].multiplo = myApp.utenti[myApp.utenteLoggato].multiplo + myApp.acquisto.ingressi
 
-        local numNonPagati = 0
-        local utente = myApp.transiti[myApp.utenteLoggato]
 
-        -- Controllo se ci sono ingressi e non pagati e se non ci sono ticket acquistati rimanenti
-        for i = 1, #utente do
-            local transito = utente[i]
-            if transito[3] == 'non pagato' then
-                nonPagati = true
-                numNonPagati = numNonPagati + 1
+    if myApp.utenteLoggato > 0 then
+
+        local regolare = false
+        local transiti = myApp.transiti[myApp.utenteLoggato]
+
+        repeat
+            
+            if transiti[1][3] == 'non pagato' then
+                transiti[1][3] = myApp.acquisto.importo
+                regolare = true
             end
-        end
-        for i = #utente, 1, -1 do
-            local transito = utente[i]
-            if transito[3] == 'non pagato' then
-                if myApp.utenti[myApp.utenteLoggato].multiplo > 0 then
-                    transito[3] = '5€'
-                    myApp.utenti[myApp.utenteLoggato].multiplo = myApp.utenti[myApp.utenteLoggato].multiplo - 1
-                    numNonPagati = numNonPagati - 1
-                end
-            end
-        end
-
-    elseif myApp.acquisto.ticket == 'Giornaliero' and myApp.utenteLoggato > 0 then
         
-        local nonPagati = false
-        local posizioneNonPagata
-        local utente = myApp.transiti[myApp.utenteLoggato]
+        until (not(regolare))
 
-        for i = #utente, 1, -1 do
-            local transito = utente[i]
-            if transito[3] == 'non pagato' and nonPagati == false then
-                nonPagati = true
-                posizioneNonPagata = i
+        if myApp.acquisto.ticket == 'Multiplo' then
+            myApp.utenti[myApp.utenteLoggato].multiplo = myApp.utenti[myApp.utenteLoggato].multiplo + myApp.acquisto.importo
+            if myApp.utenti[myApp.utenteLoggato].tipo == 'Residente' and myApp.acquisto.targa == myApp.utenti[myApp.utenteLoggato].targa then
+                transito[3] = '2€'
+            else
+                transito[3] = '5€'
             end
-        end
-
-        if nonPagati == true then
-            local transito = utente[posizioneNonPagata]
-            transito[3] = '5€'
-        else
-            table.insert(myApp.transiti[myApp.utenteLoggato], 1, { os.date("%d/%m/%Y"), myApp.acquisto.targa, myApp.acquisto.importo.."€"})
         end
 
     end
+
     myApp.acquisto = nil
     storyboard.gotoScene( 'paypal2', { effect = "slideLeft", time = 500 })
 end

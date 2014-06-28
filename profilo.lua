@@ -17,6 +17,9 @@ local onRowTouch = {}
 
 -- variabili
 local indietroEffect
+local textGratuiti
+local numGratuiti
+local numNonPagati
 
 
 -- titoli dei menu
@@ -41,16 +44,13 @@ function scene:createScene(event)
     myApp.titleBar.accedi.isVisible = false
     myApp.titleBar.profilo.isVisible = false
 
-
-    local nonPagati = false
-    local numNonPagati = 0
+    numNonPagati = 0
     local utente = myApp.transiti[myApp.utenteLoggato]
 
     -- Controllo se ci sono ingressi e non pagati e se non ci sono ticket acquistati rimanenti
     for i = 1, #utente do
         local transito = utente[i]
         if transito[3] == 'non pagato' then
-            nonPagati = true
             numNonPagati = numNonPagati + 1
         end
     end
@@ -95,81 +95,66 @@ function scene:createScene(event)
         targaText.text = 'TARGA PRINCIPALE AGEVOLATA:'
     end
 
-    local optionsTargaDati = { text = myApp.utenti[myApp.utenteLoggato].targa, x = _W*0.5, y = _H*0.31,  font = myApp.font, fontSize = 20, align = 'center' }
+    local optionsTargaDati = { text = myApp.utenti[myApp.utenteLoggato].targa, x = _W*0.5, y = _H*0.32,  font = myApp.font, fontSize = 24, align = 'center' }
     local targaDatiText = display.newText( optionsTargaDati )
     targaDatiText:setFillColor( 0, 0, 0 ) 
 
     -- ingressi multipli
-    local optionsMulti = { text = 'INGRESSI ACQUISTATI RIMANENTI:', x = _W*0.5, y = _H*0.37, font = myApp.font, fontSize = 13, align = 'center' }
+    local optionsMulti = { text = 'INGRESSI ACQUISTATI RIMANENTI:', x = _W*0.08, y = _H*0.4, font = myApp.font, fontSize = 13, align = 'center' }
     local multiText = display.newText( optionsMulti )
+    multiText.anchorX = 0
     multiText:setFillColor( 0, 0, 0 )
 
-    local optionsMultiDati = { text = myApp.utenti[myApp.utenteLoggato].multiplo, x = _W*0.5, y = _H*0.41, font = myApp.font, fontSize = 20, align = 'center' }
+    local optionsMultiDati = { text = myApp.utenti[myApp.utenteLoggato].multiplo, x = _W*0.9, y = _H*0.4, font = myApp.font, fontSize = 20, align = 'center' }
     local multiDatiText = display.newText( optionsMultiDati )
+    multiDatiText.anchorX = 1
     multiDatiText:setFillColor( 0, 0, 0 )
 
 
     -- ingressi gratuiti residenti
     if myApp.utenti[myApp.utenteLoggato].tipo == 'Residente' then
-       local optionsTextGratuiti = { text = 'INGRESSI GRATUITI RIMANENTI:', x = _W*0.5, y = _H*0.47, font = myApp.font, fontSize = 13, align = 'center' }
-        local textGratuiti = display.newText( optionsTextGratuiti )
+       local optionsTextGratuiti = { text = 'INGRESSI GRATUITI RIMANENTI:', x = _W*0.08, y = _H*0.46, font = myApp.font, fontSize = 13, align = 'center' }
+        textGratuiti = display.newText( optionsTextGratuiti )
+        textGratuiti.anchorX = 0
         textGratuiti:setFillColor( 0, 0, 0 )
 
-        local optionsNumGratuiti = { text = myApp.utenti[myApp.utenteLoggato].accessi, x = _W*0.5, y = _H*0.51, font = myApp.font, fontSize = 20, align = 'center' }
-        local numGratuiti = display.newText( optionsNumGratuiti )
+        local optionsNumGratuiti = { text = myApp.utenti[myApp.utenteLoggato].accessi, x = _W*0.9, y = _H*0.46  , font = myApp.font, fontSize = 20, align = 'center' }
+        numGratuiti = display.newText( optionsNumGratuiti )
+        numGratuiti.anchorX = 1
         numGratuiti:setFillColor( 0, 0, 0 )
 
         group:insert(textGratuiti)
         group:insert(numGratuiti)
     else
-        multiText.y = _H*0.45 
-        multiDatiText.y = _H*0.49
+        multiText.y = _H*0.42 
+        multiDatiText.y = _H*0.42
     end
 
 
-    if nonPagati == true then
-        if myApp.utenti[myApp.utenteLoggato].tipo == 'Residente' then
-            targaText.y = targaText.y - 15
-            targaDatiText.y = targaDatiText.y - 15
-            multiText.y = multiText.y - 15
-            multiDatiText.y = multiDatiText.y - 15
-            textGratuiti.y = textGratuiti.y - 15
-            numGratuiti.y = numGratuiti.y - 15
+    local optionsNonPagati = { text = 'ACCESSI NON PAGATI:', x = _W*0.08, y = _H*0.53, font = myApp.font, fontSize = 13, align = 'center' }
+    local textNonPagati = display.newText( optionsNonPagati )
+    textNonPagati.anchorX = 0
+    textNonPagati:setFillColor( 1, 0, 0 )     
 
-            local optionsNonPagati = { text = 'ACCESSI NON PAGATI:', x = _W*0.5, y = _H*0.53, font = myApp.font, fontSize = 13, align = 'center' }
-            local textNonPagati = display.newText( optionsNonPagati )
-            textNonPagati:setFillColor( 1, 0, 0 )     
+    local optionsNumNonPagati = { text = numNonPagati, x = _W*0.9, y = _H*0.53, font = myApp.font, fontSize = 20, align = 'center' }
+    local numNonPagati = display.newText( optionsNumNonPagati )
+    numNonPagati.anchorX = 1
+    numNonPagati:setFillColor( 1, 0, 0 )      
 
-            local optionsNumNonPagati = { text = numNonPagati, x = _W*0.5, y = _H*0.57, font = myApp.font, fontSize = 20, align = 'center' }
-            local numNonPagati = display.newText( optionsNumNonPagati )
-            numNonPagati:setFillColor( 1, 0, 0 )       
-        
-            group:insert(textNonPagati)
-            group:insert(numNonPagati)
-        end
-
-        if myApp.utenti[myApp.utenteLoggato].tipo == 'Non residente' or myApp.utenti[myApp.utenteLoggato].tipo == 'Disabile' then
-            multiText.y = _H*0.37
-            multiDatiText.y = _H*0.41
-
-            local optionsNonPagati = { text = 'ACCESSI NON PAGATI:', x = _W*0.5, y = _H*0.47, font = myApp.font, fontSize = 13, align = 'center' }
-            local textNonPagati = display.newText( optionsNonPagati )
-            textNonPagati:setFillColor( 1, 0, 0 )     
-
-            local optionsNumNonPagati = { text = numNonPagati, x = _W*0.5, y = _H*0.51, font = myApp.font, fontSize = 20, align = 'center' }
-            local numNonPagati = display.newText( optionsNumNonPagati )
-            numNonPagati:setFillColor( 1, 0, 0 )       
-        
-            group:insert(textNonPagati)
-            group:insert(numNonPagati)
-        end
+    if myApp.utenti[myApp.utenteLoggato].tipo == 'Non residente' or myApp.utenti[myApp.utenteLoggato].tipo == 'Disabile' then
+        textNonPagati.y = _H*0.5
+        numNonPagati.y = _H*0.5
     end
+
+    
 
     group:insert(utente)
     group:insert(targaText)
     group:insert(targaDatiText)
     group:insert(multiText)
     group:insert(multiDatiText)
+    group:insert(textNonPagati)
+    group:insert(numNonPagati)
 
     group:insert(library.makeList("pf", strings, 0, _H*0.6, _W, 50, {arrow = true}, nil, onRowTouch))
     group:insert(BtDisconnetti)

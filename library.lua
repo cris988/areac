@@ -98,8 +98,10 @@ local function makeList(id, values, x, y, width, rowHeight, paramsRow, eventRowR
             }
         }
 
-        for k,v in pairs(paramsRow) do
-            options.params[k] = v
+        if paramsRow ~= nil then
+            for k,v in pairs(paramsRow) do
+                options.params[k] = v
+            end
         end
 
 

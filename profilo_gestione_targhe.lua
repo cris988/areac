@@ -244,7 +244,7 @@ end
 
 
 function createList()
-    return library.makeList("targhe", myApp:getTargheUtente(myApp.utenteLoggato), 0, 0, _W, 50)
+    return library.makeList("targhe", myApp:getTargheUtente(myApp.utenteLoggato), 0, 0, _W, 50, {x = 40})
 end
 
 
