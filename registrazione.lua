@@ -33,48 +33,6 @@ local txtUser
 local txtPass
 local txtPassC
 
-myApp.datiUtente = {
-    username = '',
-    password = '',
-    nome = '',
-    cognome = '',
-    tipo = ',',
-    targa  = '',
-    targaSelezionata = 1,
-    cellulare = '',
-    email = '',
-    multiplo = 0,
-    --Residenti
-    accessi = 40,
-    patente = '',
-    via = '',
-    cf = '',
-    civico = '',
-    cap = '',
-    --Disabile
-    pass =''
-}
-
-if debugMode then
-    myApp.datiUtente = {
-        username = 'Marco',
-        password = 'ciao',
-        nome = 'Marco',
-        cognome = 'Pluto',
-        tipo = 'Residente',
-        targa  = 'AA123AA',
-        targaSelezionata = 1,
-        cellulare = '3331234567',
-        email = 'marco@marco.it',
-        multiplo = 0,
-        accessi = 40,
-        cf = 'RMNDESH32U84Y235E',
-        patente = 'de345ed',
-        via = 'Via Monti',
-        civico = '3',
-        cap = '20100',
-    }
-end
 
 
 function scene:createScene(event)
@@ -86,14 +44,56 @@ function scene:createScene(event)
     -- Background
 
     library.setBackground(group, _Background )
-    
-    -- Preparo titleBar
 
-    myApp.titleBar.titleText.text = "Registrazione"
-    myApp.titleBar.indietro.isVisible = true
-    myApp.titleBar.annulla.isVisible = true 
-    myApp.titleBar.indietro.func = function () 
-        myApp.titleBar.annulla.isVisible = false
+    -- Preparo titleBar
+    myApp.titleBar.setTitleBar("registrazione", "Registrazione", { 
+        indietro = true,
+        annulla = true
+    })
+    myApp.titleBar.indietro.func = function () myApp.titleBar.annulla.isVisible = false end
+    
+
+    myApp.datiUtente = {
+        username = '',
+        password = '',
+        nome = '',
+        cognome = '',
+        tipo = ',',
+        targa  = '',
+        targaSelezionata = 1,
+        cellulare = '',
+        email = '',
+        multiplo = 0,
+        --Residenti
+        accessi = 40,
+        patente = '',
+        via = '',
+        cf = '',
+        civico = '',
+        cap = '',
+        --Disabile
+        pass =''
+    } 
+    
+    if debugMode then
+        myApp.datiUtente = {
+            username = 'Marco',
+            password = 'ciao',
+            nome = 'Marco',
+            cognome = 'Pluto',
+            tipo = 'Residente',
+            targa  = 'AA123AA',
+            targaSelezionata = 1,
+            cellulare = '3331234567',
+            email = 'marco@marco.it',
+            multiplo = 0,
+            accessi = 40,
+            cf = 'RMNDESH32U84Y235E',
+            patente = 'de345ed',
+            via = 'Via Monti',
+            civico = '3',
+            cap = '20100',
+        }
     end
 
 	-- testo in alto
@@ -177,13 +177,11 @@ end
 function scene:enterScene( event )
     print("ENTRA SCENA REGISTRAZIONE")
     myApp.story.add(storyboard.getCurrentSceneName())
-
 end
 
 function scene:exitScene( event )
     print("ESCI SCENA REGISTRAZIONE")
-    
-    myApp.titleBar.indietro.func = nil
+    myApp.titleBar.indietro.func = {}
 end
 
 function scene:destroyScene( event )

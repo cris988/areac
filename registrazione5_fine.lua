@@ -38,7 +38,12 @@ function scene:createScene(event)
 
     -- Preparo titleBar
 
-    myApp.titleBar.titleText.text = "Registrazione"
+    
+    -- Preparo titleBar
+    myApp.titleBar.setTitleBar("registrazione", "Registrazione", { 
+        indietro = false,
+        annulla = false
+    })
 
     local options = {
         text = 'Registrazione avvenuta\ncon successo!',
@@ -85,10 +90,6 @@ end
 
 function fineButton()
     myApp.titleBar.annulla.isVisible = false
-    myApp.titleBar.indietro.isVisible = false
-
-    -- crea transito non pagato con la data odierna
-    table.insert(myApp.transiti[myApp.utenteLoggato], 1, { os.date("%d/%m/%Y"), myApp.utenti[myApp.utenteLoggato].targa, 'non pagato'})
 
     myApp.showHome()
 end

@@ -8,7 +8,7 @@ local scene = storyboard.newScene()
 local widget = require('widget')
 local myApp = require('myapp')
 
-
+widget.setTheme(myApp.theme)
 
 -- funzioni
 local newTitle = {}
@@ -21,10 +21,11 @@ local order = {}
 local targheTable
 local importoTable
 local periodoTable
-local scrollView 
+local scrollView
+local ricerca
 
 
-myApp.ricerca = {}
+myApp.ricerca = nil
 
 
 function scene:createScene(event)
@@ -39,14 +40,20 @@ function scene:createScene(event)
   library.setBackground(group, _Background )
   
   -- Preparo titleBar
-
-  myApp.titleBar.titleText.text = "Ricerca"
-  myApp.titleBar.indietro.isVisible = true
-  myApp.titleBar.cerca.isVisible = true
+  myApp.titleBar.setTitleBar("ricerca", "Ricerca", { 
+      indietro = true,
+      cerca = true
+  })
+  myApp.titleBar.cerca.func = function () 
+    myApp.story.back()
+    if next(ricerca) ~= nil then
+        myApp.ricerca = ricerca
+    end 
+  end
 
   -- Contenuto
 
-  myApp.ricerca = {}
+  ricerca = {}
 
   local options = {
         text = "Seleziona i criteri per la ricerca",
@@ -72,6 +79,7 @@ function scene:createScene(event)
       scrollHeight = 0,
       bottomPadding = 100,
       horizontalScrollDisabled = true,
+      isBounceEnabled = false,
       hideBackground = true
   }
 
@@ -88,7 +96,7 @@ function scene:createScene(event)
   local targhe = retrieveData(2)
   order(targhe)
   y = y + 40
-  targheTable = library.makeList("t", targhe, 0, y, _W, 40, {}, onRowRender, onRowTouch)
+  targheTable = library.makeList("t", targhe, 0, y, _W, 40, {}, onRowRender, onRowTouch, scrollView)
   y = y + 40 * #targhe
 
   scrollView:insert(title)
@@ -102,7 +110,7 @@ function scene:createScene(event)
 
   local periodo = { "Ultimi 10 giorni", "Ultimi 20 giorni", "Ultimi 30 giorni"} 
   y = y + 40
-  periodoTable = library.makeList("p", periodo, 0, y, _W, 40, {}, onRowRender, onRowTouch)
+  periodoTable = library.makeList("p", periodo, 0, y, _W, 40, {}, onRowRender, onRowTouch, scrollView)
   y = y + 40 * #periodo
 
   scrollView:insert(title)
@@ -117,7 +125,7 @@ function scene:createScene(event)
   local importo = retrieveData(3)
   order(importo)
   y = y + 40
-  importoTable = library.makeList("i", importo, 0, y, _W, 40, {}, onRowRender, onRowTouch)
+  importoTable = library.makeList("i", importo, 0, y, _W, 40, {}, onRowRender, onRowTouch, scrollView)
   y = y + 40 * #importo
 
   scrollView:insert(title)
@@ -137,7 +145,7 @@ function onRowTouch( event )
 
     if event.phase == "release" or event.phase == 'tap' then
   		row._cell:setFillColor( 0.062745,0.50980,0.99607 )
-      myApp.ricerca[row.parent.parent["id"]] = row.params.value
+        ricerca[row.parent.parent["id"]] = row.params.value
       for k, _ in pairs(row.parent.parent._view._rows ) do
       	if row.id ~= row.parent.parent._view._rows[k]._view.id then
       		row.parent.parent._view._rows[k]._view._cell:setFillColor( 1,1,1 )
@@ -234,15 +242,10 @@ end
 
 function scene:exitScene( event )
     print("ESCI SCENA RICERCA")
-    myApp.titleBar.indietro.isVisible = false
     myApp.titleBar.cerca.isVisible = false
     targheTable:removeSelf()
     periodoTable:removeSelf()
     importoTable:removeSelf()
-    
-    if next(myApp.ricerca) == nil then
-      myApp.ricerca = nil
-    end
 end
 
 function scene:destroyScene( event )

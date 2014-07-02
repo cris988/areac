@@ -17,6 +17,7 @@ local titleBar = require("titlebar")
 local library = require("library")
 local tabBar = require("tabbar")
 local utenti = require("utenti")
+local targhe = require("targhe")
 
 print ("MAIN")
 
@@ -80,8 +81,9 @@ widget.setTheme(myApp.theme)
 
 _Background = {1,1,1}
 
--- Instanzio titleBar 
-myApp.titleBar = titleBar.new()
+-- Istanzione titlebar
+
+newTitleBar()
 
 -- Distrugge le scene all'uscita
 storyboard.purgeOnSceneChange = true

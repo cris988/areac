@@ -16,11 +16,6 @@ local onRowTouch = {}
 
 
 -- variabili
-local indietroEffect
-local textGratuiti
-local numGratuiti
-local numNonPagati
-
 
 -- titoli dei menu
 local strings = {}
@@ -36,15 +31,33 @@ function scene:createScene(event)
     local group = self.view
     
     print("CREA SCENA PROFILO")
-    -- Preparo titleBar
 
-    myApp.titleBar.titleText.text = "Profilo"
-    myApp.titleBar.indietro.isVisible = true
     myApp.tabBar.isVisible = false
-    myApp.titleBar.accedi.isVisible = false
-    myApp.titleBar.profilo.isVisible = false
 
-    numNonPagati = 0
+    -- Preparo titleBar
+    myApp.titleBar.setTitleBar("profilo", "Profilo", { 
+        indietro = true,
+        accedi =  false,
+        profilo = false,
+        logo = false
+    })
+
+    myApp.titleBar.indietro.func = function () myApp.tabBar.isVisible = true end
+
+    -- Background
+
+    library.setBackground(group, _Background )
+
+    -- crea transito non pagato con la data odierna
+    if next(myApp.transiti[myApp.utenteLoggato]) == nil or myApp.transiti[myApp.utenteLoggato][1][1] ~= os.date("%d/%m/%Y")  then
+        table.insert(myApp.transiti[myApp.utenteLoggato], 1, { os.date("%d/%m/%Y"), myApp:getTargheUtente(myApp.utenteLoggato)[1], 'non pagato'})
+        if myApp:getTargheUtente(myApp.utenteLoggato)[2] ~= nil then
+            table.insert(myApp.transiti[myApp.utenteLoggato], 1, { os.date("%d/%m/%Y"), myApp:getTargheUtente(myApp.utenteLoggato)[2], 'non pagato'})
+        end
+        native.showAlert( "AreaC", "Hai effettuato un transito oggi, ricordati di regolarizzarlo", {"OK"} )
+    end    
+
+    local numNonPagati = 0
     local utente = myApp.transiti[myApp.utenteLoggato]
 
     -- Controllo se ci sono ingressi e non pagati e se non ci sono ticket acquistati rimanenti
@@ -55,17 +68,7 @@ function scene:createScene(event)
         end
     end
 
-    -- Imposto effetti indietro
-    indietroEffect = myApp.titleBar.indietro.effect
-    myApp.titleBar.indietro.func = function () 
-        myApp.titleBar.indietro.effect = { effect = "slideUp", time=100 }
-        myApp.tabBar.isVisible = true
-    end
-    
 
-    -- Background
-
-    library.setBackground(group, _Background )
 
     local BtDisconnetti = widget.newButton({
         id  = 'BtDisconnetti',
@@ -92,7 +95,7 @@ function scene:createScene(event)
     targaText:setFillColor( 0, 0, 0 )
 
     if myApp.utenti[myApp.utenteLoggato].tipo == 'Residente' or myApp.utenti[myApp.utenteLoggato].tipo == 'Disabile' then
-        targaText.text = 'TARGA PRINCIPALE AGEVOLATA:'
+        targaText.text = 'TARGA AGEVOLATA:'
     end
 
     local optionsTargaDati = { text = myApp.utenti[myApp.utenteLoggato].targa, x = _W*0.5, y = _H*0.32,  font = myApp.font, fontSize = 24, align = 'center' }
@@ -100,12 +103,12 @@ function scene:createScene(event)
     targaDatiText:setFillColor( 0, 0, 0 ) 
 
     -- ingressi multipli
-    local optionsMulti = { text = 'INGRESSI ACQUISTATI RIMANENTI:', x = _W*0.08, y = _H*0.4, font = myApp.font, fontSize = 13, align = 'center' }
+    local optionsMulti = { text = 'CREDITO RIMANENTE:', x = _W*0.08, y = _H*0.4, font = myApp.font, fontSize = 13, align = 'center' }
     local multiText = display.newText( optionsMulti )
     multiText.anchorX = 0
     multiText:setFillColor( 0, 0, 0 )
 
-    local optionsMultiDati = { text = myApp.utenti[myApp.utenteLoggato].multiplo, x = _W*0.9, y = _H*0.4, font = myApp.font, fontSize = 20, align = 'center' }
+    local optionsMultiDati = { text = myApp.utenti[myApp.utenteLoggato].multiplo.."€", x = _W*0.9, y = _H*0.4, font = myApp.font, fontSize = 20, align = 'center' }
     local multiDatiText = display.newText( optionsMultiDati )
     multiDatiText.anchorX = 1
     multiDatiText:setFillColor( 0, 0, 0 )
@@ -114,12 +117,12 @@ function scene:createScene(event)
     -- ingressi gratuiti residenti
     if myApp.utenti[myApp.utenteLoggato].tipo == 'Residente' then
        local optionsTextGratuiti = { text = 'INGRESSI GRATUITI RIMANENTI:', x = _W*0.08, y = _H*0.46, font = myApp.font, fontSize = 13, align = 'center' }
-        textGratuiti = display.newText( optionsTextGratuiti )
+        local textGratuiti = display.newText( optionsTextGratuiti )
         textGratuiti.anchorX = 0
         textGratuiti:setFillColor( 0, 0, 0 )
 
         local optionsNumGratuiti = { text = myApp.utenti[myApp.utenteLoggato].accessi, x = _W*0.9, y = _H*0.46  , font = myApp.font, fontSize = 20, align = 'center' }
-        numGratuiti = display.newText( optionsNumGratuiti )
+        local numGratuiti = display.newText( optionsNumGratuiti )
         numGratuiti.anchorX = 1
         numGratuiti:setFillColor( 0, 0, 0 )
 
@@ -193,11 +196,7 @@ end
 
 function scene:exitScene( event )
     print("ESCI SCENA PROFILO")
-
-    -- Ripristino effetti indietro
-    myApp.titleBar.indietro.isVisible = false
-    myApp.titleBar.indietro.func = nil
-    myApp.titleBar.indietro.effect = indietroEffect
+    myApp.titleBar.indietro.func = {}
 end
 
 function scene:destroyScene( event )

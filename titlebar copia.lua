@@ -11,15 +11,63 @@ myApp.titleBar = {}
 myApp.titleBar.setTitleBar = {}
 
 
-local transitionScene = {
-	accedi = { effect = "fromTop", time = 100 },
-	indietro = { effect = "slideRight", time = 500 }, 
-	profilo = {effect = "fromTop", time = 100 },
-	ricerca = { effect = "fromTop", time = 500 },
-	cerca = { effect = "slideUp", time = 500 }
+local optionsIndietro = {
+	effects = { effect = "slideRight", time = 500 }, 
+	func = {}
 }
 
-local function transitionBack(options)
+local optionsProfilo ={
+	effects = {effect = "fromTop", time = 100},
+	func = {}
+}
+
+local optionsAccedi ={
+	effects = { effect = "fromTop", time = 100, params = {effect = "fromTop", time = 100}},
+	func = {}
+}
+
+local optionsAnnulla ={
+	func = {}
+}
+
+local optionsRicerca ={
+	effects = { effect = "fromTop", time = 500},
+	func = {}
+}
+
+local optionsCerca ={
+	effects = { effect = "slideUp", time = 500},
+	func = {}
+}
+
+local optionsModifica ={
+	func = {}
+}
+
+local optionsFine ={
+	func = {}
+}
+
+
+
+local function initButton(button)
+
+	for k,v in pairs(button.default) do
+		if next(v) ~= nil then
+			-- Copia il default in valori singoli in button
+			button[k] = {}
+			for i, j in pairs(v) do
+				button[k][i] = j
+			end
+		else
+			button[k] = {}
+		end
+	end
+
+
+end
+
+function myApp.titleBar.transitionBack(options)
 
 	local effect = options.effect
 	local time = options.time
@@ -44,7 +92,7 @@ local function transitionBack(options)
 end
 
 
-function myApp.titleBar.setTitleBar(nameScene, title, params)
+function myApp.titleBar.setTitleBar(title, buttons)
 
 	-- Prototype { button =  { effect = effect, func = func }}
 	-- Prototype { button =  on}
@@ -52,26 +100,30 @@ function myApp.titleBar.setTitleBar(nameScene, title, params)
 
 	myApp.titleBar.titleText.text = title
 
-	for name, param in pairs(params) do
+	for name, options in pairs(buttons) do
 		local button = myApp.titleBar[name]
+		initButton(button)
 		-- Pulsante modalità default
-		if param == true then
+		if options == true then
 			button.isVisible = true
 		-- Pulsante modalità spegnimento
-		else
+		elseif options == false then
 			button.isVisible = false
+		else
+			button.isVisible = true
+			-- Pulsante overrided
+			for attr, value in pairs(options) do
+				if type(value) == "table" then
+					for i, j in pairs(value) do
+						button[attr][i] = j
+					end
+				else
+					button[attr] = value
+				end
+			end
 		end
 	end
-
-	if transitionScene[nameScene] ~= nil then
-		myApp.titleBar.indietro.effects = transitionBack(transitionScene[nameScene])
-	else
-		myApp.titleBar.indietro.effects = transitionScene["indietro"]
-	end
-
 end
-
-
 
 local function execFunc(button)
 	if type(button.func) == "function" then
@@ -79,6 +131,27 @@ local function execFunc(button)
 	end
 end
 
+
+local function createButton(name, id, label, x, y, color, fontSize, onRelease, options)
+
+	myApp.titleBar[name] = widget.newButton( {
+		id = id,
+		label = label,
+	    x = x,
+	    y = y,
+	    width = 90,
+	    color = color,
+	    fontSize = fontSize,
+	   	onRelease = onRelease,
+	} )
+
+	-- Imposta i valori di default del button
+	myApp.titleBar[name].default = options
+
+	-- Inizializza il button ai valori di default
+	initButton(myApp.titleBar[name])
+
+end
 
 local function indietro()
 	execFunc(myApp.titleBar.indietro)
@@ -90,7 +163,7 @@ local function profilo()
 end
 
 local function accedi()
-    storyboard.gotoScene("accedi", myApp.titleBar.accedi.effects )
+    storyboard.gotoScene("accedi", myApp.titleBar.accedi.effects)
 end
 
 local function annulla()
@@ -118,25 +191,6 @@ local function cerca()
 end
 
 
-local function createButton(name, id, label, x, y, color, fontSize, onRelease)
-
-	myApp.titleBar[name] = widget.newButton( {
-		id = id,
-		label = label,
-	    x = x,
-	    y = y,
-	    width = 90,
-	    color = color,
-	    fontSize = fontSize,
-	   	onRelease = onRelease,
-	} )
-
-	-- Inizializzo funzione anonima
-	myApp.titleBar[name].func = {}
-	myApp.titleBar[name].effects = transitionScene[name]
-
-end
-
 
 function newTitleBar()
 
@@ -158,28 +212,28 @@ function newTitleBar()
 	myApp.titleBar.logo.height = 37
 
 	createButton("indietro", "BtIndietro", "❮ Indietro", 
-		display.contentCenterX*0.3, bgTitle.height * 0.5 + 7, { 0.062745,0.50980,0.99607 }, 18, indietro)
+		display.contentCenterX*0.3, bgTitle.height * 0.5 + 7, { 0.062745,0.50980,0.99607 }, 18, indietro, optionsIndietro)
 
 	createButton("accedi", "BtAccedi", "Accedi", 
-		display.contentCenterX*1.75, bgTitle.height * 0.5 + 7, { 0.062745,0.50980,0.99607 }, 18, accedi)
+		display.contentCenterX*1.75, bgTitle.height * 0.5 + 7, { 0.062745,0.50980,0.99607 }, 18, accedi, optionsAccedi)
 
 	createButton("profilo", "BtProfilo", "Profilo", 
-		display.contentCenterX*1.75, bgTitle.height * 0.5 + 7, { 0.062745,0.50980,0.99607 }, 18, profilo)
+		display.contentCenterX*1.75, bgTitle.height * 0.5 + 7, { 0.062745,0.50980,0.99607 }, 18, profilo, optionsProfilo)
 
 	createButton("annulla", "BtAnnulla", "Annulla", 
-		display.contentCenterX*1.75, bgTitle.height * 0.5 + 7, { 0.062745,0.50980,0.99607 }, 18, annulla)
+		display.contentCenterX*1.75, bgTitle.height * 0.5 + 7, { 0.062745,0.50980,0.99607 }, 18, annulla, optionsAnnulla)
 
 	createButton("ricerca", "BtRicerca", "Ricerca", 
-		display.contentCenterX*1.75, bgTitle.height * 0.5 + 7, { 0.062745,0.50980,0.99607 }, 18, ricerca)
+		display.contentCenterX*1.75, bgTitle.height * 0.5 + 7, { 0.062745,0.50980,0.99607 }, 18, ricerca, optionsRicerca)
 
 	createButton("cerca", "BtCerca", "Cerca", 
-		display.contentCenterX*1.75, bgTitle.height * 0.5 + 7, { 0.062745,0.50980,0.99607 }, 18, cerca)
+		display.contentCenterX*1.75, bgTitle.height * 0.5 + 7, { 0.062745,0.50980,0.99607 }, 18, cerca, optionsCerca)
 
 	createButton("modifica", "BtModifica", "Modifica", 
-		display.contentCenterX*1.75, bgTitle.height * 0.5 + 7, { 0.062745,0.50980,0.99607 }, 18, modifica)
+		display.contentCenterX*1.75, bgTitle.height * 0.5 + 7, { 0.062745,0.50980,0.99607 }, 18, modifica, optionsModifica)
 
 	createButton("fine", "BtFine", "Fine", 
-		display.contentCenterX*1.75, bgTitle.height * 0.5 + 7, { 0.062745,0.50980,0.99607 }, 18, fine)
+		display.contentCenterX*1.75, bgTitle.height * 0.5 + 7, { 0.062745,0.50980,0.99607 }, 18, fine, optionsFine)
 
 	myApp.titleBar.accedi.isVisible = true
 	myApp.titleBar.profilo.isVisible = false

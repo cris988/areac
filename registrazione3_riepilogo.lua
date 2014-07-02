@@ -33,10 +33,8 @@ function scene:createScene(event)
 
     library.setBackground(group, _Background)
 
-
     -- Preparo titleBar
-
-    myApp.titleBar.titleText.text = "Riepilogo"
+    myApp.titleBar.setTitleBar("riepilogo", "Riepilogo", { })
 
     -- testo in alto
     local options = {
@@ -104,7 +102,6 @@ end
 
 function avantiButton()
     myApp.story.removeAll()
-    myApp.titleBar.indietro.isVisible = false
     storyboard.gotoScene('registrazione4_modificabili',  { effect = "slideLeft", time = 500 } )
 end
 

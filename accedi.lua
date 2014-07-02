@@ -26,13 +26,18 @@ function scene:createScene(event)
 
     print("CREA SCENA ACCEDI")
 
+    myApp.tabBar.isVisible = false
+
     -- Preparo titleBar
 
-    myApp.titleBar.titleText.text = "Profilo utente"
-    myApp.titleBar.indietro.isVisible = true
-    myApp.tabBar.isVisible = false
-    myApp.titleBar.accedi.isVisible = false
-    myApp.titleBar.profilo.isVisible = false
+    myApp.titleBar.setTitleBar("accedi", "Profilo utente", { 
+        indietro = true,
+        accedi = false,
+        profilo = false,
+        logo = false
+    })
+
+    myApp.titleBar.indietro.func = function () myApp.tabBar.isVisible = true end
 
 	local group = self.view
 
@@ -40,12 +45,7 @@ function scene:createScene(event)
 
     library.setBackground(group, _Background)
 
-    -- Imposto effetti indietro
-    indietroEffect = myApp.titleBar.indietro.effect
-    myApp.titleBar.indietro.func = function () 
-        myApp.titleBar.indietro.effect = { effect = "slideUp", time=100 }
-        myApp.tabBar.isVisible = true
-    end
+
 
     -- Contenuto
 
@@ -53,7 +53,7 @@ function scene:createScene(event)
 	-- group:insert(profiloImg)
 
     local optionsVantaggi = {
-        text = 'Eseguendo la registrazione puoi comodamente gestire tutti i tuoi veicoli e controllare la cronologia dei tuoi transiti.',
+        text = 'Effettuando la registrazione puoi comodamente gestire tutti i tuoi veicoli e controllare la cronologia dei tuoi transiti.',
         x = _W*0.5,
         y = _H*0.23,
         width = _W-30,
@@ -66,7 +66,7 @@ function scene:createScene(event)
 
 
 	local optionsReg = {
-		text = 'Se non hai mai effettuato la registrazione su quest\'applicazione o sul sito \"areaC.it\":',
+		text = 'Se non hai mai effettuato la registrazione su quest\'applicazione o sul sito AreaC.it',
 		x = _W*0.5,
 		y = _H*0.35,
 		width = _W-30,
@@ -82,7 +82,7 @@ function scene:createScene(event)
         id  = 'BtRegistrati',
         label = 'Registrati',
         x = _W*0.5,
-        y = _H*0.47,
+        y = _H*0.45,
         color = { 0.062745,0.50980,0.99607 },
         fontSize = 22,
         onRelease = registrazioneScene
@@ -154,11 +154,6 @@ function accediScene()
                 loggato = true
                 myApp.story.back() -- Rimuovo accedi dalla storia
 
-                -- crea transito non pagato con la data odierna
-                if myApp.transiti[myApp.utenteLoggato][1][1] ~= os.date("%d/%m/%Y") then
-                    table.insert(myApp.transiti[myApp.utenteLoggato], 1, { os.date("%d/%m/%Y"), myApp.utenti[myApp.utenteLoggato].targa, 'non pagato'})
-                end
-
                 storyboard.gotoScene('profilo')
             end
         end
@@ -182,11 +177,7 @@ end
 
 function scene:exitScene( event )
     print("ESCI SCENA ACCEDI")
-
-    -- Ripristino effetti indietro
-    myApp.titleBar.indietro.isVisible = false
-    myApp.titleBar.indietro.func = nil
-    myApp.titleBar.indietro.effect = indietroEffect
+    myApp.titleBar.indietro.func = {}
 end
 
 function scene:destroyScene( event )

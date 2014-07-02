@@ -34,11 +34,12 @@ function verifica0:createScene(event)
 	local group = self.view
     
     -- Preparo titleBar
-    myApp.titleBar.titleText.text = "Verifica Targa"
-    myApp.titleBar.logo.isVisible = true
-
-
-    library.checkLogIn()
+    myApp.titleBar.setTitleBar("verifica", "Verifica Targa", { 
+        indietro = false,
+        accedi =  library.checkLogIn("accedi"),
+        profilo = library.checkLogIn("profilo"),
+        logo = true
+    })
 
     -- Background
 
@@ -97,10 +98,12 @@ function verifica1:createScene(event)
 
     -- Preparo titleBar
 
-    myApp.titleBar.titleText.text = "Verifica Targa"
-    myApp.titleBar.indietro.isVisible = true
-    
-    library.checkLogIn()
+    myApp.titleBar.setTitleBar("verifica", "Verifica Targa", { 
+        indietro = true,
+        accedi =  library.checkLogIn("accedi"),
+        profilo = library.checkLogIn("profilo"),
+        logo = false
+    })
 
     -- Background
 
@@ -226,18 +229,30 @@ function verificaTarga(targa)
 
     num = math.random()
     print(num)
+
     if targaTrovata == false then
+
+        local euro
+        local tipo
+        local alim
+
         if num <= 0.90 then
             if num <= 0.80 then
                 accesso = "p"
+                euro = myApp.datiTarghe.euro[math.random(1,#myApp.datiTarghe.euro)]:upper()
+                tipo = myApp.datiTarghe.tipo[math.random(1,#myApp.datiTarghe.tipo)]
+                alim = myApp.datiTarghe.alim[math.random(1,2)]
             else
                 accesso = "g"
+                euro = myApp.datiTarghe.euro[math.random(5,#myApp.datiTarghe.euro)]:upper()
+                tipo = myApp.datiTarghe.tipo[math.random(1,#myApp.datiTarghe.tipo)]
+                alim = myApp.datiTarghe.alim[math.random(3,#myApp.datiTarghe.alim)]
             end
 
         end
         
         -- Aggiunta nuova targa nel database
-        myApp.targhe[numTarghe+1] = { targa = targa , accesso = accesso }
+        myApp.targhe[numTarghe+1] = { targa = targa , accesso = accesso, euro = euro, tipo = tipo, alim = alim }
 
     end
 
@@ -249,9 +264,10 @@ end
 
 function acquistaButton()
     require("acquista")
-    storyboard.gotoScene('acquista1', { params = { targa = targa } })
+    storyboard.gotoScene('acquista1', { effect = "slideLeft", time = 500, params = { targa = targa } })
     myApp.story.removeAll()
     myApp.story.add("acquista0")
+    myApp.tabBar:setSelected(3)
 end
 
 
@@ -284,7 +300,6 @@ end
 
 function verifica0:exitScene( event ) 
     print("ESCI SCENA VERIFICA0") 
-    myApp.titleBar.logo.isVisible = false
 end
 
 function verifica0:destroyScene( event ) print("DISTRUGGI SCENA VERIFICA0") end
@@ -297,7 +312,6 @@ end
 
 function verifica1:exitScene( event ) 
     print("ESCI SCENA VERIFICA1") 
-    myApp.titleBar.indietro.isVisible = false
 end
 
 function verifica1:destroyScene( event ) print("DISTRUGGI SCENA VERIFICA1") end

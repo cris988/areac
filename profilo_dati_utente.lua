@@ -19,16 +19,17 @@ local salvaUtente = {}
 -- variabili
 local txtCell
 local txtEmail
-local group0
-local group1
-local group
+local cellDatiText
+local emailDatiText
+local BtFine
+local BtModifica
 
 
 
 
 function scene:createScene(event)
     
-    group = self.view
+    local group = self.view
 
     print("CREA SCENA DATI UTENTE")
 
@@ -37,38 +38,15 @@ function scene:createScene(event)
     library.setBackground(group, _Background)
 
     
-    myApp.titleBar.indietro.isVisible = true
-
-    step = 0
-
     -- Preparo titleBar
-    myApp.titleBar.titleText.text = "Dati utente"
-
-    group0 = step0()
-    group:insert(group0)
-
-end
-
-
--- Gestisce il primo step di Dati utente
-
-function step0()
-
-    local group = display.newGroup( )
-
-    print("Visualizzazione dati Step 0")
-
-    local BtModifica = widget.newButton({
-        id  = 'BtModifica',
-        label = 'Modifica dati',
-        x = _W*0.5,
-        y = _H*0.925,
-        color = { 0.062745,0.50980,0.99607 },
-        fontSize = 26,
-        font = myApp.font,
-        onRelease = modificaDati
+    myApp.titleBar.setTitleBar("datiUtente", "Dati utente", { 
+        indietro = true,
+        modifica = true,
+        fine = false
     })
-     
+    myApp.titleBar.fine.func = fineModifica
+    myApp.titleBar.modifica.func = modificaDati
+
 
     -- stato utente
     local optionsStato = {
@@ -76,7 +54,7 @@ function step0()
         x = _W*0.5,
         y = _H*0.2,
         font = myApp.font,
-        fontSize = 13,
+        fontSize = 14,
         width = _W-30,
         align = "left"
     }
@@ -88,7 +66,7 @@ function step0()
         x = _W*0.5,
         y = _H*0.24,
         font = myApp.font,
-        fontSize = 20,
+        fontSize = 21,
         width = _W-30,
         align = "left"
     }
@@ -106,9 +84,9 @@ function step0()
     local optionsEmail = {
         text = 'Email:',
         x = _W*0.5,
-        y = _H*0.4,
+        y = _H*0.46,
         font = myApp.font,
-        fontSize = 13,
+        fontSize = 14,
         width = _W-30,
         align = "left"
     }
@@ -118,13 +96,13 @@ function step0()
     local optionsEmailDati = {
         text = myApp.utenti[myApp.utenteLoggato].email,
         x = _W*0.5,
-        y = _H*0.44,
+        y = _H*0.5,
         font = myApp.font,
-        fontSize = 20,
+        fontSize = 21,
         width = _W-30,
         align = "left"
     }
-    local emailDatiText = display.newText( optionsEmailDati )
+    emailDatiText = display.newText( optionsEmailDati )
     emailDatiText:setFillColor( 0, 0, 0 )
  
 
@@ -132,9 +110,9 @@ function step0()
     local optionsCell = {
         text = 'Cellulare:',
         x = _W*0.5,
-        y = _H*0.5,
+        y = _H*0.56,
         font = myApp.font,
-        fontSize = 13,
+        fontSize = 14,
         width = _W-30,
         align = "left"
     }
@@ -144,13 +122,13 @@ function step0()
     local optionsDatiCell = {
         text = myApp.utenti[myApp.utenteLoggato].cellulare,
         x = _W*0.5,
-        y = _H*0.54,
+        y = _H*0.6,
         font = myApp.font,
-        fontSize = 20,
+        fontSize = 21,
         width = _W-30,
         align = "left"
     }
-    local cellDatiText = display.newText( optionsDatiCell )
+    cellDatiText = display.newText( optionsDatiCell )
     cellDatiText:setFillColor( 0, 0, 0 )
 
 
@@ -161,7 +139,7 @@ function step0()
             x = _W*0.5,
             y = _H*0.3,
             font = myApp.font,
-            fontSize = 13,
+            fontSize = 14,
             width = _W-30,
             align = "left"
         }
@@ -173,7 +151,7 @@ function step0()
             x = _W*0.5,
             y = _H*0.34,
             font = myApp.font,
-            fontSize = 20,
+            fontSize = 21,
             width = _W-30,
             align = "left"
         }
@@ -184,7 +162,29 @@ function step0()
         
         group:insert(residenzaText)
         group:insert(residenzaDatiText)
+    else
+        emailText.y = _H*0.36
+        emailDatiText.y = _H*0.4
+        cellText.y = _H*0.46
+        cellDatiText.y = _H*0.5
     end
+
+    -- Text box in cui modificare i dati
+    txtEmail =library.textArea(group,_W*0.5, _H*0.51, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "left", "Email")
+    txtCell =library.textArea(group,_W*0.5, _H*0.61, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "left", "Cellulare")
+
+    -- Inserimento già esistenti
+    txtCell.campo.text = myApp.utenti[myApp.utenteLoggato].cellulare
+    txtEmail.campo.text = myApp.utenti[myApp.utenteLoggato].email
+
+    txtCell.isVisible = false
+    txtEmail.isVisible = false
+
+    txtCell:toFront()
+    txtEmail:toFront()
+
+    group:insert(txtEmail)
+    group:insert(txtCell)
 
     group:insert(statoText)
     group:insert(statoDatiText)
@@ -192,54 +192,25 @@ function step0()
     group:insert(emailDatiText)
     group:insert(cellText)
     group:insert(cellDatiText)
-    group:insert(BtModifica)
 
     return group
 end
 
-
--- Gestisce la modifica dei dati
-
-function step1(group)
-   
-    local group = display.newGroup( )
-
-    print("Visualizzazione dati Step 0")
-
-    local BtFine = widget.newButton({
-        id  = 'BtFine',
-        label = 'Fine modifiche',
-        x = _W*0.5,
-        y = _H*0.925,
-        color = { 0.062745,0.50980,0.99607 },
-        fontSize = 26,
-        font = myApp.font,
-        onRelease = fineModifica
-    })
-
-    -- Text box in cui modificare i dati
-    txtCell =library.textArea(group,_W*0.5, _H*0.45, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Cellulare")
-    txtEmail =library.textArea(group,_W*0.5, _H*0.3, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Email")
-
-    -- Inserimento già esistenti
-    txtCell.campo.text = myApp.utenti[myApp.utenteLoggato].cellulare
-    txtEmail.campo.text = myApp.utenti[myApp.utenteLoggato].email
-
-
-    group:insert(txtEmail)
-    group:insert(txtCell)
-    group:insert(BtFine)
-
-
-    return group
-end
 
 
 function modificaDati()
-    group1 = step1()
-    group:remove(group0)
-    group:insert(group1)
-    storyboard.reloadScene( )
+
+    txtCell.isVisible = true
+    txtEmail.isVisible = true
+
+    txtCell.campo.isVisible = true
+    txtEmail.campo.isVisible = true
+
+    cellDatiText.isVisible = false
+    emailDatiText.isVisible = false
+
+    myApp.titleBar.fine.isVisible = true
+    myApp.titleBar.modifica.isVisible = false
 end
 
 
@@ -248,11 +219,24 @@ function fineModifica()
         
         library.salvaUtente({cellulare = txtCell.campo.text, email=txtEmail.campo.text}, myApp.utenteLoggato)
 
-        storyboard.reloadScene( )
+        txtCell.isVisible = false
+        txtEmail.isVisible = false
+
+        txtCell.campo.isVisible = false
+        txtEmail.campo.isVisible = false
+
+
+        cellDatiText.text = myApp.utenti[myApp.utenteLoggato].cellulare
+        emailDatiText.text = myApp.utenti[myApp.utenteLoggato].email
+
+        cellDatiText.isVisible = true
+        emailDatiText.isVisible = true
+
     end
-    group0 = step0()
-    group:remove(group1)
-    group:insert(group0)
+
+
+    myApp.titleBar.fine.isVisible = false
+    myApp.titleBar.modifica.isVisible = true
 
 end
 
@@ -260,22 +244,17 @@ end
 
 function scene:enterScene( event )
     print("ENTRA SCENA DATI UTENTE")
-    
-    myApp.titleBar.indietro.isVisible = true
     myApp.story.add(storyboard.getCurrentSceneName())
-
 end
 
 function scene:exitScene( event )
     print("ESCI SCENA DATI UTENTE")
-
-    myApp.titleBar.indietro.isVisible = false
+    myApp.titleBar.fine.isVisible = false
+    myApp.titleBar.modifica.isVisible = false
 end
 
 function scene:destroyScene( event )
     print("DISTRUGGI SCENA DATI UTENTE")
-    group0 = nil
-    group1 = nil
 end
 
 

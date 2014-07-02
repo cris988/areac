@@ -21,11 +21,12 @@ function scene:createScene(event)
     local group = self.view  
 
     -- Preparo titleBar
-
-    myApp.titleBar.indietro.isVisible = true
-    myApp.titleBar.titleText.text = 'Info'
-
-    library.checkLogIn()
+    myApp.titleBar.setTitleBar("info", "Info", { 
+        indietro = true,
+        accedi =  library.checkLogIn("accedi"),
+        profilo = library.checkLogIn("profilo"),
+        logo = false
+    })
 
     -- Background
 
@@ -50,7 +51,6 @@ function scene:enterScene( event )
 end
 function scene:exitScene( event ) 
     print("ESCI SCENA INFO DETTAGLIO "..myApp.section)
-    myApp.titleBar.indietro.isVisible = false
 end
 function scene:destroyScene( event )
     print("DISTRUGGI SCENA INFO DETTAGLIO "..myApp.section)

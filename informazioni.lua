@@ -43,10 +43,12 @@ function scene:createScene(event)
 
     -- Preparo titleBar
 
-    myApp.titleBar.titleText.text = "Informazioni"
-    myApp.titleBar.logo.isVisible = true
-    
-    library.checkLogIn()
+    myApp.titleBar.setTitleBar("informazioni", "Informazioni", { 
+        indietro = false,
+        accedi =  library.checkLogIn("accedi"),
+        profilo = library.checkLogIn("profilo"),
+        logo = true
+    })
     
     myApp.tabBar.isVisible = true
 
@@ -77,7 +79,6 @@ end
 
 function scene:exitScene( event )
     print("ESCI SCENA INFORMAZIONI")
-    myApp.titleBar.logo.isVisible = false
 end
 
 function scene:destroyScene( event )

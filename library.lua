@@ -16,13 +16,19 @@ local function setBackground(group, color)
     group:insert(background)
 end
 
-local function checkLogIn()
-	if myApp.utenteLoggato == 0 then
-        myApp.titleBar.accedi.isVisible = true
-        myApp.titleBar.profilo.isVisible = false
+local function checkLogIn(state)
+	if myApp.utenteLoggato > 0 then
+        if state == "accedi" then
+            return false
+        else
+            return true
+        end
     else
-        myApp.titleBar.profilo.isVisible = true
-        myApp.titleBar.accedi.isVisible = false
+        if state == "accedi" then
+            return true
+        else
+            return false
+        end
     end
 end
 
@@ -58,25 +64,29 @@ local function onRowRender( event )
 end
 
 
-local function makeList(id, values, x, y, width, rowHeight, paramsRow, eventRowRender, eventRowTouch) 
+local function makeList(id, values, x, y, width, rowHeight, paramsRow, eventRowRender, eventRowTouch, scrollView) 
 
 	local group = display.newGroup( )
+    local listener = {}
 
     x = math.ceil(x)
     y = math.ceil(y)
 
-	if eventRowRender == nil then eventRowRender = onRowRender end
+    if eventRowRender == nil then eventRowRender = onRowRender end
+	if eventRowTouch == nil then eventRowTouch = onRowTouch end
+    if scrollView ~= nil then listener = function (event) scrollView:takeFocus(event) end end
 
 	local tableView = widget.newTableView
 	{
-	    x = x,
-	    y = y,
+	    x = 0,
+	    y = 0,
 	    id = id,
 	    height = rowHeight * #values,
 	    width = width,
 	    isLocked = true,
 	    onRowRender = eventRowRender,
 	    onRowTouch = eventRowTouch,
+        listener = listener
 	}
 
 	for i = 1, #values do
@@ -115,15 +125,18 @@ local function makeList(id, values, x, y, width, rowHeight, paramsRow, eventRowR
 
 	group:insert(tableView)
 
-	local lineA = display.newLine( group, x, y, width, y)
+	local lineA = display.newLine( group, 0, 0, width, 0)
 	lineA:setStrokeColor( 0.8, 0.8, 0.8 )
-	local lineB = display.newLine( group, x, tableView.y + tableView.height - 1, width, tableView.y + tableView.height - 1)
+	local lineB = display.newLine( group, 0, tableView.height - 1, width, tableView.height - 1)
 	lineB:setStrokeColor( 0.8, 0.8, 0.8 )
 
     group.deleteRow = function(index, time, delay) 
                         tableView:deleteRow( index )
                         transition.to(lineB, { time = time, delay = delay, y = lineB.y - rowHeight} )
                     end
+
+    group.x = x
+    group.y = y
 
 	return group
 

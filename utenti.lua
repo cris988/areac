@@ -10,7 +10,7 @@ local myApp = require( "myapp" )
 
 myApp.utenti = {}
 myApp.utenti[1] = { username = 'nonres', password = 'nonres' , nome = 'Mario', cognome = 'Rossi', tipo = 'Non residente', targa = ' QW111QW', targaSelezionata = 1, cellulare = '123123456', email = 'mariorossi@gmail.com', multiplo = 0}
-myApp.utenti[2] = { username = 'res', password = 'res' , nome = 'Mario', cognome = 'Rossi', tipo = 'Residente' , targa = 'PP222PP', targaSelezionata = 2, cellulare = '123123456', email = 'mariorossi@gmail.com', cf = 'RSSMT12Q231WE1', patente = '121233', via = 'Via Roma', civico = '3', cap = '12321', accessi = 40, multiplo = 0}
+myApp.utenti[2] = { username = 'res', password = 'res' , nome = 'Mario', cognome = 'Rossi', tipo = 'Residente' , targa = 'PP222PP', targaSelezionata = 1, cellulare = '123123456', email = 'mariorossi@gmail.com', cf = 'RSSMT12Q231WE1', patente = '121233', via = 'Via Roma', civico = '3', cap = '12321', accessi = 40, multiplo = 0}
 myApp.utenti[3] = { username = 'dis', password = 'dis' , nome = 'Mario', cognome = 'Rossi', tipo = 'Disabile' , targa = 'QW111QW', targaSelezionata = 1, cellulare = '123123456', email = 'mariorossi@gmail.com', pass = '123', multiplo = 2}
 
 myApp.transiti ={}
@@ -35,24 +35,9 @@ myApp.transiti[3] ={
 -- Tutte le targhe di ogni utente
 
 myApp.targheUtente = {}
-myApp.targheUtente[1] = { 'QW111QW', 'PP222PP', 'KK333KK' }
-myApp.targheUtente[2] = { 'QW111QW', 'PP222PP', 'KK333KK', 'JJ444JJ' }
+myApp.targheUtente[1] = { 'QW111QW', 'BB333BB' }
+myApp.targheUtente[2] = { 'PP222PP', 'KK333KK', 'JJ444JJ' }
 myApp.targheUtente[3] = { 'QW111QW', 'ZZ345ZZ' }
-
--- Targhe valide
-
-myApp.datiTarghe = {}
-myApp.datiTarghe.euro = {"0", "1", "2", "3", "4"}
-myApp.datiTarghe.tipo = { "Autovettura per trasporto di Persone" }
-myApp.datiTarghe.alim = {"Benzina", "Diesel", "Elettrica", "Metano"}
-
-myApp.targhe = {}
-myApp.targhe[1] = { accesso = "p", targa = 'SI111SI', euro = myApp.datiTarghe.euro[5], tipo=myApp.datiTarghe.tipo[1], alim=myApp.datiTarghe.alim[2] }
-myApp.targhe[2] = { accesso = "v", targa = 'NO111NO', euro = myApp.datiTarghe.euro[1], tipo=myApp.datiTarghe.tipo[1], alim=myApp.datiTarghe.alim[1] }
-myApp.targhe[3] = { accesso = "p", targa = 'QW111QW', euro = myApp.datiTarghe.euro[3], tipo=myApp.datiTarghe.tipo[1], alim=myApp.datiTarghe.alim[1] }
-myApp.targhe[4] = { accesso = "p", targa = 'PP222PP', euro = myApp.datiTarghe.euro[4], tipo=myApp.datiTarghe.tipo[1], alim=myApp.datiTarghe.alim[4] }
-myApp.targhe[5] = { accesso = "p", targa = 'KK333KK', euro = myApp.datiTarghe.euro[4], tipo=myApp.datiTarghe.tipo[1], alim=myApp.datiTarghe.alim[1] }
-myApp.targhe[6] = { accesso = "g", targa = 'GG111GG', euro = myApp.datiTarghe.euro[5], tipo=myApp.datiTarghe.tipo[1], alim=myApp.datiTarghe.alim[3] }
 
 
 function myApp:getNumTargheUtente(num)

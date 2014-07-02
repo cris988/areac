@@ -39,10 +39,10 @@ function scene:createScene(event)
 
     library.setBackground(group, _Background)
 
-
     -- Preparo titleBar
-
-    myApp.titleBar.titleText.text = "Registrazione"
+    myApp.titleBar.setTitleBar("registrazione", "Registrazione", { 
+        indietro = false
+    })
 
 
     -- testo in alto
@@ -131,9 +131,6 @@ end
 function salvaUtente()
 
     local newUser = myApp:getNumUtenti() + 1
-    if myApp.datiUtente.tipo == 'Residente' then
-        myApp.datiUtente.accessi = 50
-    end
     
     myApp.utenti[newUser] = {}
     myApp.targheUtente[newUser] = { myApp.datiUtente.targa }

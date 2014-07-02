@@ -36,10 +36,13 @@ function scene:createScene(event)
     local group = self.view
 
     -- Preparo titleBar
-    myApp.titleBar.titleText.text = "Mappa"
-    myApp.titleBar.logo.isVisible = true
 
-    library.checkLogIn()
+    myApp.titleBar.setTitleBar("mappa", "Mappa", { 
+        indietro = false,
+        accedi =  library.checkLogIn("accedi"),
+        profilo = library.checkLogIn("profilo"),
+        logo = true
+    })
 
     -- Background
 

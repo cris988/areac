@@ -14,27 +14,30 @@ widget.setTheme(myApp.theme)
 local inizioModifica = {}
 local fineModifica = {}
 local aggiungiButton = {}
-local makeList = {}
-local onRowRender = {}
-local onRowTouch = {}
 local eliminaRow = {}
 local selezionaStar = {}
-local createList = {}
+local newTitle = {}
 
 
 -- variabili
+local group
+local infoText
+local textInfo
+local textEditInfoPrincipale
+local textEditInfoResidente
+local targaText
+local scrollView
 local listaTarghe
+local rowDelete = {}
+local rowStar = {}
+local borderBottomScroll
 local BtModifica
 local BtFine
 local BtAggiungi
-local rowTitle
-local rowDelete = {}
-local rowStar = {}
-local group
-local targaText
-
+local isClickable = false
 
 function scene:createScene(event)
+
     group = self.view
 
     print("CREA SCENA GESTIONE TARGHE")
@@ -44,38 +47,60 @@ function scene:createScene(event)
     library.setBackground(group, _Background)
 
     -- Preparo titleBar
-    myApp.titleBar.indietro.isVisible = true
-    myApp.titleBar.titleText.text = "Gestione targhe"
+    myApp.titleBar.setTitleBar("gestioneTarghe", "Gestione Targhe", { 
+        indietro = true,
+        modifica = true,
+        fine = false
+    })
+    myApp.titleBar.modifica.func = inizioModifica
+    myApp.titleBar.fine.func = fineModifica
 
-    -- Stampa tabella targhe
+    scrollView = widget.newScrollView
+    {
+        top = myApp.titleBar.height,
+        left = 0,
+        width =  _W,
+        height = _H - myApp.titleBar.height,
+        scrollWidth = _W,
+        scrollHeight = 0,
+        horizontalScrollDisabled = true,
+        isBounceEnabled = false,
+        hideBackground = true,
+    }
 
-    listaTarghe = createList()
+    -- Bordo scrollview
 
-    listaTarghe.y = myApp.titleBar.height + 20
+    -- local borderTopScroll = display.newLine( 0, posY, _W, posY )
+    -- borderTopScroll:setStrokeColor( 0.8, 0.8, 0.8 )
 
-    group:insert(listaTarghe)
-
+    
 
     -- Testo info
 
-    local posY = _H * 0.18
+    local posY = scrollView.height * 0.09
+
+    textInfo = 'Qui puoi gestire le tue targhe registrate, aggiungerne di nuove o eliminare le inserite. '
+    textEditInfoPrincipale = "Per modificare la targa principale selezionane un'altra con la stella"
+    textEditInfoResidente = "Per modifica la targa agevolata selezionane un'altra con la stella"
 
     local optionsInfo = {
-        text = 'Qui puoi gestire le tue targhe registrate, aggiungerne di nuove o eliminare le inserite. ',
+        text = textInfo,
         x = _W*0.5,
         y = posY,
         font = myApp.font,
-        fontSize = 15,
+        fontSize = 16,
         width = _W-30,
         align = "center"
     }
-    local infoText = display.newText( optionsInfo )
+    infoText = display.newText( optionsInfo )
     infoText:setFillColor( 0, 0, 0 )
 
 
     -- Titolo Targa Principale o Agevolata
 
-    posY = posY + 50
+    posY = posY + 75
+
+    local text
 
     if myApp.utenti[myApp.utenteLoggato].tipo == 'Residente'then
         text = "TARGA AGEVOLATA"
@@ -83,19 +108,19 @@ function scene:createScene(event)
         text = "TARGA PRINCIPALE"
     end
 
-    local titleT = newTitle(text, _W * 0.5, posY, _W, 50)
+    local titleT = newTitle(text, _W * 0.5, posY, _W, 50, 20, true)
 
 
     -- Stampa Targa Principale o Agevolata
 
-    posY = posY + 55
+    posY = posY + 50
 
     local optionsTarga = {
         text = myApp.utenti[myApp.utenteLoggato].targa,
         x = _W*0.5,
         y = posY,
         font = myApp.font,
-        fontSize = 24,
+        fontSize = 20,
         align = "center"
     }
     targaText = display.newText( optionsTarga )
@@ -104,34 +129,36 @@ function scene:createScene(event)
 
     -- Titolo Targhe Registrate
 
-    posY = posY + 65
+    posY = posY + 70
 
-    local titleR = newTitle("TARGHE REGISTRATE", _W * 0.5, posY, _W, 50)
+    -- local titleR = newTitle("TARGHE REGISTRATE", _W * 0.5, posY, _W, 50)
+    local titleR = newTitle("TARGHE UTENTE", _W * 0.5, posY, _W, 50, 20, true)
 
 
-    -- Posizionamento lista taghe sotto titolo
+    -- Stampa tabella targhe
 
-    posY = posY + 25
+    posY = posY + 24
 
-    listaTarghe.y = posY
+    listaTarghe = library.makeList("targhe", myApp:getTargheUtente(myApp.utenteLoggato), 0, posY, _W, 50, {x = 40}, nil, nil, scrollView)
 
     -- Creazione pulsanti per eliminazione e star nella lista di targhe
 
     local optionsStar = {
-            width = 30,
-            height = 30,
-            numFrames = 2,
-            sheetContentWidth = 60,
-            sheetContentHeight = 30,
+        width = 30,
+        height = 30,
+        numFrames = 2,
+        sheetContentWidth = 60,
+        sheetContentHeight = 30,
     }
 
     local starImage = graphics.newImageSheet( "img/star_sheet.png", optionsStar )
+    print(listaTarghe.y)
 
     for i=1, myApp:getNumTargheUtente(myApp.utenteLoggato) do
         
         rowDelete[i] = widget.newButton({
             id = i,
-            top = posY + 50 * (i -1),
+            top = listaTarghe.y + 50 * (i -1),
             left = _W - 80,
             width = 80,
             height = 49,
@@ -146,8 +173,8 @@ function scene:createScene(event)
 
         rowStar[i] = widget.newSwitch {
             id = i,
-            top = posY + 50 * (i - 1) + 12,
-            left = _W*0.025,
+            top = listaTarghe.y + 50 * (i - 1) + 12,
+            left = _W*0.025 ,
             width = 30,
             height = 30,
             style = "radio",
@@ -163,39 +190,78 @@ function scene:createScene(event)
             rowStar[i].isVisible = false
         end
 
-
-        group:insert(rowDelete[i])
-        group:insert(rowStar[i])
-
     end
 
     -- Button di editing
 
-    posY = posY + listaTarghe.height + 25
-
     BtAggiungi = widget.newButton({
         id  = 'BtAggiungi',
-        label = '+ Aggiungi nuova targa',
-        x = _W*0.5,
-        y = posY,
-        width = _W-30,
+        label = 'Aggiungi targa...',
+        x = _W*0.08,
+        y = listaTarghe.height + listaTarghe.y,
+        height = 50,
         color = { 0.062745,0.50980,0.99607 },
         fontSize = 20,
         align = 'center',
         onRelease =  aggiungiButton
     })
-    BtAggiungi.anchorX = 0.5
+    BtAggiungi.anchorX = 0
+    BtAggiungi.anchorY = 0
 
-    titleBar.modificaTarghe.func = inizioModifica
-    titleBar.modificaTarghe.isVisible = true
+    
+    BtModifica = widget.newButton({
+        id  = 'BtModifica',
+        label = 'Gestisci targhe',
+        x = _W*0.5,
+        y = _H*0.925,
+        color = { 0.062745,0.50980,0.99607 },
+        fontSize = 26,
+        onRelease =  inizioModifica
+    })
+    BtModifica.isVisible = false
 
-    titleBar.fineTarghe.func = fineModifica
+    BtFine = widget.newButton({
+        id  = 'BtModifica',
+        label = 'Fine modifiche',
+        x = _W*0.5,
+        y = _H*0.925,
+        color = { 0.062745,0.50980,0.99607 },
+        fontSize = 26,
+        onRelease =  fineModifica
+    })
+    BtFine.isVisible = false
 
-    group:insert(infoText)
-    group:insert(targaText)
-    group:insert(titleT)
-    group:insert(titleR)
-    group:insert(BtAggiungi)
+
+    borderBottomScroll = display.newLine( 0, BtAggiungi.y + BtAggiungi.height, _W, BtAggiungi.y + BtAggiungi.height)
+    borderBottomScroll:setStrokeColor( 0.8, 0.8, 0.8 )  
+
+    scrollView:insert(infoText)
+    scrollView:insert(titleT)
+    scrollView:insert(targaText)
+    scrollView:insert(titleR)
+
+    scrollView:insert(listaTarghe)
+
+    for i = 1, #rowDelete do
+        scrollView:insert(rowDelete[i])
+        scrollView:insert(rowStar[i])
+    end
+
+    scrollView:insert(BtAggiungi)
+    scrollView:insert(borderBottomScroll)
+    if borderBottomScroll.y > scrollView.height then
+        scrollView:setScrollHeight( borderBottomScroll.y)
+    else
+        scrollView:setScrollHeight( scrollView.height)
+    end
+
+    group:insert(scrollView)
+
+
+    group:insert(BtModifica)  
+    group:insert(BtFine)
+
+
 
    
 end
@@ -204,20 +270,9 @@ end
 
 
 
-
-
-
-
-
-
-
-function newTitle(text, x, y, width, height)
+function newTitle(text, x, y, width, height, fontSize, background)
 
     local group = display.newGroup( )
-
-    local bg = display.newRect( 0, y, width, height)
-    bg.anchorX =0
-    bg:setFillColor( 0.95,0.95,0.95 )
 
     -- Stampo titoli sezioni
     local title = display.newText
@@ -226,29 +281,43 @@ function newTitle(text, x, y, width, height)
         x = x,
         y = y,
         font = myApp.font,
-        fontSize = 20,
+        fontSize = fontSize,
         align = "center",
-        width = 370,
         height = 0
     }
     title:setFillColor( 0, 0, 0 )
 
-    local line = display.newLine( group, 0, height / 2 + y, width, height / 2 + y)
-    line:setStrokeColor( 0.8, 0.8, 0.8 )
+    if background then
 
-    group:insert(bg)
+        local bg = display.newRect( 0, y, width, height)
+        bg.anchorX = 0
+        bg:setFillColor( 0.95,0.95,0.95 )
+
+        local line = display.newLine( group, 0, height / 2 + y, width, height / 2 + y)
+        line:setStrokeColor( 0.8, 0.8, 0.8 )
+
+        group:insert(bg)
+        group:insert(line)
+
+    end
+
     group:insert(title)
 
     return group
+
 end
-
-
-function createList()
-    return library.makeList("targhe", myApp:getTargheUtente(myApp.utenteLoggato), 0, 0, _W, 50, {x = 40})
-end
-
 
 function inizioModifica()
+
+
+    if myApp.utenti[myApp.utenteLoggato].tipo == 'Residente'then
+        infoText.text = textEditInfoResidente
+    else
+        infoText.text = textEditInfoPrincipale
+    end
+
+    isClickable = true
+
     local numTarghe = myApp:getNumTargheUtente(myApp.utenteLoggato)
     for i=1, numTarghe do
         rowStar[i].isVisible = true
@@ -259,13 +328,19 @@ function inizioModifica()
         end
     end
 
-    titleBar.modificaTarghe.isVisible = false
-    titleBar.fineTarghe.isVisible = true
+    myApp.titleBar.modifica.isVisible = false
+    myApp.titleBar.fine.isVisible = true
+
 
 end
 
 
 function fineModifica()
+
+    infoText.text = textInfo
+
+    isClickable = false
+
     local numTarghe = myApp:getNumTargheUtente(myApp.utenteLoggato)
     for i=1, numTarghe do
         if rowStar[i].isOn == false then
@@ -274,8 +349,11 @@ function fineModifica()
         end
     end
 
-    titleBar.modificaTarghe.isVisible = true
-    titleBar.fineTarghe.isVisible = false
+    myApp.titleBar.modifica.isVisible = true
+    myApp.titleBar.fine.isVisible = false
+
+    -- BtModifica.isVisible = true
+    -- BtFine.isVisible = false
 end
 
 
@@ -285,22 +363,15 @@ function aggiungiButton()
 end
 
 
-
 local function listenerRecreateList( event )
 
-    --Ricreazione lista perchè gli indici 
-    --della tabella non vengono aggiornati automaticamente
-
-    -- Posizione attuale lista
-    local posY = listaTarghe.y
+    -- Ricreazione lista perchè gli indici 
+    -- della tabella non vengono aggiornati automaticamente
 
     -- Ricreo lista
     listaTarghe:removeSelf( )
-    listaTarghe = createList()
-    group:insert(listaTarghe)
-
-    -- Riposizionamento lista
-    listaTarghe.y = posY
+    listaTarghe = library.makeList("targhe", myApp:getTargheUtente(myApp.utenteLoggato), 0, listaTarghe.y, _W, 50, {x = 40}, nil, nil, scrollView)
+    scrollView:insert(listaTarghe)
 
     -- In primo piano i pulsanti elimina e star
     local numTarghe = myApp:getNumTargheUtente(myApp.utenteLoggato)
@@ -310,6 +381,8 @@ local function listenerRecreateList( event )
     end
 
 end
+
+
 
 function eliminaRow( event, index )
 
@@ -331,9 +404,10 @@ function eliminaRow( event, index )
                 rowStar[i].id = i
                 rowDelete[i].id = i
                 transition.to( rowStar[i], { time = 480, delay = 430, x =(rowStar[i].x), y =(rowStar[i].y-50) } )
-                transition.to( rowDelete[i], { time = 480, delay = 430, x =(rowDelete[i].x), y =(rowDelete[i].y-49) } )
+                transition.to( rowDelete[i], { time = 480, delay = 430, x =(rowDelete[i].x), y =(rowDelete[i].y-50) } )
             end
             transition.to( BtAggiungi, { time = 480, delay = 430, x =(BtAggiungi.x), y =(BtAggiungi.y-50) } )  
+            transition.to( borderBottomScroll, { time = 480, delay = 430, x =(borderBottomScroll.x), y =(borderBottomScroll.y-50) } )  
 
             if index < myApp.utenti[myApp.utenteLoggato].targaSelezionata then
                 myApp.utenti[myApp.utenteLoggato].targaSelezionata = myApp.utenti[myApp.utenteLoggato].targaSelezionata-1
@@ -351,23 +425,25 @@ function selezionaStar( event )
 
     --Seleziona targa principale o agevolata
 
-    local index = event.target.id
-    myApp.utenti[myApp.utenteLoggato].targaSelezionata = index
+   if isClickable == true then
+        local index = event.target.id
+        myApp.utenti[myApp.utenteLoggato].targaSelezionata = index
 
-    local targheUtente = myApp:getTargheUtente(myApp.utenteLoggato)
-    myApp.utenti[myApp.utenteLoggato].targa = targheUtente[index]
+        local targheUtente = myApp:getTargheUtente(myApp.utenteLoggato)
+        myApp.utenti[myApp.utenteLoggato].targa = targheUtente[index]
 
-    local numTarghe = myApp:getNumTargheUtente(myApp.utenteLoggato)
+        local numTarghe = myApp:getNumTargheUtente(myApp.utenteLoggato)
 
-    for i=1, numTarghe do
-        if i == index then
-            rowDelete[i].isVisible = false
-        else
-            rowDelete[i].isVisible = true
+        for i=1, numTarghe do
+            if i == index then
+                rowDelete[i].isVisible = false
+            else
+                rowDelete[i].isVisible = true
+            end
         end
+        targaText.text = targheUtente[index]
     end
 
-    targaText.text = targheUtente[index]
 
 end
     
@@ -379,9 +455,9 @@ end
 
 function scene:exitScene( event )
     print("ESCI SCENA GESTIONE TARGHE")
-    myApp.titleBar.indietro.isVisible = false
-    myApp.titleBar.modificaTarghe.isVisible = false
-    myApp.titleBar.fineTarghe.isVisible = false
+    myApp.titleBar.modifica.isVisible = false
+    myApp.titleBar.fine.isVisible = false
+    listaTarghe:removeSelf()
 end
 
 function scene:destroyScene( event )

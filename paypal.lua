@@ -35,12 +35,15 @@ function paypal0:createScene(event)
 
     print("CREA SCENA PAYPAL0")
 
-    local group = self.view
-    
-    myApp.titleBar.titleText.text = "PayPal"
-    myApp.titleBar.indietro.isVisible = true
 
-    library.checkLogIn()
+    -- Preparo titleBar
+    myApp.titleBar.setTitleBar("paypal0", "Paypal", { 
+        indietro = true,
+        accedi =  library.checkLogIn("accedi"),
+        profilo = library.checkLogIn("profilo"),
+    })
+
+    local group = self.view
 
     -- Background
 
@@ -98,14 +101,16 @@ function paypal1:createScene(event)
 
     print("CREA SCENA PAYPAL1")
 
+    -- Preparo titleBar
+    myApp.titleBar.setTitleBar("paypal1", "Paypal", { 
+        indietro = true,
+        accedi =  library.checkLogIn("accedi"),
+        profilo = library.checkLogIn("profilo"),
+    })
+
     -- Scena di riepilogo acquisto Paypal
     
     local group = self.view
-
-    myApp.titleBar.titleText.text = "PayPal"
-    myApp.titleBar.indietro.isVisible = true
-
-    library.checkLogIn()
 
     -- Background
 
@@ -180,13 +185,16 @@ function paypal2:createScene(event)
 
     print("CREA SCENA PAYPAL2")
 
+    -- Preparo titleBar
+    myApp.titleBar.setTitleBar("paypal2", "Paypal", { 
+        indietro = false,
+        accedi =  library.checkLogIn("accedi"),
+        profilo = library.checkLogIn("profilo"),
+    })
+
     -- Scena conferma acquisto
 
     local group = self.view
-
-    myApp.titleBar.titleText.text = "PayPal"
-    
-    library.checkLogIn()
 
     -- Background
 
@@ -222,7 +230,7 @@ function paypal2:createScene(event)
         y = _H*0.84,
         width = 270,
         height = 40,
-        onRelease = myApp.showHome
+        onRelease = myApp.showAcquista
     })
     BtFine.isHitTestable = true
 
@@ -247,29 +255,32 @@ function completaButton()
 
     if myApp.utenteLoggato > 0 then
 
-        local regolare = false
         local transiti = myApp.transiti[myApp.utenteLoggato]
 
-        repeat
-            
-            if transiti[1][3] == 'non pagato' then
-                transiti[1][3] = myApp.acquisto.importo
-                regolare = true
-            end
-        
-        until (not(regolare))
+        -- Aggiunge l'importo dell'acquisto multiplo
 
         if myApp.acquisto.ticket == 'Multiplo' then
             myApp.utenti[myApp.utenteLoggato].multiplo = myApp.utenti[myApp.utenteLoggato].multiplo + myApp.acquisto.importo
-            if myApp.utenti[myApp.utenteLoggato].tipo == 'Residente' and myApp.acquisto.targa == myApp.utenti[myApp.utenteLoggato].targa then
-                transito[3] = '2€'
-            else
-                transito[3] = '5€'
+        end
+
+        -- Regolarizza il transito
+        -- Scala dal multiplo il transito regolarizzato
+
+        if not(myApp:checkTargaPagata(myApp.acquisto.targa)) then
+            for i = 1, #transiti do
+                if transiti[i][1] == os.date("%d/%m/%Y") and transiti[i][3] == 'non pagato' and transiti[i][2] == myApp.acquisto.targa then
+                    transiti[i][3] = myApp.acquisto.tariffa.."€"
+                    if myApp.utenti[myApp.utenteLoggato].multiplo > 0 then
+                        myApp.utenti[myApp.utenteLoggato].multiplo = myApp.utenti[myApp.utenteLoggato].multiplo - myApp.acquisto.tariffa
+                    end
+                    break
+                end
             end
         end
 
     end
 
+    table.insert(myApp.targhePagate, myApp.acquisto.targa)
     myApp.acquisto = nil
     storyboard.gotoScene( 'paypal2', { effect = "slideLeft", time = 500 })
 end
@@ -282,7 +293,6 @@ end
 
 function paypal0:exitScene( event ) 
     print("ESCI SCENA PAYPAL0")
-    myApp.titleBar.indietro.isVisible = false
 end
 
 function paypal0:destroyScene( event ) 
@@ -296,7 +306,6 @@ end
 
 function paypal1:exitScene( event ) 
     print("ESCI SCENA PAYPAL1") 
-    myApp.titleBar.indietro.isVisible = false
 end
 
 function paypal1:destroyScene( event )

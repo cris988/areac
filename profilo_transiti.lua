@@ -24,10 +24,11 @@ function scene:createScene(event)
     local group = self.view
 
     -- Preparo titleBar
-
-    myApp.titleBar.titleText.text = "Transiti"
-    myApp.titleBar.indietro.isVisible = true
-    myApp.titleBar.ricerca.isVisible = true
+    myApp.titleBar.setTitleBar("transiti", "Transiti", { 
+        indietro = true,
+        ricerca = true,
+        fine = false
+    })
   
     -- Background
 
@@ -46,8 +47,11 @@ function scene:createScene(event)
       scrollWidth = _W,
       scrollHeight = 0,
       horizontalScrollDisabled = true,
+      isBounceEnabled = false,
       hideBackground = true
     }
+
+    print(myApp.ricerca)
 
     -- Tabella da stampare se non è una ricerca
     if myApp.ricerca == nil then
@@ -197,7 +201,6 @@ end
 function scene:exitScene( event )
     print("ESCI SCENA TRANSITI")
     myApp.titleBar.ricerca.isVisible = false
-    myApp.titleBar.indietro.isVisible = false
     myApp.ricerca = nil
     transitiTable:removeSelf( )
 end

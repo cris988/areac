@@ -35,7 +35,10 @@ function gestioneVerifica0:createScene(event)
 
     library.setBackground(group, _Background )
 
-    myApp.titleBar.indietro.isVisible = true
+    -- Preparo titleBar
+    myApp.titleBar.setTitleBar("gestioneVerifica0", "Gestione Targhe", { 
+        indietro = true,
+    })
 
     
 
@@ -88,6 +91,11 @@ function gestioneVerifica1:createScene(event)
     print("CREA SCENA GESTIONE TARGHE VERIFICA1")
     local group = self.view
 
+    -- Preparo titleBar
+    myApp.titleBar.setTitleBar("gestioneVerifica1", "Gestione Targhe", { 
+        indietro = false,
+    })
+
     -- Background
 
     library.setBackground(group, _Background )
@@ -136,39 +144,12 @@ function gestioneVerifica1:createScene(event)
         elseif accesso == 'p' then
 
 
-        -- local accesso = library.verificaTarga(targa)
-
-        -- if accesso then
-
-        --     aggiungereTarga = true
-
-
-        --     -- local line1 = display.newText( 'Il veicolo con targa '..targa,  _W*0.5, 100, myApp.font, 20)
-        --     -- line1:setFillColor(0)
-
-        --     -- local line2
-        --     if  myApp.utenti[myApp.utenteLoggato].tipo == "Disabile" then
-
-        --         require("verifica")
-        --         verificaPrint('g', targa)
-        --         -- line2 = display.newText( 'PUO\' ACCEDERE\nGRATUITAMENTE',  _W*0.5, 125, myApp.font, 20)
-        --         -- line2:setFillColor(0.1333,0.54509,0.13334)
-        --         -- line2.width = _W *0.8
-        --         -- line2.height = 300
-        --     else 
-        --         -- line2 = display.newText( 'PUO\' ACCEDERE',  _W*0.5, 125, myApp.font, 20)
-        --         -- line2:setFillColor(0.1333,0.54509,0.13334)
-        --     end
-        --     -- local line3 = display.newText( 'all\'area C',  _W*0.5, 150, myApp.font, 20)
-        --     -- line3:setFillColor(0)
-        --     --local line4 = display.newText( 'ACCESSO A PAGAMENTO', _W*0.5, _H*0.5, myApp.font, 24 )
-        --     --line4:setFillColor(0.1333,0.54509,0.13334)
-
-
                 groupVerifica = verificaPrint('p', targa)
                 
                 text = display.newText( 'TARGA INSERITA', _W*0.5, _H*0.8, myApp.font, 24 )
                 text:setFillColor(0.1333,0.54509,0.13334)
+
+                table.insert(myApp:getTargheUtente(myApp.utenteLoggato), targa)
 
         else
 
@@ -179,18 +160,6 @@ function gestioneVerifica1:createScene(event)
             text:setFillColor(1,0,0)
 
         end
-                -- group:insert(line1)
-                -- group:insert(line2)
-                -- group:insert(line3)
-                -- group:insert(line4)
-                -- group:insert(line5)
-
-        -- else
-        --     require("verifica")
-        --     notEnter(group, targa)
-        -- end
-
-        --transition.to( groupVerifica, {time = 0, y = _H * 0.1} )
 
         group:insert(groupVerifica)
         group:insert(text)
@@ -266,7 +235,6 @@ end
 
 function gestioneVerifica1:exitScene( event ) 
     print("ESCI SCENA VERIFICA1") 
-    myApp.titleBar.indietro.isVisible = false
 end
 
 function gestioneVerifica1:destroyScene( event )
