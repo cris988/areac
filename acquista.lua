@@ -33,7 +33,6 @@ local checkMultiplo60
 local txtTarga
 local textError
 local tariffa
-local fromVerifica = false
 local string = "Da qui puoi acquistare un ticket giornaliero o multiplo per il tuo veicolo"
 local importi ={ 2, 5, 30, 60 }
 local strings = {}
@@ -211,19 +210,21 @@ function acquista1:createScene(event)
     end
         
 
-    -- Recupera parametro da verificatarga
+
+
     if event.params ~= nil then
-        myApp.acquisto.targa = event.params.targa
-        fromVerifica = false
+        -- Recupera parametro da verificatarga
+        if event.params.targa ~= nil then
+            myApp.acquisto.targa = event.params.targa
+            accesso = "p"
+            --myApp.titleBar.indietro.func = function () myApp.tabBar:setSelected(2) end
+        -- Salta il verifica perchè è una targa registrata
+        elseif event.params.registrata == true then
+        end
+    else
+        require("verifica")
+        local accesso = verificaTarga(myApp.acquisto.targa)
     end
-
-    if fromVerifica then
-        myApp.titleBar.indietro.func = function () myApp.tabBar:setSelected(2) end
-    end
-
-
-    require("verifica")
-    local accesso = verificaTarga(myApp.acquisto.targa)
 
     if accesso == 'p' then
 
@@ -281,7 +282,7 @@ function acquista1:createScene(event)
 
         local BtAcquista = widget.newButton({
             id  = 'BtAcquista',
-            label = 'Acquista',
+            label = 'Acquista con PayPal',
             x = _W*0.5,
             y = _H*0.83,
             color = { 0.062745,0.50980,0.99607 },
@@ -364,7 +365,7 @@ function acquista_targheRegistrate:createScene(event)
         
         for j = 1, #transiti do
             local transito = transiti[j]
-            if transito[1] == os.date("%d/%m/%Y") and transito[3] == 'non pagato' and transito[2] == targheUtente[i] then 
+            if transito[1] == os.date("%d/%m/%Y") and transito[3] == 'da pagare' and transito[2] == targheUtente[i] then 
                 targheDaRegolarizzare[i] = display.newImage(group, "img/acquista_no.jpg", _W - 30, listaTarghe.y + 50 * (i -1) + 25)
                 targheDaRegolarizzare[i].width = 20
                 targheDaRegolarizzare[i].height = 40
@@ -497,13 +498,15 @@ end
 
 
 function avantiButton ()
-    if txtTarga.campo.text == '' then
+
+    local input = library.matchTarga( txtTarga.campo.text)
     
-    -- controllo se il formato della targa è giusto
-    elseif #txtTarga.campo.text == 7 and txtTarga.campo.text:match( '[A-Za-z][A-Za-z][0-9][0-9][0-9][A-Za-z][A-Za-z]' ) then
-        -- passo la targa come parametro facendogli il trim e l'upperCase
-        myApp.acquisto.targa = library.trimString( txtTarga.campo.text ):upper()
+    if input then
+
+        myApp.acquisto.targa = input:upper()
+
         storyboard.gotoScene('acquista1', { effect = "slideLeft", time = 500 })
+        
     else
        txtTarga.campo:setTextColor(1,0,0)
 
@@ -550,9 +553,8 @@ end
 function onRowTouchSelezTargheReg( event )
     local row = event.target
     if event.phase == "release" or event.phase == 'tap' then
-        local funzioneTargheUtente = myApp:getTargheUtente(myApp.utenteLoggato)
         myApp.acquisto.targa = row.params.value
-        storyboard.gotoScene('acquista1', { effect = "slideLeft", time = 500 })
+        storyboard.gotoScene('acquista1', { effect = "slideLeft", time = 500, params = { registrata = true }})
     end
 end
 

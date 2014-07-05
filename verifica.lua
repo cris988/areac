@@ -273,14 +273,14 @@ end
 
 function verificaButton()
 
-    if txtTarga.campo.text == '' then
-    
-    -- controllo se il formato della targa è giusto
+    local input = library.matchTarga( txtTarga.campo.text)
 
-    elseif #txtTarga.campo.text == 7 and txtTarga.campo.text:match( '[A-Za-z][A-Za-z][0-9][0-9][0-9][A-Za-z][A-Za-z]' ) then
-        -- passo la targa come parametro facendogli il trim e l'upperCase
-        targa = library.trimString( txtTarga.campo.text ):upper()
+    if input then
+
+        targa = input:upper()
+
         storyboard.gotoScene( "verifica1", { effect = "slideLeft", time = 500 })
+
     else
        txtTarga.campo:setTextColor(1,0,0)
         

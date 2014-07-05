@@ -50,9 +50,9 @@ function scene:createScene(event)
 
     -- crea transito non pagato con la data odierna
     if next(myApp.transiti[myApp.utenteLoggato]) == nil or myApp.transiti[myApp.utenteLoggato][1][1] ~= os.date("%d/%m/%Y")  then
-        table.insert(myApp.transiti[myApp.utenteLoggato], 1, { os.date("%d/%m/%Y"), myApp:getTargheUtente(myApp.utenteLoggato)[1], 'non pagato'})
+        table.insert(myApp.transiti[myApp.utenteLoggato], 1, { os.date("%d/%m/%Y"), myApp:getTargheUtente(myApp.utenteLoggato)[1], 'da pagare'})
         if myApp:getTargheUtente(myApp.utenteLoggato)[2] ~= nil then
-            table.insert(myApp.transiti[myApp.utenteLoggato], 1, { os.date("%d/%m/%Y"), myApp:getTargheUtente(myApp.utenteLoggato)[2], 'non pagato'})
+            table.insert(myApp.transiti[myApp.utenteLoggato], 1, { os.date("%d/%m/%Y"), myApp:getTargheUtente(myApp.utenteLoggato)[2], 'da pagare'})
         end
         native.showAlert( "AreaC", "Hai effettuato un transito oggi, ricordati di regolarizzarlo", {"OK"} )
     end    
@@ -63,7 +63,7 @@ function scene:createScene(event)
     -- Controllo se ci sono ingressi e non pagati e se non ci sono ticket acquistati rimanenti
     for i = 1, #utente do
         local transito = utente[i]
-        if transito[3] == 'non pagato' then
+        if transito[3] == 'da pagare' then
             numNonPagati = numNonPagati + 1
         end
     end

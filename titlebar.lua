@@ -169,7 +169,7 @@ function newTitleBar()
 	createButton("annulla", "BtAnnulla", "Annulla", 
 		display.contentCenterX*1.75, bgTitle.height * 0.5 + 7, { 0.062745,0.50980,0.99607 }, 18, annulla)
 
-	createButton("ricerca", "BtRicerca", "Ricerca", 
+	createButton("ricerca", "BtRicerca", "Filtra", 
 		display.contentCenterX*1.75, bgTitle.height * 0.5 + 7, { 0.062745,0.50980,0.99607 }, 18, ricerca)
 
 	createButton("cerca", "BtCerca", "Cerca", 

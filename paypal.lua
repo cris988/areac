@@ -268,7 +268,7 @@ function completaButton()
 
         if not(myApp:checkTargaPagata(myApp.acquisto.targa)) then
             for i = 1, #transiti do
-                if transiti[i][1] == os.date("%d/%m/%Y") and transiti[i][3] == 'non pagato' and transiti[i][2] == myApp.acquisto.targa then
+                if transiti[i][1] == os.date("%d/%m/%Y") and transiti[i][3] == 'da pagare' and transiti[i][2] == myApp.acquisto.targa then
                     transiti[i][3] = myApp.acquisto.tariffa.."€"
                     if myApp.utenti[myApp.utenteLoggato].multiplo > 0 then
                         myApp.utenti[myApp.utenteLoggato].multiplo = myApp.utenti[myApp.utenteLoggato].multiplo - myApp.acquisto.tariffa

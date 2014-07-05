@@ -47,12 +47,14 @@ function scene:createScene(event)
     myApp.titleBar.fine.func = fineModifica
     myApp.titleBar.modifica.func = modificaDati
 
+    local posY = _H * 0.2
+
 
     -- stato utente
     local optionsStato = {
         text = 'Stato:',
         x = _W*0.5,
-        y = _H*0.2,
+        y = posY,
         font = myApp.font,
         fontSize = 14,
         width = _W-30,
@@ -61,10 +63,12 @@ function scene:createScene(event)
     local statoText = display.newText( optionsStato )
     statoText:setFillColor( 0, 0, 0 )
 
+    posY = posY + 20
+
     local optionsStatoDati = {
         text = '',
         x = _W*0.5,
-        y = _H*0.24,
+        y = posY,
         font = myApp.font,
         fontSize = 21,
         width = _W-30,
@@ -72,6 +76,8 @@ function scene:createScene(event)
     }
     local statoDatiText = display.newText( optionsStatoDati )
     statoDatiText:setFillColor( 0, 0, 0 )
+
+    -- Stato dell'utente
     if myApp.utenti[myApp.utenteLoggato].tipo == 'Non residente' then
         statoDatiText.text = 'Residente fuori dall\'area C'
     elseif myApp.utenti[myApp.utenteLoggato].tipo == 'Residente' then
@@ -80,64 +86,14 @@ function scene:createScene(event)
         statoDatiText.text = myApp.utenti[myApp.utenteLoggato].tipo
     end
 
-    -- email
-    local optionsEmail = {
-        text = 'Email:',
-        x = _W*0.5,
-        y = _H*0.46,
-        font = myApp.font,
-        fontSize = 14,
-        width = _W-30,
-        align = "left"
-    }
-    local emailText = display.newText( optionsEmail )
-    emailText:setFillColor( 0, 0, 0 )
-
-    local optionsEmailDati = {
-        text = myApp.utenti[myApp.utenteLoggato].email,
-        x = _W*0.5,
-        y = _H*0.5,
-        font = myApp.font,
-        fontSize = 21,
-        width = _W-30,
-        align = "left"
-    }
-    emailDatiText = display.newText( optionsEmailDati )
-    emailDatiText:setFillColor( 0, 0, 0 )
- 
-
-    -- cellulare
-    local optionsCell = {
-        text = 'Cellulare:',
-        x = _W*0.5,
-        y = _H*0.56,
-        font = myApp.font,
-        fontSize = 14,
-        width = _W-30,
-        align = "left"
-    }
-    local cellText = display.newText( optionsCell )
-    cellText:setFillColor( 0, 0, 0 )
-
-    local optionsDatiCell = {
-        text = myApp.utenti[myApp.utenteLoggato].cellulare,
-        x = _W*0.5,
-        y = _H*0.6,
-        font = myApp.font,
-        fontSize = 21,
-        width = _W-30,
-        align = "left"
-    }
-    cellDatiText = display.newText( optionsDatiCell )
-    cellDatiText:setFillColor( 0, 0, 0 )
-
+    posY = posY + 50
 
     -- residenza
     if myApp.utenti[myApp.utenteLoggato].tipo == 'Residente' then
         local optionsResidenza = {
             text = 'Residente a:',
             x = _W*0.5,
-            y = _H*0.3,
+            y = posY,
             font = myApp.font,
             fontSize = 14,
             width = _W-30,
@@ -146,10 +102,12 @@ function scene:createScene(event)
         local residenzaText = display.newText( optionsResidenza )
         residenzaText:setFillColor( 0, 0, 0 )
 
+        posY = posY + 20
+
         local optionsResidenzaDati = {
             text = '',
             x = _W*0.5,
-            y = _H*0.34,
+            y = posY,
             font = myApp.font,
             fontSize = 21,
             width = _W-30,
@@ -162,16 +120,70 @@ function scene:createScene(event)
         
         group:insert(residenzaText)
         group:insert(residenzaDatiText)
-    else
-        emailText.y = _H*0.36
-        emailDatiText.y = _H*0.4
-        cellText.y = _H*0.46
-        cellDatiText.y = _H*0.5
+
+        posY = posY + 50
+    
     end
 
+    -- email
+    local optionsEmail = {
+        text = 'Email:',
+        x = _W*0.5,
+        y = posY,
+        font = myApp.font,
+        fontSize = 14,
+        width = _W-30,
+        align = "left"
+    }
+    local emailText = display.newText( optionsEmail )
+    emailText:setFillColor( 0, 0, 0 )
+
+    posY = posY + 20
+
+    local optionsEmailDati = {
+        text = myApp.utenti[myApp.utenteLoggato].email,
+        x = _W*0.5,
+        y = posY,
+        font = myApp.font,
+        fontSize = 21,
+        width = _W-30,
+        align = "left"
+    }
+    emailDatiText = display.newText( optionsEmailDati )
+    emailDatiText:setFillColor( 0, 0, 0 )
+
+    posY = posY + 50
+
+    -- cellulare
+    local optionsCell = {
+        text = 'Cellulare:',
+        x = _W*0.5,
+        y = posY,
+        font = myApp.font,
+        fontSize = 14,
+        width = _W-30,
+        align = "left"
+    }
+    local cellText = display.newText( optionsCell )
+    cellText:setFillColor( 0, 0, 0 )
+
+    posY = posY + 20
+
+    local optionsDatiCell = {
+        text = myApp.utenti[myApp.utenteLoggato].cellulare,
+        x = _W*0.5,
+        y = posY,
+        font = myApp.font,
+        fontSize = 21,
+        width = _W-30,
+        align = "left"
+    }
+    cellDatiText = display.newText( optionsDatiCell )
+    cellDatiText:setFillColor( 0, 0, 0 )
+
     -- Text box in cui modificare i dati
-    txtEmail =library.textArea(group,_W*0.5, _H*0.51, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "left", "Email")
-    txtCell =library.textArea(group,_W*0.5, _H*0.61, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "left", "Cellulare")
+    txtEmail =library.textArea(group, emailDatiText.x, emailDatiText.y + 10, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "left", "Email")
+    txtCell =library.textArea(group, cellDatiText.x, cellDatiText.y + 10, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "left", "Cellulare")
 
     -- Inserimento già esistenti
     txtCell.campo.text = myApp.utenti[myApp.utenteLoggato].cellulare
@@ -179,6 +191,9 @@ function scene:createScene(event)
 
     txtCell.isVisible = false
     txtEmail.isVisible = false
+
+    txtCell.campo.isVisible = false
+    txtEmail.campo.isVisible = false
 
     txtCell:toFront()
     txtEmail:toFront()

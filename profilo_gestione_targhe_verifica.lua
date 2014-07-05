@@ -195,9 +195,13 @@ end
 
 
 function aggiungiButton()
-    local text = txtTarga.campo.text
-    if text ~= '' and  #text == 7 and text:match( '[A-Za-z][A-Za-z][0-9][0-9][0-9][A-Za-z][A-Za-z]' ) then
-        targa = trimString( text ):upper()
+
+    local input = library.matchTarga( txtTarga.campo.text)
+
+    if input then
+
+        targa = input:upper()
+
         storyboard.gotoScene( "gestioneVerifica1", { effect = "slideLeft", time = 500 })
     else
        txtTarga.campo:setTextColor(1,0,0)

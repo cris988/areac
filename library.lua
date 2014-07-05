@@ -142,8 +142,18 @@ local function makeList(id, values, x, y, width, rowHeight, paramsRow, eventRowR
 
 end
 
-function trimString( s )
+local function trimString( s )
    return string.match( s,"^()%s*$") and "" or string.match(s,"^%s*(.*%S)" )
+end
+
+local function matchTarga( t )
+
+    local targa = string.match( t,'^[A-Za-z][A-Za-z]%s?[0-9][0-9][0-9]%s?[A-Za-z][A-Za-z]' )
+
+    if targa ~= nil then
+        return string.gsub(targa,'%s', "" )
+    end
+     
 end
 
 local function clearListener( campoInserimento, btClear ) 
@@ -186,8 +196,6 @@ local function textListener(group, campoInserimento, btClear, funcBegan, funcSub
 	        if campoInserimento.text == '' then
 	            btClear.alpha = 0
 	        end
-            --native.setKeyboardFocus( nil )
-            --transition.to( group, {time=100, y=0} )
     	elseif event.phase == "submitted" then
             if funcSub ~= nil then
                 funcSub()
@@ -250,6 +258,7 @@ end
 library.makeList = makeList
 library.setBackground = setBackground
 library.trimString = trimString
+library.matchTarga = matchTarga
 library.textArea = textArea
 library.checkLogIn = checkLogIn
 library.salvaUtente = salvaUtente
