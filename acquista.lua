@@ -180,11 +180,6 @@ function acquista1:createScene(event)
  
     -- Preparo titleBar
 
-    myApp.titleBar.titleText.text = "Acquista"
-    myApp.titleBar.indietro.isVisible = true
-
-    library.checkLogIn()
-
     myApp.titleBar.setTitleBar("acquista1", "Acquista", { 
         indietro = true,
         accedi =  library.checkLogIn("accedi"),
@@ -209,24 +204,18 @@ function acquista1:createScene(event)
         end
     end
         
-
-
+    local accesso
 
     if event.params ~= nil then
-        -- Recupera parametro da verificatarga
-        if event.params.targa ~= nil then
-            myApp.acquisto.targa = event.params.targa
-            accesso = "p"
-            --myApp.titleBar.indietro.func = function () myApp.tabBar:setSelected(2) end
-        -- Salta il verifica perchè è una targa registrata
-        elseif event.params.registrata == true then
-        end
-    else
+        -- Targa già verificata
+        myApp.acquisto.targa = event.params.targa
+        myApp.acquisto.accesso = "p"
+    elseif myApp.acquisto.accesso == nil then
         require("verifica")
-        local accesso = verificaTarga(myApp.acquisto.targa)
+        myApp.acquisto.accesso = verificaTarga(myApp.acquisto.targa)
     end
 
-    if accesso == 'p' then
+    if myApp.acquisto.accesso == 'p' then
 
         local options = {
             text = 'Seleziona il ticket da acquistare per questa targa: '..myApp.acquisto.targa,
@@ -301,15 +290,13 @@ function acquista1:createScene(event)
         group:insert(info)
         group:insert(BtAcquista)
 
-    elseif accesso == 'g' then
+    elseif myApp.acquisto.accesso == 'g' then
 
         local groupVerifica = verificaPrint('g', myApp.acquisto.targa)
         group:insert(groupVerifica)
 
     else
-        
         local groupVerifica = verificaPrint('v', myApp.acquisto.targa)
-
         group:insert(groupVerifica)
     end
 
@@ -503,9 +490,7 @@ function avantiButton ()
     
     if input then
 
-        myApp.acquisto.targa = input:upper()
-
-        storyboard.gotoScene('acquista1', { effect = "slideLeft", time = 500 })
+       storyboard.gotoScene('acquista1', { effect = "slideLeft", time = 500, params = { targa = input:upper()}})
         
     else
        txtTarga.campo:setTextColor(1,0,0)
@@ -553,8 +538,7 @@ end
 function onRowTouchSelezTargheReg( event )
     local row = event.target
     if event.phase == "release" or event.phase == 'tap' then
-        myApp.acquisto.targa = row.params.value
-        storyboard.gotoScene('acquista1', { effect = "slideLeft", time = 500, params = { registrata = true }})
+        storyboard.gotoScene('acquista1', { effect = "slideLeft", time = 500, params = { targa = row.params.value}})
     end
 end
 

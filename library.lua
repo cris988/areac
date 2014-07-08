@@ -14,6 +14,12 @@ local function setBackground(group, color)
     background.x = display.contentCenterX
     background.y = display.contentCenterY
     group:insert(background)
+
+    local function listener( event )
+        native.setKeyboardFocus( nil )
+    end
+    background:addEventListener( "tap", listener )
+
 end
 
 local function checkLogIn(state)
@@ -171,15 +177,15 @@ local function clearListener( campoInserimento, btClear )
 	end
 end
 
-local function textListener(group, campoInserimento, btClear, funcBegan, funcSub ) 
+local function textListener(group, campoInserimento, btClear, funcBegan, funcEnd, funcSub ) 
 
 	return function(event)
 	    if event.phase == "began" then
             if funcBegan ~= nil then
                 funcBegan()
             end
-            if campoInserimento.y > _H * 0.5 then
-                transition.to( group, {time=120, y=-campoInserimento.y+_H*0.5} )
+            if campoInserimento.parent.y > _H * 0.5 then
+                transition.to( group, {time=120, y=-campoInserimento.parent.y+_H*0.5} )
             end
 	        if campoInserimento.text ~= '' then
 	            btClear.alpha = 0.2
@@ -191,11 +197,11 @@ local function textListener(group, campoInserimento, btClear, funcBegan, funcSub
 	        else
 	            btClear.alpha = 0
 	        end
-
-	    elseif event.phase == "ended" then
-	        if campoInserimento.text == '' then
-	            btClear.alpha = 0
-	        end
+        elseif event.phase == "ended" then
+            if funcEnd ~= nil then
+                funcEnd()
+            end
+            transition.to( group, {time=100, y=0} )
     	elseif event.phase == "submitted" then
             if funcSub ~= nil then
                 funcSub()
@@ -204,17 +210,16 @@ local function textListener(group, campoInserimento, btClear, funcBegan, funcSub
             transition.to( group, {time=100, y=0} )
         end
      end
+
 end
 
-local function textArea(group, x, y, width, height, color, font, align, text, secure, funcBegan, funcSub)
+local function textArea(group, x, y, width, height, color, font, align, text, secure, funcBegan, funcEnd, funcSub)
 
     local gruppoInserimento = display.newGroup()
 
-    sfondoInserimento = display.newImageRect('img/textArea.png', width * 1.4, height * 1.3)
-    sfondoInserimento.x = x
-    sfondoInserimento.y = y
+    local sfondoInserimento = display.newImageRect('img/textArea.png', math.ceil(width * 1.4), math.ceil(height * 1.3))
 
-    campoInserimento = native.newTextField( x, y, width, height) 
+    local campoInserimento = native.newTextField( 0,0, width, height) 
     campoInserimento:setTextColor( color[1], color[2], color[3] )
     campoInserimento.font = font
     campoInserimento.align = align
@@ -224,7 +229,7 @@ local function textArea(group, x, y, width, height, color, font, align, text, se
 
     btClear = display.newImage('img/delete.png', 10,10)
     btClear.x = campoInserimento.x + campoInserimento.width * 0.6
-    btClear.y = campoInserimento.y
+    btClear.y = 0
     btClear.alpha = 0
 
 
@@ -236,8 +241,16 @@ local function textArea(group, x, y, width, height, color, font, align, text, se
     gruppoInserimento:insert(campoInserimento)
     gruppoInserimento:insert(btClear)
 
+    gruppoInserimento.anchorX = 0
+    gruppoInserimento.anchorY = 0
+
+    gruppoInserimento.x = math.ceil(x - gruppoInserimento.width * 0.5)
+    gruppoInserimento.y = math.ceil(y - gruppoInserimento.height * 0.5)
+
+    gruppoInserimento.anchorChildren = true
+
     btClear:addEventListener( "touch", clearListener(campoInserimento, btClear) )
-    campoInserimento:addEventListener( "userInput", textListener(group, campoInserimento, btClear, funcBegan, funcSub))
+    campoInserimento:addEventListener( "userInput", textListener(group, campoInserimento, btClear, funcBegan, funcEnd, funcSub))
 
     gruppoInserimento.campo = campoInserimento
     gruppoInserimento.bg = sfondoInserimento

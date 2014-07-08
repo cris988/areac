@@ -81,9 +81,10 @@ function scene:createScene(event)
 
     -- Casella di testo per ricerca via
 
-    txtSearch = library.textArea(group, _W*0.45, bgSearch.height / 2, _W * 0.6, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Inserisci la via", nil, searchFocus, mapLocation)
+    txtSearch = library.textArea(group, _W*0.45, bgSearch.height / 2, 190, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Inserisci la via", nil, searchFocus, nil, mapLocation)
 
-    local imgLente = display.newImage( group, "img/lente.png", _W * 0.1, bgSearch.height / 2)
+
+    local imgLente = display.newImage( group, "img/lente.png", _W * 0.09, bgSearch.height / 2)
     imgLente.width = 25
     imgLente.height = 25
 
@@ -221,7 +222,7 @@ function lostFocus()
     native.setKeyboardFocus( nil )
     BtAnnulla.alpha = 0
     BtMyPos.alpha = 1
-    txtSearch.width = txtSearch.width + 20
+    transition.scaleTo(txtSearch, {xScale = 1})
 end
 
 function searchFocus()
@@ -229,7 +230,7 @@ function searchFocus()
     if not(keyboardFocus) then
         BtMyPos.alpha = 0
         BtAnnulla.alpha = 1
-        txtSearch.width = txtSearch.width - 20
+        transition.scaleTo(txtSearch, {xScale = 0.90})
         keyboardFocus = true
     end
 end

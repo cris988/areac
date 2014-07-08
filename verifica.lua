@@ -227,14 +227,14 @@ function verificaTarga(targa)
         end
     end
 
-    num = math.random()
-    print(num)
-
     if targaTrovata == false then
 
         local euro
         local tipo
         local alim
+
+        num = math.random()
+        print(num)
 
         if num <= 0.90 then
             if num <= 0.80 then
@@ -264,7 +264,7 @@ end
 
 function acquistaButton()
     require("acquista")
-    storyboard.gotoScene('acquista1', { effect = "slideLeft", time = 500, params = { targa = targa } })
+    storyboard.gotoScene('acquista1', { effect = "slideLeft", time = 500, params = { targa = targa} })
     myApp.story.removeAll()
     myApp.story.add("acquista0")
     myApp.tabBar:setSelected(3)
