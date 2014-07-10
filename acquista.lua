@@ -25,8 +25,12 @@ local acquistaTicket = {}
 local checkBoxListener = {}
 local onRowTouchInfoTicket = {}
 local onRowTouchSelezTargheReg = {}
+local cambiaPulsante = {}
+local onRowTouch = {}
 
 -- variabili
+local targaReg
+local targaRegLista
 local checkGiornaliero
 local checkMultiplo30
 local checkMultiplo60
@@ -109,12 +113,14 @@ function acquista0:createScene(event)
 
     y = 0.5
 
+
     if myApp.utenteLoggato > 0 then
+
 
         local optionsSeleziona = {
             text = 'Seleziona una targa che hai gia registrato:',
             x = _W*0.5,
-            y = _H*0.425,
+            y = _H*0.4,
             width = _W - 30,
             fontSize = 16,
             align = "center"
@@ -123,15 +129,18 @@ function acquista0:createScene(event)
         textSeleziona:setFillColor( 0, 0, 0 )
 
 
-        local targaReg = widget.newButton({
+        targaReg = widget.newButton({
             id  = 'BtTargaReg',
             label = 'Targhe utente',
             x = _W*0.5,
-            y = _H*0.5,
+            y = _H*0.455,
             color = { 0.062745,0.50980,0.99607 },
             fontSize = 26,
             onRelease = selezionaTargaButton
         })
+        targaReg.alpha = 0
+
+        targaRegLista = library.makeList('targaReg', { 'Targhe utente' }, 0, _H*0.45, _W, 50, {arrow = true}, nil, onRowTouch) 
 
         -- testo in alto
         local options2 = {
@@ -148,12 +157,29 @@ function acquista0:createScene(event)
 
 
         group:insert(targaReg)
+        group:insert(targaRegLista)
         group:insert(textSeleziona)
         group:insert(text2)
 
 
         y = 0.725
-    
+
+
+        -- pulsante invisibile che abilità o disattiva la tableView al posto del bottone e viceversa
+        local optionsInv = {
+            id = 'invisBt',
+            x = _W,
+            y = _H - myApp.tabBar.height,
+            defaultFile = 'img/invisible_button.png',
+            label = '',
+            onEvent = cambiaPulsante,
+        }
+        local invisBt = widget.newButton( optionsInv )
+        invisBt.anchorX, invisBt.anchorY = 1, 1
+        
+        group:insert(invisBt)
+
+
     end 
 
     txtTarga = library.textArea(group, _W*0.5, _H*y, 160, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Targa")
@@ -607,6 +633,37 @@ function acquistaTicket()
         storyboard.gotoScene('paypal0', { effect = "slideLeft", time = 500 } )
     end
 end
+
+
+
+
+
+-- gestisce le azioni dell'utente sulle righe della lista
+function onRowTouch( event )
+    local row = event.target
+    if event.phase == "release" or event.phase == 'tap' then
+        storyboard.gotoScene( 'acquista_targheRegistrate', { effect = "slideLeft", time = 500 })
+    end
+end
+
+function cambiaPulsante( event )
+     local phase = event.phase
+        if "began" == phase then
+             pressTimer = os.time()
+        elseif "ended" == phase then
+            local timeHeld = os.time() - pressTimer
+            if timeHeld >= 3 then
+                if targaReg.alpha == 1 then
+                    targaRegLista.alpha = 1 
+                    targaReg.alpha = 0                   
+                else
+                    targaRegLista.alpha = 0 
+                    targaReg.alpha = 1
+                end
+            end
+        end
+end
+
 
 
 

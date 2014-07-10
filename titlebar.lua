@@ -131,7 +131,7 @@ local function createButton(name, id, label, x, y, color, fontSize, onRelease)
 	   	onRelease = onRelease,
 	} )
 
-	if system.getInfo("model") ~= "iPhone" then
+	if system.getInfo("model") ~= "iPhone" and system.getInfo("model") ~= 'iPhone Simulator' then
 		myApp.titleBar[name].y = myApp.titleBar[name].y + 9
 	end
 
@@ -153,7 +153,7 @@ function newTitleBar()
 	myApp.titleBar.titleText = display.newText( '', 0, 0, myApp.fontBold, 20 )
 	myApp.titleBar.titleText:setFillColor(0,0,0)
 	myApp.titleBar.titleText.x = display.contentCenterX
-	if system.getInfo("model") == "iPhone" then
+	if system.getInfo("model") == "iPhone" or system.getInfo("model") == 'iPhone Simulator' then
 		myApp.titleBar.titleText.y = bgTitle.height * 0.5 + 7
 	else
 		myApp.titleBar.titleText.y = bgTitle.height * 0.5 + 15
@@ -164,7 +164,7 @@ function newTitleBar()
 	myApp.titleBar.logo = display.newImage( 'img/logo.png', _W*0.1, _H*0.08 )
 	myApp.titleBar.logo.width = 45
 	myApp.titleBar.logo.height = 37
-	if system.getInfo("model") ~= "iPhone" then
+	if system.getInfo("model") ~= "iPhone" and system.getInfo("model") ~= 'iPhone Simulator' then
 		myApp.titleBar.logo.y = _H*0.09
 	end
 
