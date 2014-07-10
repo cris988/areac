@@ -33,7 +33,7 @@ local checkMultiplo60
 local txtTarga
 local textError
 local tariffa
-local string = "Da qui puoi acquistare un ticket giornaliero o multiplo per i tuoi veicoli che oggi hanno effettuato un accesso.\n\n\nSeleziona una targa che hai gia registrato:"
+local string = "Da qui puoi acquistare un ticket giornaliero o multiplo per i tuoi veicoli che oggi hanno effettuato un accesso."
 local importi ={ 2, 5, 30, 60 }
 local strings = {}
 strings[1] = 'Informazioni su Ticket Giornaliero'
@@ -110,12 +110,24 @@ function acquista0:createScene(event)
     y = 0.5
 
     if myApp.utenteLoggato > 0 then
-        
+
+        local optionsSeleziona = {
+            text = 'Seleziona una targa che hai gia registrato:',
+            x = _W*0.5,
+            y = _H*0.425,
+            width = _W - 30,
+            fontSize = 16,
+            align = "center"
+        }
+        local textSeleziona = display.newText( optionsSeleziona )
+        textSeleziona:setFillColor( 0, 0, 0 )
+
+
         local targaReg = widget.newButton({
             id  = 'BtTargaReg',
             label = 'Targhe utente',
             x = _W*0.5,
-            y = _H*0.475,
+            y = _H*0.5,
             color = { 0.062745,0.50980,0.99607 },
             fontSize = 26,
             onRelease = selezionaTargaButton
@@ -125,7 +137,7 @@ function acquista0:createScene(event)
         local options2 = {
             text = 'Oppure inserisci una nuova targa:',
             x = _W*0.5,
-            y = _H*0.6,
+            y = _H*0.65,
             width = _W - 30,
             fontSize = 16,
             align = "center"
@@ -136,10 +148,11 @@ function acquista0:createScene(event)
 
 
         group:insert(targaReg)
+        group:insert(textSeleziona)
         group:insert(text2)
 
 
-        y = 0.675
+        y = 0.725
     
     end 
 
