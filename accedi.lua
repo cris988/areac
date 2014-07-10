@@ -154,6 +154,14 @@ function accediScene()
                 loggato = true
                 myApp.story.back() -- Rimuovo accedi dalla storia
 
+                local nome = myApp.utenti[myApp.utenteLoggato].nome
+                if #myApp.utenti[myApp.utenteLoggato].nome > 8 then
+                    nome = myApp.utenti[myApp.utenteLoggato].nome:sub(1, 7) .. '...'
+                    myApp.titleBar.profilo.anchorX = 1
+                    myApp.titleBar.profilo.x = _W*0.98
+                end
+                myApp.titleBar.profilo:setLabel( nome )
+
                 storyboard.gotoScene('profilo')
             end
         end

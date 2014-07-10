@@ -34,7 +34,7 @@ end
 --
 -- turn on debugging
 --
-debugMode = false
+debugMode = true
 --
 -- this little snippet will make a copy of the print function
 -- and now will only print if debugMode is true
