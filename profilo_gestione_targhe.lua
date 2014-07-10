@@ -103,8 +103,10 @@ function scene:createScene(event)
     infoText:setFillColor( 0, 0, 0 )
 
     starInfo = display.newImage( starImage, 1 )
-    starInfo.x = _W * 0.9
-    starInfo.y = posY
+    starInfo.x = _W * 0.89
+    starInfo.y = posY+7
+    starInfo.width = 22.5
+    starInfo.height = 22.5
     starInfo.alpha = 0
 
 

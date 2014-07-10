@@ -33,7 +33,7 @@ local checkMultiplo60
 local txtTarga
 local textError
 local tariffa
-local string = "Da qui puoi acquistare un ticket giornaliero o multiplo per il tuo veicolo"
+local string = "Da qui puoi acquistare un ticket giornaliero o multiplo per i tuoi veicoli che oggi hanno effettuato un accesso.\n\n\nSeleziona una targa che hai gia registrato:"
 local importi ={ 2, 5, 30, 60 }
 local strings = {}
 strings[1] = 'Informazioni su Ticket Giornaliero'
@@ -82,7 +82,7 @@ function acquista0:createScene(event)
         id  = 'BtAvanti',
         label = 'Avanti',
         x = _W*0.5,
-        y = _H*0.75,
+        y = _H*0.8,
         color = { 0.062745,0.50980,0.99607 },
         fontSize = 26,
         onRelease = avantiButton
@@ -113,9 +113,9 @@ function acquista0:createScene(event)
         
         local targaReg = widget.newButton({
             id  = 'BtTargaReg',
-            label = 'Seleziona targa registrata',
+            label = 'Targhe utente',
             x = _W*0.5,
-            y = _H*0.4,
+            y = _H*0.475,
             color = { 0.062745,0.50980,0.99607 },
             fontSize = 26,
             onRelease = selezionaTargaButton
@@ -125,7 +125,7 @@ function acquista0:createScene(event)
         local options2 = {
             text = 'Oppure inserisci una nuova targa:',
             x = _W*0.5,
-            y = _H*0.555,
+            y = _H*0.6,
             width = _W - 30,
             fontSize = 16,
             align = "center"
@@ -139,7 +139,7 @@ function acquista0:createScene(event)
         group:insert(text2)
 
 
-        y = 0.65
+        y = 0.675
     
     end 
 
@@ -329,7 +329,7 @@ function acquista_targheRegistrate:createScene(event)
 
 
     local optionsInfo = {
-        text ='Le targhe che hanno effettuato un transito oggi e non sono regolarizzate sono indicate con il simbolo escalamativo',
+        text ='Le targhe che hanno effettuato un transito oggi e non sono regolarizzate sono indicate con la scritta',
         x = _W*0.5,
         y = posY,
         font = myApp.font,
