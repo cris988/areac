@@ -105,11 +105,15 @@ function avantiButton()
     local email = txtEmail.campo.text
 
     if  targa ~= '' or cell ~= '' or email~='' then
-        if #library.trimString( targa ) == 7 and library.trimString( targa ):match( '[A-Za-z][A-Za-z][0-9][0-9][0-9][A-Za-z][A-Za-z]' ) then
 
-            myApp.datiUtente.targa = trimString( txtTarga.campo.text ):upper()
-            myApp.datiUtente.cell = trimString( txtCell.campo.text )
-            myApp.datiUtente.email = trimString( txtEmail.campo.text )
+        local input = library.matchTarga( txtTarga.campo.text)
+
+        if input then
+
+            myApp.datiUtente.targa = library.trimString( txtTarga.campo.text ):upper()
+            myApp.datiUtente.cell = library.trimString( txtCell.campo.text )
+            myApp.datiUtente.email = library.trimString( txtEmail.campo.text )
+
 
             print("TARGA: "..txtTarga.campo.text)
             print("CELL: "..txtCell.campo.text)
@@ -117,11 +121,14 @@ function avantiButton()
 
             salvaUtente()
             storyboard.gotoScene( 'registrazione5_fine', { effect = "slideLeft", time = 500 }  )
+
         else
            txtTarga.campo:setTextColor(1,0,0)
+            
             -- testo di errore
             textError.alpha = 1
-        end    
+        end
+         
     end
 end
 

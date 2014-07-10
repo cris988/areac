@@ -60,7 +60,7 @@ function scene:createScene(event)
     -- Text field dati
     txtCF =library.textArea(group,_W*0.5, _H*0.28, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Codice Fiscale")
     txtPatente =library.textArea(group,_W*0.5, _H*0.38, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Numero di patente")
-    txtIndirizzo =library.textArea(group,_W*0.5, _H*0.48, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Via di domicilio")
+    txtIndirizzo =library.textArea(group,_W*0.5, _H*0.48, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Via di residenza")
     txtCivico =library.textArea(group,_W*0.5, _H*0.58, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Numero civico")
     txtCAP =library.textArea(group,_W*0.5, _H*0.68, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "CAP")
 
