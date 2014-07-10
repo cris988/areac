@@ -226,6 +226,9 @@ local function textArea(group, x, y, width, height, color, font, align, text, se
     campoInserimento.hasBackground = false
     campoInserimento.placeholder = text
     if secure ~= nil then campoInserimento.isSecure = secure end
+    if system.getInfo("model") ~= "iPhone" and system.getInfo("model") ~= 'iPhone Simulator' then
+        campoInserimento.height = campoInserimento.height*2
+    end
 
     btClear = display.newImage('img/delete.png', 10,10)
     btClear.x = campoInserimento.x + campoInserimento.width * 0.6

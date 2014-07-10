@@ -133,8 +133,7 @@ function scene:createScene(event)
 
 
         local image = {
-            filename = 'img/greenPin.png',
-            baseDir = system.ResourcesDirectory
+            filename = 'img/greenPin.png'
         }
         
         myMap:addMarker( 45.470762350021, 9.2052590724373,

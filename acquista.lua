@@ -133,11 +133,14 @@ function acquista0:createScene(event)
             id  = 'BtTargaReg',
             label = 'Targhe utente',
             x = _W*0.5,
-            y = _H*0.455,
+            y = _H*0.475,
             color = { 0.062745,0.50980,0.99607 },
             fontSize = 26,
             onRelease = selezionaTargaButton
         })
+        if system.getInfo("model") ~= "iPhone" and system.getInfo("model") ~= 'iPhone Simulator' then
+            targaReg.y = _H*0.5
+        end
         targaReg.alpha = 0
 
         targaRegLista = library.makeList('targaReg', { 'Targhe utente' }, 0, _H*0.45, _W, 50, {arrow = true}, nil, onRowTouch) 
