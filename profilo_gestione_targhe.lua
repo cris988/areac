@@ -25,15 +25,15 @@ local infoText
 local textInfo
 local textEditInfoPrincipale
 local textEditInfoResidente
-local targaText
+--local targaText
 local scrollView
 local listaTarghe
 local rowDelete = {}
 local rowStar = {}
 local borderBottomScroll
-local BtModifica
-local BtFine
 local BtAggiungi
+local starInfo
+local indexToSaved
 local isClickable = false
 
 function scene:createScene(event)
@@ -68,10 +68,17 @@ function scene:createScene(event)
         hideBackground = true,
     }
 
-    -- Bordo scrollview
+    -- Star image
 
-    -- local borderTopScroll = display.newLine( 0, posY, _W, posY )
-    -- borderTopScroll:setStrokeColor( 0.8, 0.8, 0.8 )
+    local optionsStar = {
+        width = 30,
+        height = 30,
+        numFrames = 2,
+        sheetContentWidth = 60,
+        sheetContentHeight = 30,
+    }
+
+    local starImage = graphics.newImageSheet( "img/star_sheet.png", optionsStar )
 
     
 
@@ -95,36 +102,42 @@ function scene:createScene(event)
     infoText = display.newText( optionsInfo )
     infoText:setFillColor( 0, 0, 0 )
 
-
-    -- Titolo Targa Principale o Agevolata
-
-    posY = posY + 75
-
-    local text
-
-    if myApp.utenti[myApp.utenteLoggato].tipo == 'Residente'then
-        text = "TARGA AGEVOLATA"
-    else
-        text = "TARGA PRINCIPALE"
-    end
-
-    local titleT = newTitle(text, _W * 0.5, posY, _W, 50, 20, true)
+    starInfo = display.newImage( starImage, 1 )
+    starInfo.x = _W * 0.9
+    starInfo.y = posY
+    starInfo.alpha = 0
 
 
-    -- Stampa Targa Principale o Agevolata
 
-    posY = posY + 50
+    -- -- Titolo Targa Principale o Agevolata
 
-    local optionsTarga = {
-        text = myApp.utenti[myApp.utenteLoggato].targa,
-        x = _W*0.5,
-        y = posY,
-        font = myApp.font,
-        fontSize = 20,
-        align = "center"
-    }
-    targaText = display.newText( optionsTarga )
-    targaText:setFillColor( 0, 0, 0 )
+    -- posY = posY + 75
+
+    -- local text
+
+    -- if myApp.utenti[myApp.utenteLoggato].tipo == 'Residente'then
+    --     text = "TARGA AGEVOLATA"
+    -- else
+    --     text = "TARGA PRINCIPALE"
+    -- end
+
+    -- local titleT = newTitle(text, _W * 0.5, posY, _W, 50, 20, true)
+
+
+    -- -- Stampa Targa Principale o Agevolata
+
+    -- posY = posY + 50
+
+    -- local optionsTarga = {
+    --     text = myApp.utenti[myApp.utenteLoggato].targa,
+    --     x = _W*0.5,
+    --     y = posY,
+    --     font = myApp.font,
+    --     fontSize = 20,
+    --     align = "center"
+    -- }
+    -- targaText = display.newText( optionsTarga )
+    -- targaText:setFillColor( 0, 0, 0 )
 
 
     -- Titolo Targhe Registrate
@@ -142,17 +155,6 @@ function scene:createScene(event)
     listaTarghe = library.makeList("targhe", myApp:getTargheUtente(myApp.utenteLoggato), 0, posY, _W, 50, {x = 40}, nil, nil, scrollView)
 
     -- Creazione pulsanti per eliminazione e star nella lista di targhe
-
-    local optionsStar = {
-        width = 30,
-        height = 30,
-        numFrames = 2,
-        sheetContentWidth = 60,
-        sheetContentHeight = 30,
-    }
-
-    local starImage = graphics.newImageSheet( "img/star_sheet.png", optionsStar )
-    print(listaTarghe.y)
 
     for i=1, myApp:getNumTargheUtente(myApp.utenteLoggato) do
         
@@ -236,10 +238,11 @@ function scene:createScene(event)
     borderBottomScroll:setStrokeColor( 0.8, 0.8, 0.8 )  
 
     scrollView:insert(infoText)
-    scrollView:insert(titleT)
-    scrollView:insert(targaText)
-    scrollView:insert(titleR)
+    scrollView:insert(starInfo)
+    -- scrollView:insert(titleT)
+    -- scrollView:insert(targaText)
 
+    scrollView:insert(titleR)
     scrollView:insert(listaTarghe)
 
     for i = 1, #rowDelete do
@@ -309,6 +312,7 @@ end
 
 function inizioModifica()
 
+    -- Cambia info text in base utente
 
     if myApp.utenti[myApp.utenteLoggato].tipo == 'Residente'then
         infoText.text = textEditInfoResidente
@@ -318,16 +322,20 @@ function inizioModifica()
 
     isClickable = true
 
+    -- Mostra i controlli di modifica
+
     local numTarghe = myApp:getNumTargheUtente(myApp.utenteLoggato)
     for i=1, numTarghe do
         rowStar[i].isVisible = true
         if i == myApp.utenti[myApp.utenteLoggato].targaSelezionata then
+            indexToSaved = i
             rowDelete[i].isVisible = false
         else
             rowDelete[i].isVisible = true
         end
     end
 
+    starInfo.alpha = 1
     myApp.titleBar.modifica.isVisible = false
     myApp.titleBar.fine.isVisible = true
 
@@ -337,7 +345,13 @@ end
 
 function fineModifica()
 
-    infoText.text = textInfo
+    --infoText.text = textInfo
+
+    myApp.utenti[myApp.utenteLoggato].targaSelezionata = indexToSaved
+
+    local targheUtente = myApp:getTargheUtente(myApp.utenteLoggato)
+
+    myApp.utenti[myApp.utenteLoggato].targa = targheUtente[indexToSaved]
 
     isClickable = false
 
@@ -352,8 +366,6 @@ function fineModifica()
     myApp.titleBar.modifica.isVisible = true
     myApp.titleBar.fine.isVisible = false
 
-    -- BtModifica.isVisible = true
-    -- BtFine.isVisible = false
 end
 
 
@@ -426,11 +438,10 @@ function selezionaStar( event )
     --Seleziona targa principale o agevolata
 
    if isClickable == true then
-        local index = event.target.id
-        myApp.utenti[myApp.utenteLoggato].targaSelezionata = index
 
-        local targheUtente = myApp:getTargheUtente(myApp.utenteLoggato)
-        myApp.utenti[myApp.utenteLoggato].targa = targheUtente[index]
+        local index = event.target.id
+
+        indexToSaved = index
 
         local numTarghe = myApp:getNumTargheUtente(myApp.utenteLoggato)
 
@@ -441,7 +452,7 @@ function selezionaStar( event )
                 rowDelete[i].isVisible = true
             end
         end
-        targaText.text = targheUtente[index]
+        --targaText.text = targheUtente[index]
     end
 
 

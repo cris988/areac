@@ -98,7 +98,7 @@ local function makeList(id, values, x, y, width, rowHeight, paramsRow, eventRowR
 	for i = 1, #values do
 
 
-        local rowColor = { default={ 1, 1, 1 }, over={ 0.3, 0.3, 0, 0.3 } }
+        local rowColor = { default={ 1, 1, 1 }, }
         local lineColor
 
         if i < #values then lineColor = { 0.8, 0.8, 0.8 }  else lineColor = { 1, 1, 1 } end
@@ -219,7 +219,7 @@ local function textArea(group, x, y, width, height, color, font, align, text, se
 
     local sfondoInserimento = display.newImageRect('img/textArea.png', math.ceil(width * 1.4), math.ceil(height * 1.3))
 
-    local campoInserimento = native.newTextField( 0,0, width, height) 
+    local campoInserimento = native.newTextField( sfondoInserimento.x, sfondoInserimento.y, width, height) 
     campoInserimento:setTextColor( color[1], color[2], color[3] )
     campoInserimento.font = font
     campoInserimento.align = align

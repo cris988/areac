@@ -206,6 +206,8 @@ function acquista1:createScene(event)
         
     local accesso
 
+    assert(myApp.acquisto ~=nil)
+
     if event.params ~= nil then
         -- Targa già verificata
         myApp.acquisto.targa = event.params.targa
@@ -353,10 +355,22 @@ function acquista_targheRegistrate:createScene(event)
         for j = 1, #transiti do
             local transito = transiti[j]
             if transito[1] == os.date("%d/%m/%Y") and transito[3] == 'da pagare' and transito[2] == targheUtente[i] then 
-                targheDaRegolarizzare[i] = display.newImage(group, "img/acquista_no.jpg", _W - 30, listaTarghe.y + 50 * (i -1) + 25)
-                targheDaRegolarizzare[i].width = 20
-                targheDaRegolarizzare[i].height = 40
-                targheDaRegolarizzare[i].isVisible = true
+                --targheDaRegolarizzare[i] = display.newImage("img/acquista_no.jpg", _W - 30, listaTarghe.y + 50 * (i -1) + 25)
+                local options = {
+                    text ='Da pagare',
+                    x = _W - 90,
+                    y = listaTarghe.y + 50 * (i -1) + 25,
+                    font = myApp.font,
+                    fontSize = 18,
+                    width = 150,
+                    align = "right"
+                }
+                targheDaRegolarizzare[i] = display.newText( options )
+                targheDaRegolarizzare[i]:setFillColor( 1, 0, 0 )
+                -- targheDaRegolarizzare[i].width = 20
+                -- targheDaRegolarizzare[i].height = 40
+                -- targheDaRegolarizzare[i].isVisible = true
+                group:insert(targheDaRegolarizzare[i])
             end
         end
 
