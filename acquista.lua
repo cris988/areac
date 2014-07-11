@@ -37,6 +37,7 @@ local checkMultiplo60
 local txtTarga
 local textError
 local tariffa
+local pressTimer
 local string = "Da qui puoi acquistare un ticket giornaliero o multiplo per i tuoi veicoli che oggi hanno effettuato un accesso."
 local importi ={ 2, 5, 30, 60 }
 local strings = {}
@@ -146,7 +147,7 @@ function acquista0:createScene(event)
         targaRegLista = library.makeList('targaReg', { 'Targhe utente' }, 0, _H*0.45, _W, 50, {arrow = true}, nil, onRowTouch) 
 
         -- testo in alto
-        local options2 = {
+        local optionsNuovaTarga = {
             text = 'Oppure inserisci una nuova targa:',
             x = _W*0.5,
             y = _H*0.65,
@@ -154,15 +155,15 @@ function acquista0:createScene(event)
             fontSize = 16,
             align = "center"
         }
-        local text2 = display.newText( options2 )
-        text2:setFillColor( 0, 0, 0 )
+        local textNuovaTarga = display.newText( optionsNuovaTarga )
+        textNuovaTarga:setFillColor( 0, 0, 0 )
 
 
 
         group:insert(targaReg)
         group:insert(targaRegLista)
         group:insert(textSeleziona)
-        group:insert(text2)
+        group:insert(textNuovaTarga)
 
 
         y = 0.725
@@ -651,20 +652,20 @@ end
 
 function cambiaPulsante( event )
      local phase = event.phase
-        if "began" == phase then
-             pressTimer = os.time()
-        elseif "ended" == phase then
-            local timeHeld = os.time() - pressTimer
-            if timeHeld >= 3 then
-                if targaReg.alpha == 1 then
-                    targaRegLista.alpha = 1 
-                    targaReg.alpha = 0                   
-                else
-                    targaRegLista.alpha = 0 
-                    targaReg.alpha = 1
-                end
+    if "began" == phase then
+        pressTimer = os.time()
+    elseif "ended" == phase then
+        local timeHeld = os.time() - pressTimer
+        if timeHeld >= 2 then
+            if targaReg.alpha == 1 then
+                targaRegLista.alpha = 1 
+                targaReg.alpha = 0                   
+            else
+                targaRegLista.alpha = 0 
+                targaReg.alpha = 1
             end
         end
+    end
 end
 
 

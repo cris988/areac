@@ -15,10 +15,12 @@ local function setBackground(group, color)
     background.y = display.contentCenterY
     group:insert(background)
 
-    local function listener( event )
-        native.setKeyboardFocus( nil )
-    end
-    background:addEventListener( "tap", listener )
+    -- local function listener( event )
+    --     native.setKeyboardFocus( nil )
+    --     print("toccato bg")
+    -- end
+    -- background:addEventListener( "touch", listener )
+
 
 end
 
@@ -38,6 +40,17 @@ local function checkLogIn(state)
     end
 end
 
+local function setNameLogin()
+
+    local nome = myApp.utenti[myApp.utenteLoggato].nome
+    if #myApp.utenti[myApp.utenteLoggato].nome > 8 then
+        nome = myApp.utenti[myApp.utenteLoggato].nome:sub(1, 7) .. '...'
+        myApp.titleBar.profilo.anchorX = 1
+        myApp.titleBar.profilo.x = _W*0.98
+    end
+    myApp.titleBar.profilo:setLabel( nome )
+
+end
 
 local function onRowRender( event )
 
@@ -162,17 +175,17 @@ local function matchTarga( t )
      
 end
 
-local function clearListener( campoInserimento, btClear ) 
+local function clearListener( campoInserimento ) 
    return function (event)
 
-	    if(event.phase == "began") then
-	        btClear.alpha = 0.8
+	    if(event.phase == "began") or (event.phase == "moved") then
+	        event.target.alpha = 0.8
 	    elseif(event.phase == "cancelled") then
-	        btClear.alpha = 0.5
+	        event.target.alpha = 0.5
 	    elseif(event.phase == "ended") then
 	        campoInserimento.text = ''
 	        native.setKeyboardFocus( campoInserimento )
-	        btClear.alpha = 0
+	        event.target.alpha = 0
 	    end
 	end
 end
@@ -201,7 +214,6 @@ local function textListener(group, campoInserimento, btClear, funcBegan, funcEnd
             if funcEnd ~= nil then
                 funcEnd()
             end
-            transition.to( group, {time=100, y=0} )
     	elseif event.phase == "submitted" then
             if funcSub ~= nil then
                 funcSub()
@@ -252,7 +264,7 @@ local function textArea(group, x, y, width, height, color, font, align, text, se
 
     gruppoInserimento.anchorChildren = true
 
-    btClear:addEventListener( "touch", clearListener(campoInserimento, btClear) )
+    btClear:addEventListener( "touch", clearListener(campoInserimento) )
     campoInserimento:addEventListener( "userInput", textListener(group, campoInserimento, btClear, funcBegan, funcEnd, funcSub))
 
     gruppoInserimento.campo = campoInserimento
@@ -278,5 +290,6 @@ library.matchTarga = matchTarga
 library.textArea = textArea
 library.checkLogIn = checkLogIn
 library.salvaUtente = salvaUtente
+library.setNameLogin = setNameLogin
 
 return library

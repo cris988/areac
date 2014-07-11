@@ -357,6 +357,8 @@ function fineModifica()
 
     isClickable = false
 
+    -- Nasconde i controlli di modifica
+
     local numTarghe = myApp:getNumTargheUtente(myApp.utenteLoggato)
     for i=1, numTarghe do
         if rowStar[i].isOn == false then
@@ -365,6 +367,8 @@ function fineModifica()
         end
     end
 
+    infoText.text = textInfo
+    starInfo.alpha = 0
     myApp.titleBar.modifica.isVisible = true
     myApp.titleBar.fine.isVisible = false
 

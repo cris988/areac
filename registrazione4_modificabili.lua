@@ -146,6 +146,7 @@ function salvaUtente()
     library.salvaUtente(myApp.datiUtente, newUser)
 
     myApp.utenteLoggato = newUser
+    
 end
 
 
