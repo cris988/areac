@@ -66,32 +66,33 @@ function scene:createScene(event)
 
 
 	local optionsReg = {
-		text = 'Se non hai mai effettuato la registrazione su quest\'applicazione o sul sito AreaC.it',
+		text = 'Se non hai mai effettuato la registrazione su quest\'applicazione o sul sito AreaC.it:',
 		x = _W*0.5,
-		y = _H*0.35,
+		y = _H*0.4,
 		width = _W-30,
 		fontSize = 16,
         align = "center",
         font = myApp.font
 	}
 	
-	local regText = display.newText( optionsReg )
+    local regText = display.newText( optionsReg )
     regText:setFillColor(0) 
+
 
     local BtRegistrati = widget.newButton({
         id  = 'BtRegistrati',
         label = 'Registrati',
         x = _W*0.5,
-        y = _H*0.45,
+        y = _H*0.5,
         color = { 0.062745,0.50980,0.99607 },
         fontSize = 22,
         onRelease = registrazioneScene
     })
 
     local optionsAccedi = {
-		text = 'altrimenti accedi con le tue credenziali:',
+		text = 'Altrimenti accedi con le tue credenziali:',
 		x = _W*0.5,
-		y = _H*0.57,
+		y = _H*0.625,
 		width = _W-30,
 		fontSize = 16,
         align = "center",
@@ -102,8 +103,8 @@ function scene:createScene(event)
     accediText:setFillColor(0) 
 
     -- Text field dati
-    txtUser =library.textArea(group,_W*0.5, _H*0.675, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Username")
-    txtPass =library.textArea(group,_W*0.5, _H*0.775, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Password", true)
+    txtUser =library.textArea(group,_W*0.5, _H*0.7, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Username")
+    txtPass =library.textArea(group,_W*0.5, _H*0.8, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Password", true)
 
     -- Testo di errore
     textError = display.newText('DATI NON CORRETTI',_W*0.5,_H*0.835, myApp.font, 13)
