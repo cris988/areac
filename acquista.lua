@@ -389,6 +389,7 @@ function acquista_targheRegistrate:createScene(event)
     local targheDaRegolarizzare = {}
     local transiti = myApp.transiti[myApp.utenteLoggato]
     local targheUtente = myApp:getTargheUtente(myApp.utenteLoggato)
+    local topStar
 
     local listaTarghe = library.makeList("targhe", targheUtente, 0, posY, _W, 50, {x = 40}, nil, onRowTouchSelezTargheReg)
     group:insert(listaTarghe)
@@ -417,6 +418,10 @@ function acquista_targheRegistrate:createScene(event)
             end
         end
 
+        if targheUtente[i] == myApp.utenti[myApp.utenteLoggato].targa then
+            topStar = listaTarghe.y + 50 * (i - 1) + 12
+        end
+
     end
 
 
@@ -430,17 +435,6 @@ function acquista_targheRegistrate:createScene(event)
     }    
 
     local starImage = graphics.newImageSheet( "img/star_sheet.png", optionsStar )
-
-    local topStar
-
-    for i=1, #targheUtente do
-
-        if targheUtente[i] == myApp.utenti[myApp.utenteLoggato].targa then
-            topStar = listaTarghe.y + 50 * (i - 1) + 12
-
-        end
-    end
-
 
     local rowStar = widget.newSwitch {
         top = topStar,
