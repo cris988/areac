@@ -150,7 +150,7 @@ function acquista0:createScene(event)
         local optionsNuovaTarga = {
             text = 'Oppure inserisci una nuova targa:',
             x = _W*0.5,
-            y = _H*0.65,
+            y = _H*0.635,
             width = _W - 30,
             fontSize = 16,
             align = "center"
@@ -166,7 +166,7 @@ function acquista0:createScene(event)
         group:insert(textNuovaTarga)
 
 
-        y = 0.725
+        y = 0.7
 
 
         -- pulsante invisibile che abilità o disattiva la tableView al posto del bottone e viceversa
@@ -192,7 +192,7 @@ function acquista0:createScene(event)
         txtTarga.campo.text = myApp.acquisto.targa
     end
 
-    textError = display.newText('FORMATO NON CORRETTO',_W*0.5,_H*0.555, myApp.font, 13)
+    textError = display.newText('FORMATO NON CORRETTO',_W*0.5,_H*y+30, myApp.font, 13)
     textError:setFillColor( 1, 0, 0 )
     textError.alpha = 0
 
@@ -555,9 +555,9 @@ function avantiButton ()
         -- testo di errore
         textError.alpha = 1
 
-        if myApp.utenteLoggato > 0 then
-            textError.y = _H*0.725
-        end
+        -- if myApp.utenteLoggato > 0 then
+        --     textError.y = _H*0.725
+        -- end
     end
 end
 

@@ -107,7 +107,7 @@ function scene:createScene(event)
     txtPass =library.textArea(group,_W*0.5, _H*0.8, 195, 28, {0,0,0}, native.newFont( myApp.font, 17 ), "center", "Password", true)
 
     -- Testo di errore
-    textError = display.newText('DATI NON CORRETTI',_W*0.5,_H*0.835, myApp.font, 13)
+    textError = display.newText('DATI NON CORRETTI',_W*0.5,_H*0.85, myApp.font, 13)
     textError:setFillColor( 1, 0, 0 )
     textError.alpha = 0
 
