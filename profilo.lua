@@ -185,7 +185,8 @@ end
 function disconnessioneButton()
     myApp.tabBar.isVisible = true
     myApp.utenteLoggato = 0
-    storyboard.gotoScene(myApp.story.back(), { effect = "slideUp", time=100 })
+    storyboard.gotoScene("mappa", { effect = "slideUp", time=100 })
+    myApp.tabBar:setSelected(1)
 end
 
 
