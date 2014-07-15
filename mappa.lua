@@ -267,7 +267,7 @@ function scene:enterScene( event )
     local group = self.view
 
     myMap = native.newMapView( 0, 0, _W , mappa.height )
-    myMap.mapType = 'normal'
+    myMap.mapType = 'standard'
 
     myMap.x = display.contentCenterX
     myMap.y = mappa.y + mappa.height*0.5
