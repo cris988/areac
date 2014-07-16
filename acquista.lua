@@ -45,6 +45,13 @@ strings[1] = 'Informazioni su Ticket Giornaliero'
 strings[2] = 'Informazioni su Ticket Multiplo'
 
 
+   myApp.acquisto = {
+        targa = '',
+        ticket = '',
+        tariffa = '', -- Tariffa della targa
+        importo = '', -- Importo da pagare
+    }
+
 function acquista0:createScene(event)
 
     print("CREA SCENA ACQUISTA0")
@@ -64,16 +71,14 @@ function acquista0:createScene(event)
     library.setBackground(group, _Background)
 
     -- Inizializzo
-    if myApp.story.back() ~= 'verifica' then
-        myApp.acquisto = { 
+    myApp.acquisto = {
 
-            targa = '',
-            ticket = '',
-            tariffa = '', -- Tariffa della targa
-            importo = '', -- Importo da pagare
+        targa = '',
+        ticket = '',
+        tariffa = '', -- Tariffa della targa
+        importo = '', -- Importo da pagare
 
-        }
-    end
+    }
 
 
 
