@@ -64,14 +64,16 @@ function acquista0:createScene(event)
     library.setBackground(group, _Background)
 
     -- Inizializzo
-    myApp.acquisto = {
+    if myApp.story.back() ~= 'verifica' then
+        myApp.acquisto = { 
 
-        targa = '',
-        ticket = '',
-        tariffa = '', -- Tariffa della targa
-        importo = '', -- Importo da pagare
+            targa = '',
+            ticket = '',
+            tariffa = '', -- Tariffa della targa
+            importo = '', -- Importo da pagare
 
-    }
+        }
+    end
 
 
 
