@@ -242,7 +242,7 @@ local function textArea(group, x, y, width, height, color, font, align, text, se
         campoInserimento.height = campoInserimento.height*2
     end
 
-    btClear = display.newImage('img/delete.png', 10,10)
+    local btClear = display.newImage('img/delete.png', 10,10)
     btClear.x = campoInserimento.x + campoInserimento.width * 0.6
     btClear.y = 0
     btClear.alpha = 0

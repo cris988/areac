@@ -289,7 +289,6 @@ end
 
 function scene:exitScene( event ) 
     print("ESCI SCENA MAPPA") 
-    myApp.titleBar.logo.isVisible = false
 end
 
 function scene:destroyScene( event )
