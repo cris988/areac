@@ -45,17 +45,6 @@ strings[1] = 'Informazioni su Ticket Giornaliero'
 strings[2] = 'Informazioni su Ticket Multiplo'
 
 
--- Inizializzo
-myApp.acquisto = {
-
-    targa = '',
-    ticket = '',
-    tariffa = '', -- Tariffa della targa
-    importo = '', -- Importo da pagare
-
-}
-
-
 function acquista0:createScene(event)
 
     print("CREA SCENA ACQUISTA0")
@@ -73,6 +62,17 @@ function acquista0:createScene(event)
     -- Background
 
     library.setBackground(group, _Background)
+
+    -- Inizializzo
+    myApp.acquisto = {
+
+        targa = '',
+        ticket = '',
+        tariffa = '', -- Tariffa della targa
+        importo = '', -- Importo da pagare
+
+    }
+
 
 
     if debugMode then
@@ -239,13 +239,6 @@ function acquista1:createScene(event)
     -- Targa Predefinito 5€
 
     tariffa = importi[2]
-
-    if myApp.utenteLoggato ~= 0 and myApp.utenti[myApp.utenteLoggato].tipo == 'Residente' then
-        local targaAgevolata = myApp.utenti[myApp.utenteLoggato].targa
-        if myApp.acquisto.targa == targaAgevolata then
-            tariffa = importi[1]
-        end
-    end
         
     local accesso
 
@@ -258,6 +251,13 @@ function acquista1:createScene(event)
     elseif myApp.acquisto.accesso == nil then
         require("verifica")
         myApp.acquisto.accesso = verificaTarga(myApp.acquisto.targa)
+    end
+
+    if myApp.utenteLoggato ~= 0 and myApp.utenti[myApp.utenteLoggato].tipo == 'Residente' then
+        local targaAgevolata = myApp.utenti[myApp.utenteLoggato].targa
+        if myApp.acquisto.targa == targaAgevolata then
+            tariffa = importi[1]
+        end
     end
 
     if myApp.acquisto.accesso == 'p' then
