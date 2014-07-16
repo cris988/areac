@@ -71,7 +71,7 @@ function scene:createScene(event)
         y = _H*0.81,
         width = _W - 30,
         fontSize = 12,
-        align = "left",
+        align = "center",
         text = "Si ricorda che il dichiarante è soggetto alle sanzioni previste dal Codice Penale e dalle Leggi speciali " ..
         "in materia, qualora rilasci dichiarazioni mendaci, formi o faccia uso di atti falsi o esibisca atti contenenti " ..
         "dati non più rispondenti a verità (art. 76 del D.P.R. 445/2000). "

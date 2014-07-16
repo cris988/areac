@@ -63,7 +63,7 @@ function scene:createScene(event)
 
     checkNonRes = widget.newSwitch
     {
-       x = _W*0.15,
+       x = _W*0.125,
        y = _H*0.6,
        style = "checkbox",
        id = "Non residente",
@@ -73,7 +73,7 @@ function scene:createScene(event)
      
     checkRes = widget.newSwitch
     {
-       x = _W*0.15,
+       x = _W*0.125,
        y = _H*0.7,
        style = "checkbox",
        id = "Residente",
@@ -83,7 +83,7 @@ function scene:createScene(event)
 
     checkDis = widget.newSwitch
     {
-       x = _W*0.15,
+       x = _W*0.125,
        y = _H*0.8,
        style = "checkbox",
        id = "Disabile",
@@ -92,13 +92,13 @@ function scene:createScene(event)
     }
 
     
-    local textNonRes = display.newText('Non residente a Milano', _W*0.25, _H*0.6, myApp.font, 20)
+    local textNonRes = display.newText('Non residente nell\'areaC', _W*0.2, _H*0.6, myApp.font, 20)
     textNonRes:setFillColor( 0 )
     textNonRes.anchorX = 0
-    local textRes = display.newText('Residente a Milano', _W*0.25, _H*0.7, myApp.font, 20)
+    local textRes = display.newText('Residente nell\'areaC', _W*0.2, _H*0.7, myApp.font, 20)
     textRes:setFillColor( 0 )
     textRes.anchorX = 0
-    local textDis = display.newText('Disabile', _W*0.25, _H*0.80, myApp.font, 20)
+    local textDis = display.newText('Disabile', _W*0.2, _H*0.80, myApp.font, 20)
     textDis:setFillColor( 0 )
     textDis.anchorX = 0
 

@@ -157,6 +157,10 @@ function accediScene()
 
                 library.setNameLogin()
 
+                if myApp.transiti[myApp.utenteLoggato][1][1] == os.date("%d/%m/%Y") then
+                    native.showAlert( "AreaC", "Hai effettuato un transito oggi, ricordati di regolarizzarlo", {"OK"} )
+                end
+
                 storyboard.gotoScene('profilo')
             end
         end

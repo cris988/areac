@@ -9,7 +9,7 @@ local myApp = require( "myapp" )
 library = {}
 
 local function setBackground(group, color)
-    local background = display.newRect(0,0,display.contentWidth, display.contentHeight+200)
+    local background = display.newRect(0,0,display.contentWidth, display.contentHeight+225)
     background:setFillColor(color[1], color[2], color[3])
     background.x = display.contentCenterX
     background.y = display.contentCenterY

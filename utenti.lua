@@ -15,7 +15,7 @@ myApp.utenti[3] = { username = 'dis', password = 'dis' , nome = 'Mario', cognome
 
 myApp.transiti ={}
 myApp.transiti[1] ={
-{ "01/06/2014", "PP222PP" , "da pagare"}, { "31/05/2014", "KK333KK" , "da pagare"},
+{ "01/06/2014", "PP222PP" , "5€"}, { "31/05/2014", "KK333KK" , "5€"},
 { "30/05/2014", "QW111QW" , "5€"}, { "29/05/2014", "PP222PP" , "5€"},
 { "22/05/2014", "PP222PP" , "5€"}, { "21/05/2014", "QW111QW" , "5€"}, 
 { "30/04/2014", "QW111QW" , "5€"}, { "16/02/2014", "KK333KK" , "5€"},
